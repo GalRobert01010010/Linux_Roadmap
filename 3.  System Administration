@@ -1,0 +1,365 @@
+3.  System Administration
+
+> User & Group Management:
+    Managing system users, groups, and permissions
+
+User Operations
+  - useradd username: Create a new user account with default settings
+    - Example: sudo useradd student
+  - useradd -m -s /bin/bash username: Create a user with a home directory and a specific login shell
+    - Example: sudo useradd -m -s /bin/bash olympiad_user
+  - usermod -aG groupname username: Append a user to a supplementary group without removing them from others
+    - Example: sudo usermod -aG sudo student
+  - usermod -l newname oldname: Change the login name of an existing user
+    - Example: sudo usermod -l winner student
+  - userdel username: Delete a user account from the system
+    - Example: sudo userdel temp_user
+  - userdel -r username: Remove the user along with their home directory and mail spool
+    - Example: sudo userdel -r old_user
+  - id username: Display the UID, GID, and groups the specified user belongs to
+    - Example: id root
+  - whoami: Print the effective username of the current user
+    - Example: whoami
+  - who: Display a list of all users currently logged into the system
+    - Example: who
+  - w: Show who is logged in and provide a summary of their current activity and system load
+    - Example: w
+
+Group Operations
+  - groupadd groupname: Create a new group in the system
+    - Example: sudo groupadd developers
+  - groupmod -n newname oldname: Rename an existing group
+    - Example: sudo groupmod -n admins sysops
+  - groupdel groupname: Delete an existing group (cannot delete a user's primary group)
+    - Example: sudo groupdel testgroup
+  - groups username: List all groups a specific user is a member of
+    - Example: groups student
+  - gpasswd -a username groupname: Add a user to a group (alternative to usermod)
+    - Example: sudo gpasswd -a student docker
+  - gpasswd -d username groupname: Remove a user from a specific group
+    - Example: sudo gpasswd -d student docker
+
+Password Management
+  - passwd: Change the password for the currently logged-in user
+    - Example: passwd
+  - passwd username: Change the password for a specific user (requires root privileges)
+    - Example: sudo passwd student
+  - passwd -l username: Lock a user account by prefixing the password hash (disables login)
+    - Example: sudo passwd -l suspicious_user
+  - passwd -u username: Unlock a locked user account
+    - Example: sudo passwd -u suspicious_user
+  - chage -l username: List detailed password aging and expiration information
+    - Example: chage -l student
+  - chage -M 90 username: Set the maximum number of days a password is valid to 90
+    - Example: sudo chage -M 90 student
+  - chage -E 2024-12-31 username: Set a specific date when the user account will expire
+    - Example: sudo chage -E 2026-12-31 student
+
+sudo Configuration
+  - sudo command: Execute a single command with superuser (root) privileges
+    - Example: sudo apt update
+  - sudo -u username command: Run a command as a different user instead of root
+    - Example: sudo -u www-data php script.php
+  - sudo -i: Open an interactive login shell as the root user
+    - Example: sudo -i
+  - visudo: Safely edit the /etc/sudoers file with syntax checking to prevent lockout
+    - Example: sudo visudo
+  - Syntax: username ALL=(ALL:ALL) ALL: Standard full sudo access configuration
+  - Syntax: username ALL=(ALL) NOPASSWD: /path/to/command: Allow running a specific command without a password
+  - %groupname ALL=(ALL:ALL) ALL: Grant sudo privileges to every member of the specified group
+  - sudo -l: List the specific sudo privileges and commands allowed for the current user
+    - Example: sudo -l
+____________________________________________________________________________________________________________________
+
+
+> Package Management:
+    Installing and managing software packages
+
+APT (Debian/Ubuntu)
+  - apt update: Update the local database of available packages from repositories
+    - Example: sudo apt update
+  - apt upgrade: Upgrade all currently installed packages to their latest versions
+    - Example: sudo apt upgrade
+  - apt install package: Download and install a specific package along with its dependencies
+    - Example: sudo apt install vim
+  - apt remove package: Uninstall a package but keep its configuration files
+    - Example: sudo apt remove apache2
+  - apt purge package: Completely remove a package and all its configuration files
+    - Example: sudo apt purge apache2
+  - apt autoremove: Remove packages that were installed as dependencies but are no longer needed
+    - Example: sudo apt autoremove
+  - apt search keyword: Search for a package name or description in the repositories
+    - Example: apt search monitor
+  - apt show package: Display detailed information about a package (version, size, description)
+    - Example: apt show htop
+  - apt list --installed: List all packages currently installed on the system via APT
+    - Example: apt list --installed | grep zip
+  - dpkg -i package.deb: Install a standalone Debian package file locally
+    - Example: sudo dpkg -i google-chrome.deb
+  - dpkg -l: List every package installed on the system with its current status
+    - Example: dpkg -l | grep python
+  - dpkg -L package: List every file and directory installed by a specific package
+    - Example: dpkg -L coreutils
+
+YUM/DNF (RedHat/CentOS/Fedora)
+  - dnf check-update: Check the repositories for available updates without applying them
+    - Example: dnf check-update
+  - dnf update: Update all installed packages to the newest available versions
+    - Example: sudo dnf update
+  - dnf install package: Install a specific package from the configured repositories
+    - Example: sudo dnf install nginx
+  - dnf remove package: Uninstall a package from the system
+    - Example: sudo dnf remove git
+  - dnf search keyword: Search for packages matching a specific keyword
+    - Example: dnf search database
+  - dnf info package: Show technical details and description of a specific package
+    - Example: dnf info kernel
+  - dnf list installed: List all packages currently registered in the DNF database
+    - Example: dnf list installed
+  - rpm -ivh package.rpm: Install a local RPM file (i: install, v: verbose, h: hash/progress)
+    - Example: sudo rpm -ivh oracle-xe.rpm
+  - rpm -qa: Query all installed RPM packages on the system
+    - Example: rpm -qa | grep ssh
+  - rpm -ql package: List all files associated with an installed RPM package
+    - Example: rpm -ql bash
+
+Package Dependencies
+  - apt-cache depends package: Show a list of all packages that the specified package requires
+    - Example: apt-cache depends vlc
+  - apt-cache rdepends package: Show "reverse dependencies" (what other packages require this one)
+    - Example: apt-cache rdepends libc6
+  - dnf deplist package: List all dependencies and what packages provide them in DNF
+    - Example: dnf deplist mariadb
+  - Automatic Resolution: High-level managers (apt/dnf) automatically solve dependency trees.
+  - Broken Dependencies: Occur when requirements are missing or conflict with other versions.
+  - apt --fix-broken install: Attempt to correct a system with broken dependencies
+    - Example: sudo apt --fix-broken install
+____________________________________________________________________________________________________________________
+
+
+> Systemd & Services:
+    Managing system services and boot process
+
+Service Management
+  - systemctl start service: Start a service immediately in the current session
+    - Example: sudo systemctl start apache2
+  - systemctl stop service: Stop a running service immediately
+    - Example: sudo systemctl stop nginx
+  - systemctl restart service: Stop and then start a service again (used for major changes)
+    - Example: sudo systemctl restart ssh
+  - systemctl reload service: Reload the service configuration without interrupting current connections
+    - Example: sudo systemctl reload postfix
+  - systemctl status service: Show detailed runtime status and recent log lines for a service
+    - Example: systemctl status cron
+  - systemctl enable service: Configure a service to start automatically at system boot
+    - Example: sudo systemctl enable docker
+  - systemctl disable service: Prevent a service from starting automatically at boot
+    - Example: sudo systemctl disable bluetooth
+  - systemctl is-active service: Check if a service is currently running (returns active/inactive)
+    - Example: systemctl is-active networking
+  - systemctl is-enabled service: Check if a service is configured to start at boot
+    - Example: systemctl is-enabled ssh
+  - systemctl list-units --type=service: List all service units currently loaded in memory
+    - Example: systemctl list-units --type=service --all
+
+Journal Logs
+  - journalctl: Query and display logs from the systemd journal
+    - Example: journalctl
+  - journalctl -u service: Display logs specifically for a single service unit
+    - Example: journalctl -u ssh
+  - journalctl -f: Monitor logs in real-time as they are being written (follow)
+    - Example: journalctl -f
+  - journalctl -b: Show logs collected since the most recent system boot
+    - Example: journalctl -b
+  - journalctl --since '2024-01-01': Show logs starting from a specific date or time
+    - Example: journalctl --since "2026-02-01 12:00:00"
+  - journalctl --until '1 hour ago': Show logs up to a specific relative or absolute time
+    - Example: journalctl --until "10 minutes ago"
+  - journalctl -p err: Filter logs by priority level (err, warning, info, debug, etc.)
+    - Example: journalctl -p err -b
+  - journalctl --disk-usage: Show the current disk space occupied by all journal files
+    - Example: journalctl --disk-usage
+  - journalctl --vacuum-time=7d: Remove old journal logs to keep only the last 7 days of data
+    - Example: sudo journalctl --vacuum-time=7d
+
+Unit Files
+  - Unit Location: /etc/systemd/system/ (Admin created) or /lib/systemd/system/ (Package default)
+  - [Unit] section: Defines metadata like Description, and dependencies (After, Requires)
+  - [Service] section: Defines execution logic (Type, ExecStart command, Restart policy)
+  - [Install] section: Defines how the unit is enabled (WantedBy=multi-user.target for CLI boot)
+  - systemctl daemon-reload: Reload systemd manager configuration to recognize new or changed unit files
+    - Example: sudo systemctl daemon-reload
+  - systemctl cat service: Show the full content of the unit file (including overrides)
+    - Example: systemctl cat ssh
+  - systemctl edit service: Create an override file to modify service behavior without editing the main unit file
+    - Example: sudo systemctl edit docker
+
+Targets (Runlevels)
+  - systemctl get-default: Display the target that the system boots into by default
+    - Example: systemctl get-default
+  - systemctl set-default multi-user.target: Set the system to boot into a non-graphical, multi-user CLI mode
+    - Example: sudo systemctl set-default multi-user.target
+  - systemctl isolate graphical.target: Switch the current session to the GUI target immediately
+    - Example: sudo systemctl isolate graphical.target
+  - systemctl isolate multi-user.target: Switch the current session to the CLI target immediately
+    - Example: sudo systemctl isolate multi-user.target
+  - poweroff.target: Target used to shut down and power off the system
+  - reboot.target: Target used to shut down and reboot the system
+  - rescue.target: A special target for system maintenance (single-user mode with minimal services)
+  ____________________________________________________________________________________________________________________
+
+
+> Bash Scripting:
+    Automating tasks with shell scripts
+
+Script Basics
+  - #!/bin/bash: The Shebang line; specifies the absolute path to the bash interpreter
+    - Example: #!/bin/bash at the top of the file
+  - chmod +x script.sh: Grant execute permission to the script file
+    - Example: chmod +x backup.sh
+  - ./script.sh: Execute the script in the current directory (requires execute permission)
+    - Example: ./script.sh
+  - bash script.sh: Run the script by passing it as an argument to bash (no execute permission needed)
+    - Example: bash script.sh
+  - Comments: Any text following a # is ignored by the shell
+    - Example: # This is a comment
+  - echo 'text': Print strings or variable values to the standard output
+    - Example: echo "Hello World"
+  - read variable: Pause execution to take input from the user and store it
+    - Example: read -p "Enter name: " user_name
+  - exit 0: Terminate the script and return a success status to the parent shell
+    - Example: exit 0
+  - exit 1: Terminate the script and return an error status (1-255)
+    - Example: [ $? -ne 0 ] && exit 1
+
+Variables
+  - name='value': Assign a value to a variable (Note: No spaces allowed around the equals sign)
+    - Example: city='London'
+  - $name or ${name}: Retrieve and use the value stored in a variable
+    - Example: echo "I live in ${city}"
+  - readonly var: Mark a variable as constant; its value cannot be changed later
+    - Example: readonly PI=3.14
+  - unset var: Remove a variable definition from the current shell environment
+    - Example: unset temp_data
+  - $0: A special variable containing the name of the script being executed
+  - $1, $2, ...: Positional parameters representing arguments passed to the script
+    - Example: ./script.sh arg1 arg2 ($1 is arg1)
+  - $#: Contains the total number of arguments passed to the script
+  - $@: Expands to all positional parameters as separate quoted words
+  - $?: Holds the exit status of the most recently executed command (0 for success)
+  - $$: Contains the Process ID (PID) of the current script instance
+
+Conditionals
+  - if [ condition ]; then ... fi: Basic conditional structure for decision making
+  - if [ condition ]; then ... else ... fi: Conditional with a fallback branch
+  - if [ condition ]; then ... elif [ condition ]; then ... fi: Multiple-choice conditional
+  - [ -f file ]: Test if the specified path exists and is a regular file
+    - Example: if [ -f /etc/hosts ]; then echo "Exists"; fi
+  - [ -d dir ]: Test if the path exists and is a directory
+  - [ -z string ]: True if the string length is zero (empty)
+  - [ -n string ]: True if the string length is non-zero (not empty)
+  - [ $a -eq $b ]: Numeric comparison: True if $a is equal to $b
+  - [ $a -lt $b ]: Numeric comparison: True if $a is less than $b
+  - [ $a -gt $b ]: Numeric comparison: True if $a is greater than $b
+  - [ string1 = string2 ]: String comparison: True if strings are identical
+  - [[ condition ]]: Modern "keyword" test; safer than [ ] and supports regex and &&/||
+    - Example: [[ $name =~ ^[Aa].* ]]
+
+Loops
+  - for i in 1 2 3; do ... done: Iterate over a predefined list of items
+  - for i in {1..10}; do ... done: Iterate over a generated range of numbers
+  - for file in *.txt; do ... done: Iterate over files matching a wildcard pattern
+    - Example: for f in *.log; do mv "$f" "${f}.bak"; done
+  - while [ condition ]; do ... done: Repeat commands as long as the condition remains true
+    - Example: while ping -c 1 8.8.8.8; do sleep 1; done
+  - until [ condition ]; do ... done: Repeat commands as long as the condition is false
+  - break: Immediately exit the current loop
+  - continue: Skip the rest of the current iteration and move to the next one
+
+Functions
+  - function_name() { commands; }: Define a reusable block of code
+    - Example: check_root() { [ $(id -u) -ne 0 ] && exit 1; }
+  - function_name: Invoke/call a defined function by its name
+  - $1, $2: Within a function, these represent the arguments passed to the function, not the script
+  - return value: Terminate the function and return a status code (0-255)
+  - local var: Declare a variable that only exists inside the function (avoids side effects)
+    - Example: local result=$((1+1))
+  - Definition: Functions must be defined in the script before they are called
+  ____________________________________________________________________________________________________________________
+
+
+> Security Basics:
+    Firewall, SSH, and system security
+
+Firewall - UFW (Uncomplicated Firewall)
+  - ufw status: Display the current state and active rules of the firewall
+    - Example: sudo ufw status
+  - ufw enable: Turn on the firewall and start applying rules at boot
+    - Example: sudo ufw enable
+  - ufw disable: Turn off the firewall and stop filtering traffic
+    - Example: sudo ufw disable
+  - ufw allow 22: Open port 22 (SSH) to allow incoming connections
+    - Example: sudo ufw allow 22/tcp
+  - ufw allow 80/tcp: Allow incoming traffic specifically on TCP port 80 (HTTP)
+    - Example: sudo ufw allow 80/tcp
+  - ufw deny 23: Block all incoming traffic on port 23 (Telnet)
+    - Example: sudo ufw deny 23
+  - ufw delete allow 80: Remove the rule that previously allowed port 80
+    - Example: sudo ufw delete allow 80
+  - ufw status numbered: List active rules with an index number for easy management
+    - Example: sudo ufw status numbered
+  - ufw delete 2: Remove a firewall rule by specifying its index number
+    - Example: sudo ufw delete 2
+
+Firewall - iptables (Low-level Filter)
+  - iptables -L: List all current firewall rules in the default filter table
+    - Example: sudo iptables -L -n -v
+  - iptables -A INPUT -p tcp --dport 22 -j ACCEPT: Append a rule to allow TCP traffic on port 22
+    - Example: sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+  - iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT: Allow all traffic originating from a specific subnet
+    - Example: sudo iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT
+  - iptables -A INPUT -j DROP: Drop all incoming packets that do not match previous allow rules
+    - Example: sudo iptables -A INPUT -j DROP
+  - iptables -D INPUT 1: Delete the first rule in the INPUT chain
+    - Example: sudo iptables -D INPUT 1
+  - iptables -F: Flush all rules (delete everything) from the current table
+    - Example: sudo iptables -F
+  - iptables-save > /etc/iptables/rules.v4: Save current rules to a file (doesn't persist automatically)
+    - Example: sudo iptables-save | sudo tee /etc/iptables/rules.v4
+  - iptables-restore < /etc/iptables/rules.v4: Load firewall rules from a previously saved file
+    - Example: sudo iptables-restore < /etc/iptables/rules.v4
+
+SSH Security
+  - ssh user@host: Establish a secure shell connection to a remote server
+    - Example: ssh student@10.0.0.5
+  - ssh -p 2222 user@host: Connect to a remote SSH server listening on a non-standard port
+    - Example: ssh -p 2222 admin@myserver.com
+  - ssh-keygen: Create a new pair of authentication keys (public and private)
+    - Example: ssh-keygen -t ed25519
+  - ssh-copy-id user@host: Install your public key on the remote server for passwordless login
+    - Example: ssh-copy-id -i ~/.ssh/id_rsa.pub user@192.168.1.10
+  - Config file: /etc/ssh/sshd_config: The main configuration file for the SSH daemon
+  - PermitRootLogin no: Security setting to prevent the root user from logging in via SSH
+  - PasswordAuthentication no: Disable password logins to force the use of SSH keys
+  - Port 2222: Change the default listening port to reduce automated brute-force attacks
+  - systemctl restart sshd: Restart the SSH service to apply changes made to sshd_config
+    - Example: sudo systemctl restart ssh
+
+File Security
+  - chmod 600 file: Set permissions so only the owner can read and write the file
+    - Example: chmod 600 ~/.ssh/id_rsa
+  - chmod 644 file: Allow owner to read/write, and everyone else to only read
+    - Example: chmod 644 index.html
+  - chmod 755 file: Allow owner full access (rwx) and others to read and execute (rx)
+    - Example: chmod 755 script.sh
+  - chown user:group file: Change both the owner and the group of a file/directory
+    - Example: sudo chown www-data:www-data /var/www/html
+  - umask 022: Set the default bitmask for new files (results in 644 for files, 755 for dirs)
+    - Example: umask 022
+  - find / -perm -4000: Search the entire system for files with the SUID bit set
+    - Example: sudo find / -perm -4000
+  - find / -nouser: Locate files that do not belong to any user currently in /etc/passwd
+    - Example: sudo find / -nouser
+____________________________________________________________________________________________________________________
+
+
