@@ -1,6 +1,7 @@
 > Linux Command Reference and Dictionary:
     Unified documentation for essential system utilities
 
+
 awk - Pattern Scanning
   - awk: A powerful text processing and pattern scanning language
     - Example: awk -F: '{print $1}' /etc/passwd
@@ -225,25 +226,31 @@ ulimit - User Limits
   - ulimit: View or set resource limits for the current shell and its child processes
     - Example: ulimit -n 4096
 
+
 uname -a - System Info
   - uname -a: Print all available system information (Kernel version, Hostname, Architecture)
     - Example: uname -a
+
 
 unzip - Extract ZIP
   - unzip: List, test, or extract files from a ZIP compressed archive
     - Example: unzip archive.zip
 
+
 uptime - System Run Time
   - uptime: Display how long the system has been running since the last boot
     - Example: uptime
+
 
 wget - Web Get
   - wget: Download files from the web using HTTP, HTTPS, or FTP protocols
     - Example: wget https://example.com/file.zip
 
+
 whoami - Who Am I
   - whoami: Print the effective username currently associated with the session
     - Example: whoami
+
 
 zip - Create ZIP
   - zip: Package and compress files into a ZIP archive
