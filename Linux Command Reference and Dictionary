@@ -1,0 +1,250 @@
+> Linux Command Reference and Dictionary:
+    Unified documentation for essential system utilities
+
+awk - Pattern Scanning
+  - awk: A powerful text processing and pattern scanning language
+    - Example: awk -F: '{print $1}' /etc/passwd
+  - awk '{print $NF}': Print the last field of every line
+    - Example: ls -l | awk '{print $NF}'
+
+cat - Concatenate Files
+  - cat: Display the entire content of files to standard output
+    - Example: cat /etc/hostname
+  - cat -n: Display content with line numbers
+    - Example: cat -n script.sh
+
+cd - Change Directory
+  - cd: Change the current working directory in the shell hierarchy
+    - Example: cd /var/log
+  - cd ..: Move up one directory level
+    - Example: cd ..
+
+chmod - Change Mode
+  - chmod: Modify file and directory permissions using symbolic or octal restricted bits
+    - Example: chmod 755 script.sh
+  - chmod +x: Grant execute permission to the file owner, group, and others
+    - Example: chmod +x tool.py
+
+chown - Change Owner
+  - chown: Change the user and/or group ownership of a file or directory
+    - Example: sudo chown root:root /etc/shadow
+  - chown -R: Change ownership recursively for a directory and its contents
+    - Example: sudo chown -R user:group /home/user/project
+
+chroot - Change Root
+  - chroot: Run a command or an interactive shell with a specified directory as the root (/)
+    - Example: sudo chroot /mnt/sysroot /bin/bash
+
+clear - Clear Screen
+  - clear: Wipe the terminal screen and scrollback buffer for a clean workspace
+    - Example: clear
+
+cp - Copy
+  - cp: Copy files or directories from a source to a destination
+    - Example: cp config.old config.new
+  - cp -r: Copy directories recursively including all subfolders and files
+    - Example: cp -r /src /backup
+
+curl - Client URL
+  - curl: Transfer data from or to a server using protocols like HTTP, FTP, or SMTP
+    - Example: curl https://ifconfig.me
+  - curl -o: Save the downloaded content to a specific file
+    - Example: curl -o index.html https://google.com
+
+df - Disk Free
+  - df: Display the amount of available disk space on mounted filesystems
+    - Example: df
+  - df -h: Show disk space usage in human-readable format (MB, GB)
+    - Example: df -h
+  - df -i: Show inode usage instead of block usage for mounted filesystems
+    - Example: df -i
+
+du - Disk Usage
+  - du: Estimate and show the disk space used by files and directories
+    - Example: du /var/log
+  - du -sh: Display the total size of a specific path in human-readable format
+    - Example: du -sh /home/user
+
+echo - Output Text
+  - echo: Print a string of text or the value of a variable to the terminal
+    - Example: echo "Hello Linux"
+  - echo $PATH: Display the content of an environment variable
+    - Example: echo $SHELL
+
+find - Search Files
+  - find: Search for files and directories in a directory hierarchy based on various criteria
+    - Example: find . -type d
+  - find / -name: Search for files by their exact name starting from the root directory
+    - Example: sudo find / -name "id_rsa"
+
+grep - Global Regular Expression Print
+  - grep: Search for specific text patterns within files or command output
+    - Example: grep "ERROR" /var/log/syslog
+  - grep -r: Search for a pattern recursively through all files in a directory
+    - Example: grep -r "127.0.0.1" /etc/
+
+head - Show Beginning
+  - head: Display the first part (default 10 lines) of a file
+    - Example: head /etc/passwd
+  - head -n 5: Display only the first 5 lines of a file
+    - Example: head -n 5 /var/log/messages
+
+history - Command History
+  - history: Display the list of commands previously executed in the current session
+    - Example: history | grep "ssh"
+
+htop - Interactive Process Viewer
+  - htop: An interactive, colorized process monitor with mouse support and horizontal scrolling
+    - Example: htop
+
+ifconfig - Interface Config (Legacy)
+  - ifconfig: Display or configure network interface parameters (IP, Netmask, Status)
+    - Example: ifconfig eth0
+
+ip route show - Routing Table
+  - ip route show: Display the system's IP routing table managed by the kernel
+    - Example: ip route show
+
+journalctl - Systemd Logs
+  - journalctl: Query and display logs collected by the systemd-journald service
+    - Example: journalctl -xe
+
+kill - Terminate Process
+  - kill: Send a signal (default SIGTERM) to a process to request its termination
+    - Example: kill 1234
+  - kill -9: Send the SIGKILL signal to forcefully and immediately terminate a process
+    - Example: kill -9 1234
+
+locate - Fast File Find
+  - locate: Find files quickly by name using a pre-built system database (updated by updatedb)
+    - Example: locate .bashrc
+
+ls - List
+  - ls: List directory contents, showing files, directories, and links
+    - Example: ls /bin
+  - ls -la: Show all files (including hidden) in a long format with detailed attributes
+    - Example: ls -la
+
+lsof -i - List Open Files (Network)
+  - lsof -i: List all active processes that have opened network sockets
+    - Example: sudo lsof -i :22
+
+man - Manual
+  - man: Display the reference manual for a specific command or system component
+    - Example: man iptables
+
+mkdir - Make Directory
+  - mkdir: Create a new directory at the specified path
+    - Example: mkdir projects
+  - mkdir -p: Create nested parent directories as needed
+    - Example: mkdir -p /tmp/a/b/c
+
+mount -o remount,rw - Remount
+  - mount -o remount,rw: Change the state of an already mounted filesystem to read-write
+    - Example: mount -o remount,rw /
+
+mv - Move/Rename
+  - mv: Move files or directories to a new location or rename them
+    - Example: mv old.txt new.txt
+
+netstat -tuln - Network Statistics
+  - netstat -tuln: List all listening TCP and UDP ports numerically without resolving hostnames
+    - Example: sudo netstat -tuln
+
+ps - Process Status
+  - ps: Show a snapshot of the processes running in the current shell session
+    - Example: ps
+  - ps aux: Display detailed information about every process running on the system
+    - Example: ps aux | grep nginx
+
+pwd - Print Working Directory
+  - pwd: Print the full absolute path of the current working directory
+    - Example: pwd
+
+rm - Remove
+  - rm: Delete files or directories from the system
+    - Example: rm file.txt
+  - rm -rf: Forcefully and recursively delete a directory and its entire contents
+    - Example: rm -rf /tmp/test_dir
+
+rmdir - Remove Directory
+  - rmdir: Remove an empty directory (fails if the directory contains files)
+    - Example: rmdir empty_folder
+
+rsync - Remote Sync
+  - rsync -aHAX --delete: Create a full mirror sync preserving ACLs, Hardlinks, and Attributes while deleting extra files
+    - Example: rsync -aHAX --delete /src/ /backup/
+  - rsync -av: Synchronize files and directories while preserving basic attributes and showing progress
+    - Example: rsync -av /home/user/ /media/usb/
+
+sed -i - Stream Editor (In-place)
+  - sed -i: Search and replace text patterns directly within the source file
+    - Example: sed -i 's/localhost/127.0.0.1/g' config.yaml
+
+strace - System Trace
+  - strace: Intercept and record the system calls made and signals received by a process
+    - Example: strace -p 1234
+
+sudo - SuperUser Do
+  - sudo: Execute a command with the security privileges of another user (usually root)
+    - Example: sudo systemctl restart sshd
+
+systemctl isolate - Change Target
+  - systemctl isolate: Switch the system to a different operating target (e.g., graphical to CLI)
+    - Example: sudo systemctl isolate multi-user.target
+
+tail - Show End
+  - tail: Display the last part (default 10 lines) of a file
+    - Example: tail /var/log/syslog
+  - tail -f: Follow a file in real-time, displaying new lines as they are appended
+    - Example: tail -f /var/log/auth.log
+
+tar - Tape Archive
+  - tar: Create or extract archive files (Tape Archives)
+    - Example: tar -xvf archive.tar
+  - tar -czvf: Create a compressed archive using the gzip algorithm (c: create, z: gzip, v: verbose, f: file)
+    - Example: tar -czvf backup.tar.gz /home/user
+
+tcpdump - Packet Sniffer
+  - tcpdump: Capture and analyze network traffic flowing through a specific interface
+    - Example: sudo tcpdump -i eth0
+
+top - Table of Processes
+  - top: Provide a dynamic, real-time view of running processes and system resource usage
+    - Example: top
+
+touch - Create/Update File
+  - touch: Create an empty file or update the access/modification timestamps of an existing file
+    - Example: touch new_file.txt
+
+tty - Terminal Name
+  - tty: Print the file name of the terminal device currently connected to the standard input
+    - Example: tty
+
+ulimit - User Limits
+  - ulimit: View or set resource limits for the current shell and its child processes
+    - Example: ulimit -n 4096
+
+uname -a - System Info
+  - uname -a: Print all available system information (Kernel version, Hostname, Architecture)
+    - Example: uname -a
+
+unzip - Extract ZIP
+  - unzip: List, test, or extract files from a ZIP compressed archive
+    - Example: unzip archive.zip
+
+uptime - System Run Time
+  - uptime: Display how long the system has been running since the last boot
+    - Example: uptime
+
+wget - Web Get
+  - wget: Download files from the web using HTTP, HTTPS, or FTP protocols
+    - Example: wget https://example.com/file.zip
+
+whoami - Who Am I
+  - whoami: Print the effective username currently associated with the session
+    - Example: whoami
+
+zip - Create ZIP
+  - zip: Package and compress files into a ZIP archive
+    - Example: zip -r backup.zip /path/to/files
