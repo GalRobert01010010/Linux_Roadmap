@@ -1,0 +1,202 @@
+4. Advanced Topics
+
+> Performance Monitoring:
+    System resource monitoring and optimization
+
+CPU & Memory Monitoring
+  - vmstat 1: Report virtual memory statistics, including processes, memory, paging, and CPU activity every second
+    - Example: vmstat 1 5
+  - vmstat components: Displays data on 'r' (runnable processes), 'swpd' (used swap), 'si/so' (swap in/out), and 'us/sy/id' (CPU usage)
+  - free -h: Show the total amount of free and used physical and swap memory in human-readable units (MB, GB)
+    - Example: free -h
+  - uptime: Display how long the system has been running along with the load average for the last 1, 5, and 15 minutes
+    - Example: uptime
+  - mpstat: Report individual or collective CPU processor statistics
+    - Example: mpstat -P ALL
+  - sar -u 1 10: Collect and display CPU utilization 10 times at 1-second intervals
+    - Example: sar -u 1 10
+  - sar -r: Report historical or current memory utilization statistics
+    - Example: sar -r
+  - Load average logic: If the load average is higher than the number of CPU cores, the system is over-saturated and processes are queuing
+
+Disk I/O Monitoring
+  - iostat: Display CPU statistics and input/output statistics for devices and partitions
+    - Example: iostat
+  - iostat -x 1: Provide extended disk I/O statistics every second (includes wait times and utilization %)
+    - Example: iostat -x 1
+  - iotop: Monitor and display I/O usage by individual processes in real-time, similar to the top utility
+    - Example: sudo iotop
+  - df -h: Report the amount of available and used disk space on all mounted filesystems
+    - Example: df -h
+  - df -i: Display the number of used and available inodes for each filesystem
+    - Example: df -i
+  - du -sh /path: Calculate the total disk space used by a specific directory in human-readable format
+    - Example: du -sh /var/log
+  - du -h --max-depth=1: Display the size of subdirectories at only one level deep from the current path
+    - Example: du -h --max-depth=1 /home
+  - lsblk: List information about all available or specified block devices (disks, partitions)
+    - Example: lsblk
+  - hdparm -t /dev/sda: Perform a test of the buffered read speed of a specific hard drive
+    - Example: sudo hdparm -t /dev/sda
+
+Network Monitoring
+  - iftop: Monitor real-time network bandwidth usage on a specific interface
+    - Example: sudo iftop -i eth0
+  - nethogs: Group network traffic by process, showing which applications are consuming bandwidth
+    - Example: sudo nethogs
+  - nload: Provide a visual representation of incoming and outgoing network traffic
+    - Example: nload
+  - sar -n DEV 1: Report network interface statistics (packets sent/received, error rates) every second
+    - Example: sar -n DEV 1
+  - ss -s: Display a summary of active sockets, including TCP, UDP, and RAW counts
+    - Example: ss -s
+  - netstat -i: Show a table of network interface statistics, including MTU and error counts
+    - Example: netstat -i
+
+Kernel Tuning
+  - sysctl -a: List all currently available kernel parameters and their values
+    - Example: sysctl -a
+  - sysctl parameter: Display the value of a specific kernel parameter
+    - Example: sysctl vm.swappiness
+  - sysctl -w parameter=value: Temporarily modify a kernel parameter without a reboot
+    - Example: sudo sysctl -w net.ipv4.ip_forward=1
+  - /etc/sysctl.conf: The configuration file used to make kernel parameter changes permanent
+  - sysctl -p: Reload and apply the settings from /etc/sysctl.conf immediately
+    - Example: sudo sysctl -p
+  - vm.swappiness: Controls the tendency of the kernel to move processes out of physical memory and into swap (0-100)
+  - net.ipv4.ip_forward: Enables the system to act as a router by forwarding IP packets between interfaces
+  - fs.file-max: Defines the maximum number of file handles that the Linux kernel will allocate
+  _____________________________________________________________________________________________________________________________________
+
+
+  > System Troubleshooting:
+    Debugging and problem resolution techniques
+
+Log Analysis
+  - /var/log/syslog: Primary log file for general system messages and global activities (Debian/Ubuntu)
+  - /var/log/messages: Main system log file containing general messages and system-related info (RedHat/CentOS)
+  - /var/log/auth.log: Tracks all authentication attempts, including sudo usage and SSH logins
+  - /var/log/kern.log: Dedicated log for kernel messages, including hardware and driver events
+  - /var/log/dmesg: Contains the initial messages recorded during the system boot sequence
+  - dmesg: Read and control the kernel ring buffer (shows hardware/driver events in real-time)
+    - Example: dmesg -w
+  - dmesg | grep -i error: Quickly filter the boot messages for errors or failures
+    - Example: dmesg | grep -i 'failed'
+  - last: Show a list of the last logged-in users and their sessions (reads from /var/log/wtmp)
+    - Example: last -n 5
+  - lastlog: Display the most recent login time for every user account in the system
+    - Example: lastlog -u student
+
+Process Debugging
+  - strace command: Intercept and record the system calls made by a process and the signals it receives
+    - Example: strace ls
+  - strace -p PID: Attach the debugger to a currently running process to see its system calls in real-time
+    - Example: sudo strace -p 1234
+  - strace -e open command: Filter the trace to only show file opening operations
+    - Example: strace -e open cat /etc/passwd
+  - ltrace command: Trace library calls (shared library functions) invoked by an executable
+    - Example: ltrace ./my_program
+  - lsof: List all open files currently in use by the system and active processes
+    - Example: lsof
+  - lsof -p PID: List all files (and sockets/pipes) currently opened by a specific process ID
+    - Example: lsof -p 4567
+  - lsof -i :80: Find which processes are currently using port 80 (HTTP)
+    - Example: sudo lsof -i :80
+  - lsof -u username: List all files currently opened by a specific user
+    - Example: lsof -u root
+  - gdb program: The powerful GNU Debugger used to step through source code and analyze crashes
+    - Example: gdb ./my_app
+
+Network Debugging
+  - tcpdump -i eth0: Capture and display network packets transmitted or received over a specific interface
+    - Example: sudo tcpdump -i eth0
+  - tcpdump -i eth0 port 80: Capture only the packets traveling through port 80
+    - Example: sudo tcpdump -i eth0 port 80 -n
+  - tcpdump -w file.pcap: Save captured packets to a file for later analysis (e.g., in Wireshark)
+    - Example: sudo tcpdump -w capture.pcap
+  - tcpdump -r file.pcap: Read and display the contents of a previously saved packet capture file
+    - Example: tcpdump -r capture.pcap
+  - tcpdump host 192.168.1.1: Capture traffic coming from or going to a specific IP address
+    - Example: sudo tcpdump host 8.8.8.8
+  - nmap host: Network exploration tool and port scanner to discover open ports and services
+    - Example: nmap -v google.com
+  - telnet host port: Test simple TCP connectivity to a specific port on a remote host
+    - Example: telnet 192.168.1.10 22
+  - nc -zv host port: Netcat command used as a fast port scanner to check connectivity
+    - Example: nc -zv 127.0.0.1 80-100
+
+Boot Issues
+  - Rescue Mode: Accessible from the GRUB menu (Advanced Options) to perform maintenance
+  - mount -o remount,rw /: Change the root filesystem from read-only to read-write mode to allow edits
+    - Example: mount -o remount,rw /
+  - fsck /dev/sda1: Check and attempt to repair the integrity of a Linux filesystem
+    - Example: sudo fsck -y /dev/sdb1
+  - chroot /mnt/sysroot: Change the current root directory to a mounted system for recovery
+    - Example: chroot /mnt
+  - grub2-install /dev/sda: Reinstall the GRUB bootloader to the specified disk's master boot record
+    - Example: sudo grub-install /dev/sda
+  - update-grub: Automatically regenerate the GRUB configuration file based on available kernels
+    - Example: sudo update-grub
+  - systemctl set-default multi-user.target: Set the system to boot into CLI mode if GUI prevents boot
+    - Example: sudo systemctl set-default multi-user.target
+  _____________________________________________________________________________________________________________________________________
+
+
+> Storage Management:
+    Disk partitioning, LVM, and filesystems
+
+Disk Partitioning
+  - fdisk -l: List all detected disk drives and their current partition tables
+    - Example: sudo fdisk -l
+  - fdisk /dev/sda: Open the interactive menu to create, delete, or modify partitions on a specific disk
+    - Example: sudo fdisk /dev/sdb
+  - parted /dev/sda: A more advanced partitioning tool that supports GPT and large disks (>2TB)
+    - Example: sudo parted /dev/sda
+  - mkfs.ext4 /dev/sda1: Format a partition with the Fourth Extended Filesystem (standard for Linux)
+    - Example: sudo mkfs.ext4 /dev/sdb1
+  - mkfs.xfs /dev/sda1: Format a partition with the XFS filesystem (high performance for large files)
+    - Example: sudo mkfs.xfs /dev/sdb2
+  - mount /dev/sda1 /mnt: Attach a formatted partition to a specific directory in the filesystem tree
+    - Example: sudo mount /dev/sdb1 /mnt/data
+  - umount /mnt: Detach a filesystem from its current mount point
+    - Example: sudo umount /mnt/data
+  - /etc/fstab: Configuration file used to define how and where partitions are automatically mounted at boot
+  - mount -a: Immediately mount all filesystems listed as "auto" in the /etc/fstab file
+    - Example: sudo mount -a
+
+LVM - Logical Volume Management
+  - pvcreate /dev/sda1: Initialize a physical partition or disk as a Physical Volume (PV) for LVM use
+    - Example: sudo pvcreate /dev/sdb1
+  - pvdisplay: Show detailed properties of all configured Physical Volumes
+    - Example: sudo pvdisplay
+  - vgcreate vg_name /dev/sda1: Group one or more Physical Volumes into a single Volume Group (VG)
+    - Example: sudo vgcreate vg_data /dev/sdb1
+  - vgdisplay: Show properties and available space within Volume Groups
+    - Example: sudo vgdisplay
+  - lvcreate -L 10G -n lv_name vg_name: Create a Logical Volume (LV) of a specific size within a Volume Group
+    - Example: sudo lvcreate -L 50G -n lv_projects vg_data
+  - lvdisplay: Show properties, paths, and sizes of all Logical Volumes
+    - Example: sudo lvdisplay
+  - lvextend -L +5G /dev/vg_name/lv_name: Increase the size of an existing Logical Volume
+    - Example: sudo lvextend -L +10G /dev/vg_data/lv_projects
+  - resize2fs /dev/vg_name/lv_name: Expand an ext4 filesystem to fill the newly extended Logical Volume
+    - Example: sudo resize2fs /dev/vg_data/lv_projects
+  - xfs_growfs /mount/point: Expand an XFS filesystem to fill the extended capacity (requires the mount point)
+    - Example: sudo xfs_growfs /mnt/projects
+
+RAID Configuration
+  - mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sda1 /dev/sdb1: Create a new software RAID array
+    - Example: sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdc1 /dev/sdd1
+  - RAID 0 (Striping): Data is split across disks for speed; no redundancy (if one disk fails, all data is lost)
+  - RAID 1 (Mirroring): Data is identical on both disks; high redundancy (survives one disk failure)
+  - RAID 5 (Parity): Data and parity are striped across 3+ disks; balances speed and redundancy
+  - RAID 10: A combination of mirroring (RAID 1) and striping (RAID 0); requires at least 4 disks
+  - cat /proc/mdstat: Quickly view the current status and health of all active RAID arrays
+    - Example: cat /proc/mdstat
+  - mdadm --detail /dev/md0: Show comprehensive technical information about a specific RAID array
+    - Example: sudo mdadm --detail /dev/md0
+  - mdadm --fail /dev/md0 /dev/sda1: Manually mark a specific drive as "failed" in the array
+    - Example: sudo mdadm --fail /dev/md0 /dev/sdc1
+  - mdadm --remove /dev/md0 /dev/sda1: Remove a failed or disconnected drive from the RAID configuration
+    - Example: sudo mdadm --remove /dev/md0 /dev/sdc
+_____________________________________________________________________________________________________________________________________
