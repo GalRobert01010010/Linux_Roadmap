@@ -246,7 +246,6 @@ whoami - Who Am I
 zip - Create ZIP
   - zip: Package and compress files into a ZIP archive
     - Example: zip -r backup.zip /path/to/files
-_________________________________________________________________________________
 
 Variabile de Mediu și Speciale (Completare)
   - $PWD: Reține calea absolută către directorul curent (similar cu comanda pwd)
