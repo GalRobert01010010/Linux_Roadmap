@@ -1,0 +1,160 @@
+1. Linux Fundamentals
+
+> Introduction to Linux:
+    Understanding the Linux operating system, its architecture, and ecosystem
+
+What is Linux?
+  Open-source Unix-like operating system kernel created by Linus Torvalds in 1991
+  Forms the base of many distributions (distros) like Ubuntu, Debian, CentOS, Fedora, Arch
+  Powers servers, supercomputers, Android devices, and embedded systems
+  Free to use, modify, and distribute under GPL license
+
+Linux Architecture
+  Kernel: Core component managing hardware, memory, processes, and system calls
+  Shell: Command-line interface (bash, zsh, fish etc.) for user interaction
+    - bash (Bourne Again SHell): The most widely used default shell; known for its versatility and script compatibility.
+    - zsh (Z Shell): Highly customizable with advanced tab completion, globbing, and "Oh My Zsh" framework support.
+    - fish (Friendly Interactive SHell): User-centric with syntax highlighting, autosuggestions, and a web-based configuration tool.
+    - sh (Bourne Shell): The original Unix shell; minimalist and used primarily for basic system recovery and scripts.
+    - ksh (KornShell): Combines features of the Bourne shell (sh) and C shell (csh); favored in enterprise and legacy Unix environments.
+    - csh (C Shell): Uses syntax similar to the C programming language; 
+    - dash (Debian Almquist Shell): A lightweight, POSIX-compliant shell used in Debian/Ubuntu for fast system booting.
+  System Libraries: Provide functions for applications (glibc, etc.)
+    - glibc (GNU Library for C): The essential wrapper for system calls; defines standard functions like open(), read(), and malloc().
+    - musl: A lightweight, fast, and simple C library; often used in embedded systems or minimal distributions like Alpine Linux.
+    - libstdc++: The standard C++ library; provides core functionality for applications written in C++.
+    - openssl: Provides robust cryptographic functions and protocols (SSL/TLS) for secure communication and data encryption.
+    - zlib: A foundational library for data compression used by many system tools and applications.
+    - libpthread: Implements POSIX threads for multi-threaded application execution and management.
+  System Utilities: Essential tools and programs (ls, cp, grep, etc.)
+  Desktop Environment: Optional GUI layer (GNOME, KDE, XFCE)
+    - GNOME: Focused on modern design, simplicity, and a workflow-oriented interface; default for many major distros.
+    - KDE Plasma: Highly flexible and customizable; offers a traditional "Windows-like" layout with powerful integrated tools.
+    - XFCE: Lightweight and stable; designed for performance and low resource usage without sacrificing functionality.
+    - MATE: A continuation of the classic GNOME 2 interface; provides a traditional, intuitive desktop experience.
+    - Cinnamon: Developed for Linux Mint; balances modern features with a traditional, familiar desktop layout.
+
+Popular Distributions
+  Ubuntu/Debian: User-friendly, large community, apt package manager
+  CentOS/RHEL/Fedora: Enterprise-focused, yum/dnf package manager
+  Arch Linux: Rolling release, minimal base, pacman package manager
+  openSUSE: YaST configuration tool, zypper package manager
+
+Key Differences from Windows
+  Case-sensitive filesystem (File.txt ≠ file.txt)
+  Forward slashes for paths (/home/user) vs backslashes (C:\Users)
+  No drive letters - everything under root directory /
+  Package managers instead of .exe installers
+  Text-based configuration files in /etc instead of registry
+__________________________________________________________________________________________________________
+
+
+> Filesystem Hierarchy:
+    Understanding Linux directory structure and file organization
+
+Root Directory Structure
+  / - Root directory, top of filesystem hierarchy
+  /home - User home directories (/home/username)
+  /root - Home directory for root user
+  /etc - System configuration files
+  /var - Variable data (logs, databases, web content)
+  /usr - User programs and data (read-only)
+  /bin - Essential user command binaries
+  /sbin - System administration binaries
+  /tmp - Temporary files (cleared on reboot)
+  /opt - Optional third-party software
+  /dev - Device files (hard drives, terminals)
+  /proc - Virtual filesystem for process information
+  /sys - Virtual filesystem for kernel/hardware info
+
+File Types
+  Regular files (-): Normal files containing data
+  Directories (d): Folders containing other files
+  Symbolic links (l): Shortcuts pointing to other files
+  Character devices (c): Serial devices like terminals
+  Block devices (b): Storage devices like hard drives
+  Sockets (s): Inter-process communication
+  Named pipes (p): FIFO special files
+
+Permissions System
+  Three permission types: read (r/4), write (w/2), execute (x/1)
+  Three user categories: owner, group, others
+  Example: -rwxr-xr-- means owner:rwx, group:r-x, others:r--
+  chmod 755 file = rwxr-xr-x (owner full, others read+execute)
+  chmod u+x file = add execute permission for owner
+  chown user:group file = change owner and group
+  Special permissions: SUID (4), SGID (2), Sticky bit (1)
+
+Path Types
+  Absolute path: Starts from root (/) - /home/user/documents/file.txt
+  Relative path: From current directory - documents/file.txt or ../file.txt
+  . represents current directory
+  .. represents parent directory
+  ~ represents user home directory
+  - represents previous directory (cd -)
+__________________________________________________________________________________________________________
+
+
+> Essential Commands:
+    Core commands for navigation and file manipulation
+
+Navigation Commands
+  pwd - Print working directory (shows current location)
+  cd /path - Change directory to absolute path
+  cd .. - Go up one directory level
+  cd ~ or cd - Go to home directory
+  cd - - Go to previous directory
+  ls - List directory contents
+  ls -l - Long format with permissions, owner, size, date
+  ls -a - Show hidden files (starting with .)
+  ls -lh - Human-readable file sizes (KB, MB, GB)
+  ls -R - Recursive listing of subdirectories
+
+File Operations
+  touch file.txt - Create empty file or update timestamp
+  mkdir directory - Create new directory
+  mkdir -p path/to/dir - Create nested directories
+  cp source dest - Copy file
+  cp -r dir1 dir2 - Copy directory recursively
+  mv source dest - Move or rename file/directory
+  rm file - Delete file
+  rm -r directory - Delete directory recursively
+  rm -f file - Force delete without confirmation
+  rmdir directory - Remove empty directory
+
+Viewing File Content
+  cat file - Display entire file content
+  cat file1 file2 - Concatenate multiple files
+  less file - View file with scrolling (q to quit)
+  more file - View file page by page
+  head file - Show first 10 lines
+  head -n 20 file - Show first 20 lines
+  tail file - Show last 10 lines
+  tail -f file - Follow file updates in real-time (logs)
+  wc file - Count lines, words, characters
+  wc -l file - Count only lines
+
+Search Commands
+  find /path -name 'pattern' - Search files by name
+  find . -type f -name '*.txt' - Find all .txt files
+  find /home -user john - Find files owned by user
+  find . -mtime -7 - Files modified in last 7 days
+  locate filename - Fast search using database
+  updatedb - Update locate database (run as root)
+  which command - Show path of executable
+  whereis command - Show binary, source, manual locations
+__________________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
