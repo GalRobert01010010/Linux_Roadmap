@@ -1,6 +1,6 @@
 > Linux Command Reference and Dictionary:
     Unified documentation for essential system utilities
-
+ 
 awk - Pattern Scanning
   - awk: A powerful text processing and pattern scanning language
     - Example: awk -F: '{print $1}' /etc/passwd
