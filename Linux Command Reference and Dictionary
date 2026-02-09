@@ -1,7 +1,6 @@
 > Linux Command Reference and Dictionary:
     Unified documentation for essential system utilities
 
-
 awk - Pattern Scanning
   - awk: A powerful text processing and pattern scanning language
     - Example: awk -F: '{print $1}' /etc/passwd
@@ -160,7 +159,6 @@ ps - Process Status
 
 pwd - Print Working Directory
   - pwd: Print the full absolute path of the current working directory
-    - Example: pwd
 
 rm - Remove
   - rm: Delete files or directories from the system
@@ -246,4 +244,6 @@ whoami - Who Am I
   - whoami: Print the effective username currently associated with the session
     - Example: whoami
 
-
+zip - Create ZIP
+  - zip: Package and compress files into a ZIP archive
+    - Example: zip -r backup.zip /path/to/files
