@@ -2,7 +2,7 @@
 
 > Text Processing Tools:
     Powerful commands for searching, filtering, and transforming text
-
+ 
 grep - Pattern Searching
   - grep 'pattern' file: Search for a specific pattern in a file
     - Example: grep 'root' /etc/passwd
