@@ -17,7 +17,6 @@ cd - Change Directory
   - cd: Change the current working directory in the shell hierarchy
     - Example: cd /var/log
   - cd ..: Move up one directory level
-    - Example: cd ..
 
 chmod - Change Mode
   - chmod: Modify file and directory permissions using symbolic or octal restricted bits
@@ -247,5 +246,50 @@ whoami - Who Am I
 zip - Create ZIP
   - zip: Package and compress files into a ZIP archive
     - Example: zip -r backup.zip /path/to/files
+_________________________________________________________________________________
 
+Variabile de Mediu și Speciale (Completare)
+  - $PWD: Reține calea absolută către directorul curent (similar cu comanda pwd)
+    - Exemplu: echo "Sunt în directorul: $PWD"
+  - $HOME: Reține calea către directorul "home" al utilizatorului curent
+    - Exemplu: cd $HOME
+  - $USER: Reține numele utilizatorului care rulează shell-ul curent
+    - Exemplu: echo "Salut, $USER"
+  - $SHELL: Reține calea către interpretorul de comenzi utilizat în prezent
+    - Exemplu: echo "Folosesc shell-ul: $SHELL"
+  - $PATH: O listă de directoare (separate prin ":") unde sistemul caută executabilele comenzilor
+    - Exemplu: echo $PATH
+  - $HOSTNAME: Numele de rețea al calculatorului
+    - Exemplu: echo "Mașina se numește: $HOSTNAME"
+  - $LANG: Limba și codificarea caracterelor utilizate de sistem
+    - Exemplu: echo $LANG
+  - $OLDPWD: Reține directorul în care te aflai înainte de ultima comandă 'cd'
+    - Exemplu: cd $OLDPWD
+  - $RANDOM: Generează un număr întreg aleatoriu între 0 și 32767
+    - Exemplu: echo "Număr norocos: $RANDOM"
+  - $UID: Reține ID-ul numeric al utilizatorului curent (0 pentru root)
+    - Exemplu: echo "ID-ul meu este: $UID"
+  - $*: Similar cu $@, expandează toate argumentele poziționale, dar ca un singur șir de caractere (string)
+    - Exemplu: echo "$*"
+  - $!: Reține PID-ul (Process ID) ultimului proces rulat în fundal (background)
+    - Exemplu: sleep 10 & echo "PID proces fundal: $!"
 
+Controlul Fluxului și Redirecționări
+  - > : Redirectează output-ul unei comenzi către un fișier (suprascrie conținutul existent)
+    - Exemplu: echo "text nou" > fisier.txt
+  - >> : Redirectează output-ul unei comenzi către un fișier (adaugă la finalul conținutului existent)
+    - Exemplu: echo "linie noua" >> fisier.txt
+  - < : Citește input-ul unei comenzi dintr-un fișier (în loc de tastatură)
+    - Exemplu: wc -l < lista.txt
+  - 2> : Redirectează doar mesajele de eroare (stderr) către un fișier
+    - Exemplu: ls /root 2> erori.log
+  - &> : Redirectează atât output-ul normal (stdout) cât și erorile (stderr) în același loc
+    - Exemplu: comanda &> log_complet.txt
+  - | (Pipe) : Trimite output-ul primei comenzi ca input pentru a doua comandă
+    - Exemplu: cat /etc/passwd | grep "root"
+  - && (AND) : Execută a doua comandă doar dacă prima s-a terminat cu succes (exit code 0)
+    - Exemplu: mkdir folder && cd folder
+  - || (OR) : Execută a doua comandă doar dacă prima a eșuat (exit code diferit de 0)
+    - Exemplu: ls fisier_inexistent || echo "Fișierul nu a fost găsit"
+  - /dev/null : "Gaura neagră" a sistemului; orice trimiți aici dispare (util pentru a ascunde output-ul)
+    - Exemplu: comanda > /dev/null 2>&1
