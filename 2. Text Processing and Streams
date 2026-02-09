@@ -1,1 +1,247 @@
 2. Text Processing and Streams
+
+> Text Processing Tools:
+    Powerful commands for searching, filtering, and transforming text
+
+grep - Pattern Searching
+  - grep 'pattern' file: Search for a specific pattern in a file
+    - Example: grep 'root' /etc/passwd
+  - grep -i 'pattern' file: Perform a case-insensitive search
+    - Example: grep -i 'linux' readme.txt
+  - grep -r 'pattern' /path: Search for pattern recursively in directories
+    - Example: grep -r '127.0.0.1' /etc/
+  - grep -v 'pattern' file: Invert match to show non-matching lines
+    - Example: grep -v '#' config.conf
+  - grep -n 'pattern' file: Prefix each line of output with its line number
+    - Example: grep -n 'error' /var/log/syslog
+  - grep -c 'pattern' file: Suppress normal output and show count of matching lines
+    - Example: grep -c 'failed' auth.log
+  - grep -E 'regex' file: Interpret pattern as an extended regular expression
+    - Example: grep -E 'apple|orange' fruit.txt
+  - grep -w 'word' file: Match only whole words
+    - Example: grep -w 'is' document.txt
+  - grep -A 3 'pattern' file: Print 3 lines of trailing context after matching lines
+    - Example: grep -A 3 'start' boot.log
+  - grep -B 3 'pattern' file: Print 3 lines of leading context before matching lines
+    - Example: grep -B 3 'end' boot.log
+
+sed - Stream Editor
+  - sed 's/old/new/' file: Replace the first occurrence of a pattern per line
+    - Example: sed 's/bash/zsh/' script.sh
+  - sed 's/old/new/g' file: Replace all occurrences of a pattern per line
+    - Example: sed 's/temp/final/g' data.txt
+  - sed -i 's/old/new/g' file: Edit the file in-place (saves changes to file)
+    - Example: sed -i 's/localhost/127.0.0.1/g' /etc/hosts
+  - sed '5d' file: Delete the 5th line of the file
+    - Example: sed '5d' users.list
+  - sed '1,5d' file: Delete a range of lines from 1 to 5
+    - Example: sed '1,5d' log.txt
+  - sed -n '10,20p' file: Print only a specific range of lines (10 to 20)
+    - Example: sed -n '10,20p' database.csv
+  - sed '/pattern/d' file: Delete all lines matching the pattern
+    - Example: sed '/# comment/d' config.py
+  - sed 's/^/prefix/' file: Insert text at the beginning of each line
+    - Example: sed 's/^/DEBUG: /' app.log
+  - sed 's/$/suffix/' file: Append text to the end of each line
+    - Example: sed 's/$/;/' main.c
+
+awk - Pattern Scanning
+  - awk '{print $1}' file: Print the first field (column) of each line
+    - Example: awk '{print $1}' names.txt
+  - awk '{print $1,$3}' file: Print multiple specific fields
+    - Example: ls -l | awk '{print $9, $5}'
+  - awk -F: '{print $1}' /etc/passwd: Define a custom field separator
+    - Example: awk -F: '{print $1}' /etc/passwd
+  - awk '$3 > 100' file: Filter lines based on a numeric condition in a field
+    - Example: awk '$3 > 500' stats.txt
+  - awk '{sum+=$1} END {print sum}': Perform arithmetic operations and print final result
+    - Example: awk '{sum+=$3} END {print sum}' sales.log
+  - awk 'NR==5' file: Print a line based on its record number (line number)
+    - Example: awk 'NR==10' data.csv
+  - awk 'length > 80' file: Print lines that exceed a certain character length
+    - Example: awk 'length > 100' source_code.c
+  - awk '/pattern/ {print $2}' file: Print a specific field only for matching lines
+    - Example: awk '/active/ {print $2}' services.log
+
+Other Text Tools
+  - cut -d: -f1 file: Extract fields using a delimiter
+    - Example: cut -d: -f1 /etc/group
+  - cut -c1-10 file: Extract a specific range of characters
+    - Example: cut -c1-8 passwords.txt
+  - sort file: Sort lines of text alphabetically
+    - Example: sort list.txt
+  - sort -n file: Sort lines based on numeric value
+    - Example: sort -n scores.txt
+  - sort -r file: Reverse the result of the sort
+    - Example: sort -r names.txt
+  - sort -u file: Sort and remove duplicate lines (unique)
+    - Example: sort -u access.log
+  - uniq file: Report or omit repeated adjacent lines
+    - Example: sort list.txt | uniq
+  - uniq -c file: Prefix lines by the number of occurrences
+    - Example: sort category.txt | uniq -c
+  - tr 'a-z' 'A-Z': Translate or delete characters (lowercase to uppercase)
+    - Example: echo "hello" | tr 'a-z' 'A-Z'
+  - tr -d '0-9': Delete specific characters from the input
+    - Example: echo "pass123" | tr -d '0-9'
+________________________________________________________________________________________
+
+> I/O Redirection & Pipes:
+    Controlling input/output streams and chaining commands
+
+Output Redirection
+  - command > file: Redirect standard output to a file, overwriting existing content
+    - Example: ls /etc > list.txt
+  - command >> file: Redirect standard output to a file, appending to existing content
+    - Example: echo "New entry" >> log.txt
+  - command 2> file: Redirect standard error (stderr) to a file
+    - Example: ls /root 2> error.log
+  - command &> file: Redirect both standard output and standard error to the same file
+    - Example: tar -czf backup.tar.gz /data &> backup.log
+  - command 2>&1: Redirect stderr to the same location as stdout
+    - Example: my_script.sh > output.log 2>&1
+  - command > /dev/null: Discard output by sending it to the "null device" (black hole)
+    - Example: ping -c 4 8.8.8.8 > /dev/null
+  - command 2>&1 | tee file: Display output on screen and save it to a file simultaneously
+    - Example: make 2>&1 | tee build_output.txt
+
+Input Redirection
+  - command < file: Read input for a command from a file instead of the keyboard
+    - Example: mysql database_name < backup.sql
+  - command << EOF: Use a "Here Document" for multi-line input until the EOF string
+    - Example: cat << EOF > hello.txt
+  - command <<< 'string': Use a "Here String" to pass a single line of text as input
+    - Example: base64 -d <<< 'SGVsbG8='
+
+Pipes and Command Chaining
+  - cmd1 | cmd2: Pass the standard output of cmd1 as standard input to cmd2
+    - Example: history | grep "chmod"
+  - cmd1 && cmd2: Execute cmd2 only if cmd1 finishes successfully (exit code 0)
+    - Example: make && ./install.sh
+  - cmd1 || cmd2: Execute cmd2 only if cmd1 fails (exit code non-zero)
+    - Example: mkdir folder || echo "Folder already exists"
+  - cmd1 ; cmd2: Execute cmd2 immediately after cmd1, regardless of the outcome
+    - Example: date ; sleep 5 ; date
+  - Example: ps aux | grep nginx | awk '{print $2}' - Get nginx PIDs
+    - Use case: Lists all processes, filters for nginx, and extracts the second column (PID)
+  - Example: cat file | sort | uniq -c | sort -rn - Frequency count
+    - Use case: Reads a file, sorts lines, counts unique occurrences, and sorts by frequency descending
+________________________________________________________________________________________
+
+> Process Management:
+    Monitoring and controlling running processes
+
+Viewing Processes
+  - ps: Show processes associated with the current terminal session
+    - Example: ps
+  - ps aux: Show all processes from all users with detailed information (CPU, Memory, etc.)
+    - Example: ps aux | grep firefox
+  - ps -ef: Show all processes in a full-format listing, including the parent PID (PPID)
+    - Example: ps -ef --forest
+  - ps -u username: Display all processes owned by a specific user
+    - Example: ps -u student
+  - pstree: Display the running processes as a hierarchical tree structure
+    - Example: pstree -p
+  - top: Provide a real-time, interactive view of running processes and system resources
+    - Example: top
+  - htop: An enhanced, colorized, and user-friendly version of top (requires installation)
+    - Example: htop
+  - Interactive top commands:
+    - k: Kill a process by PID
+    - r: Change the priority (renice) of a process
+    - q: Quit the interactive viewer
+  - top -u username: Filter the real-time monitor to show only one user's processes
+    - Example: top -u root
+
+Process Control
+  - kill PID: Send the SIGTERM (15) signal to request a graceful shutdown
+    - Example: kill 1234
+  - kill -9 PID: Send the SIGKILL (9) signal to force an immediate termination
+    - Example: kill -9 1234
+  - kill -15 PID: Explicitly send the SIGTERM signal (standard behavior of kill)
+    - Example: kill -15 1234
+  - killall process_name: Send a signal to all processes identified by their exact name
+    - Example: killall sleep
+  - pkill pattern: Send a signal to processes based on a pattern or attribute
+    - Example: pkill -u dan python
+  - Ctrl+C: Send the SIGINT (2) signal to interrupt the current foreground process
+    - Use case: Stopping a ping command in the terminal
+  - Ctrl+Z: Send the SIGTSTP (20) signal to suspend the foreground process
+    - Use case: Pausing a text editor to return to the shell
+  - bg: Resume a suspended process in the background
+    - Example: bg %1
+  - fg: Bring a background or suspended job to the foreground
+    - Example: fg %1
+  - jobs: List all active jobs associated with the current shell session
+    - Example: jobs -l
+  - command &: Execute a command in the background immediately
+    - Example: updatedb &
+  - nohup command &: Run a command that persists even after the terminal is closed (ignores SIGHUP)
+    - Example: nohup ./long_script.sh &
+
+Process Priority
+  - nice -n 10 command: Launch a new process with a specific "niceness" value
+    - Example: nice -n 10 tar -czf backup.tar.gz /data
+  - Nice values: Range from -20 (highest priority/least nice) to 19 (lowest priority/most nice)
+  - renice -n 5 -p PID: Modify the priority of an already running process
+    - Example: sudo renice -n -5 -p 1234
+  - Default value: All processes start with a default nice value of 0
+  - Permissions: Regular users can only increase nice values; only root can set negative values
+________________________________________________________________________________________
+
+> Basic Networking Commands:
+    Network configuration and diagnostics
+
+Network Configuration
+  - ip addr show: Display all network interfaces and their assigned IP addresses
+    - Example: ip addr show eth0
+  - ip link show: Show the status of network interfaces (Up, Down, MTU)
+    - Example: ip link show wlan0
+  - ip route show: Display the kernel's routing table (gateway and routes)
+    - Example: ip route show
+  - ifconfig: Legacy tool to display or configure network interface parameters
+    - Example: ifconfig
+  - ifconfig eth0 up/down: Enable or disable a specific network interface
+    - Example: sudo ifconfig eth0 down
+  - hostname: View or temporarily modify the system's network hostname
+    - Example: hostname
+  - hostname -I: Display all network addresses assigned to the host
+    - Example: hostname -I
+
+Network Diagnostics
+  - ping host: Send ICMP Echo Request packets to test network connectivity
+    - Example: ping google.com
+  - ping -c 4 host: Limit the number of echo requests sent to exactly four
+    - Example: ping -c 4 8.8.8.8
+  - traceroute host: Print the route (hops) that packets take to reach a network host
+    - Example: traceroute yahoo.com
+  - tracepath host: Trace the path to a destination, discovering MTU along the way (no root required)
+    - Example: tracepath google.com
+  - mtr host: A real-time, interactive tool that combines ping and traceroute
+    - Example: mtr 8.8.8.8
+  - netstat -tuln: Display listening TCP and UDP ports in numeric format (no DNS lookup)
+    - Example: netstat -tuln
+  - netstat -an: Show all active and listening network connections
+    - Example: netstat -an | grep :80
+  - ss -tuln: Modern and faster replacement for netstat, showing listening sockets
+    - Example: ss -tuln
+  - ss -s: Provide a summary of socket statistics (TCP, UDP, RAW, etc.)
+    - Example: ss -s
+
+File Transfer
+  - wget URL: Download a file from the internet directly to the current directory
+    - Example: wget https://kernel.org/pub/linux/kernel/v5.x/linux-5.0.tar.xz
+  - wget -c URL: Resume a partially downloaded file from where it stopped
+    - Example: wget -c https://example.com/bigfile.iso
+  - curl URL: Transfer data from or to a server (displays content in terminal by default)
+    - Example: curl https://ifconfig.me
+  - curl -O URL: Save the downloaded file using its original remote filename
+    - Example: curl -O https://example.com/file.zip
+  - curl -o file URL: Save the downloaded file under a custom local filename
+    - Example: curl -o setup.sh https://example.com/install.sh
+  - scp file user@host:/path: Securely copy a file to a remote host over SSH
+    - Example: scp script.sh student@192.168.1.50:/home/student/
+  - scp -r dir user@host:/path: Recursively copy an entire directory to a remote location
+    - Example: scp -r project/ backup_user@server:/backups/
+  - rsync -avz source dest: Synchronize files/directories efficiently (archive mode, verbose, compressed)
+    - Example: rsync -avz Documents/ /backup/Documents/
