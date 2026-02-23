@@ -1,11 +1,13 @@
 > Linux Command Reference and Dictionary:
     Unified documentation for essential system utilities
  
-awk - Pattern Scanning
-  - awk: A powerful text processing and pattern scanning language
-    - Example: awk -F: '{print $1}' /etc/passwd
-  - awk '{print $NF}': Print the last field of every line
-    - Example: ls -l | awk '{print $NF}'
+awk - Pattern Processor
+  - awk '{print $n}': Afișează coloana n
+    - Exemplu: awk '{print $1}' date.txt
+  - awk -F [sep]: Specifică separatorul de coloane
+    - Exemplu: awk -F ":" '{print $1}' /etc/passwd
+  - awk 'NR==n': Afișează doar linia cu numărul n
+    - Exemplu: awk 'NR==5' fisier.txt
 
 cat - Concatenate Files
   - cat: Display the entire content of files to standard output
@@ -273,9 +275,13 @@ rsync - Remote Sync
   - rsync -av: Synchronize files and directories while preserving basic attributes and showing progress
     - Example: rsync -av /home/user/ /media/usb/
 
-sed -i - Stream Editor (In-place)
-  - sed -i: Search and replace text patterns directly within the source file
-    - Example: sed -i 's/localhost/127.0.0.1/g' config.yaml
+sed - Stream Editor
+  - sed 's/vechi/nou/g': Înlocuire globală în linie
+    - Exemplu: sed 's/a/b/g' text.txt
+  - sed -i: (In-place) Salvează modificările direct în fișier
+    - Exemplu: sed -i 's/1/2/g' date.txt
+  - sed '/pattern/d': Șterge liniile care conțin șablonul
+    - Exemplu: sed '/^$/d' text.txt (Șterge linii goale)
 
 strace - System Trace
   - strace [comanda]: Interceptează apelurile de sistem efectuate de o comandă
