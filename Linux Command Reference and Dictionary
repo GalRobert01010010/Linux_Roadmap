@@ -471,6 +471,30 @@ tree - Directory Tree
   - tree -L [nivel]: (Level) Limitează adâncimea afișării
     - Exemplu: tree -L 2
 
+cut - Column Extractor
+  - cut -d [delimitator]: Specifică simbolul care separă coloanele
+    - Exemplu: cut -d ":" -f 1 /etc/passwd
+  - cut -f [număr]: Selectează doar câmpul (coloana) specificat
+    - Exemplu: cut -f 1,3 date.txt
+  - cut -c [interval]: Selectează doar caracterele de la pozițiile specificate
+    - Exemplu: cut -c 1-10 text.txt
+
+nl - Number Lines
+  - nl -b a: (Body all) Numerotează toate liniile, inclusiv cele goale
+    - Exemplu: nl -b a fisier.txt
+  - nl -n [format]: Specifică formatul numerotării (rz = cu zerouri în față)
+    - Exemplu: nl -n rz fisier.txt
+
+wc - Word Count
+  - wc -l: (Lines) Afișează numărul de linii
+    - Exemplu: wc -l /etc/passwd
+  - wc -w: (Words) Afișează numărul de cuvinte
+    - Exemplu: wc -w fisier.txt
+  - wc -c: (Bytes) Afișează numărul de octeți
+    - Exemplu: wc -c mesaj.txt
+  - wc -L: (Max length) Afișează lungimea celei mai lungi linii
+    - Exemplu: wc -L fisier.txt
+
 Variabile de Mediu și Speciale (Completare)
   - $PWD: Reține calea absolută către directorul curent (similar cu comanda pwd)
     - Exemplu: echo "Sunt în directorul: $PWD"
