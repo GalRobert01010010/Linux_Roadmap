@@ -495,6 +495,56 @@ wc - Word Count
   - wc -L: (Max length) Afișează lungimea celei mai lungi linii
     - Exemplu: wc -L fisier.txt
 
+uniq - Unique Lines
+  - uniq -c: (Count) Afișează numărul de apariții pentru fiecare linie
+    - Exemplu: sort date.txt | uniq -c
+  - uniq -d: (Duplicates) Afișează doar liniile care se repetă
+    - Exemplu: sort date.txt | uniq -d
+  - uniq -u: (Unique) Afișează doar liniile care apar o singură dată
+    - Exemplu: sort date.txt | uniq -u
+  - uniq -i: (Ignore case) Ignoră diferențele de majuscule
+    - Exemplu: uniq -i date.txt
+
+fmt - Text Formatter
+  - fmt -w [n]: (Width) Limitează lățimea liniilor la n caractere
+    - Exemplu: fmt -w 50 text.txt
+  - fmt -s: (Split) Desparte liniile lungi fără a le uni pe cele scurte
+    - Exemplu: fmt -s text.txt
+
+paste - Merge Lines
+  - paste -d [delimitator]: Specifică separatorul la îmbinare
+    - Exemplu: paste -d "," f1.txt f2.txt
+  - paste -s: (Serial) Pune toate liniile pe un singur rând
+    - Exemplu: paste -s fisier.txt
+
+join - Join on Field
+  - join -t [delimitator]: Specifică separatorul de câmpuri
+    - Exemplu: join -t ":" f1.txt f2.txt
+  - join -1 [n] -2 [m]: Unește folosind coloana n (f1) și m (f2)
+    - Exemplu: join -1 1 -2 1 fisier1.txt fisier2.txt
+
+rev - Reverse Characters
+  - rev: Inversează ordinea caracterelor din fiecare linie
+    - Exemplu: echo "123" | rev
+
+tac - Reverse Cat
+  - tac: Afișează liniile în ordine inversă (ultima devine prima)
+    - Exemplu: tac fisier.txt
+
+tr - Translate
+  - tr [set1] [set2]: Înlocuiește caracterele din set1 cu cele din set2
+    - Exemplu: tr "a-z" "A-Z"
+  - tr -d [set]: (Delete) Șterge caracterele specificate
+    - Exemplu: tr -d "0-9"
+  - tr -s [set]: (Squeeze) Reduce secvențele repetate la un singur caracter
+    - Exemplu: tr -s " "
+
+tee - T-splitter
+  - tee [fisier]: Scrie în fișier și la ecran simultan
+    - Exemplu: ls | tee output.txt
+  - tee -a: (Append) Adaugă la fișier fără să-l suprascrie
+    - Exemplu: echo "log" | tee -a sistem.log
+
 Variabile de Mediu și Speciale (Completare)
   - $PWD: Reține calea absolută către directorul curent (similar cu comanda pwd)
     - Exemplu: echo "Sunt în directorul: $PWD"
