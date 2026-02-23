@@ -276,12 +276,20 @@ rsync - Remote Sync
     - Example: rsync -av /home/user/ /media/usb/
 
 sed - Stream Editor
-  - sed 's/vechi/nou/g': Înlocuire globală în linie
-    - Exemplu: sed 's/a/b/g' text.txt
-  - sed -i: (In-place) Salvează modificările direct în fișier
-    - Exemplu: sed -i 's/1/2/g' date.txt
-  - sed '/pattern/d': Șterge liniile care conțin șablonul
-    - Exemplu: sed '/^$/d' text.txt (Șterge linii goale)
+  - sed -e [comanda]: Permite specificarea mai multor comenzi de editare într-o singură linie
+    - Exemplu: sed -e 's/ana/ANA/' -e 's/mere/MERE/' test.txt
+  - sed -n: (Quiet/Silent) Suprimă afișarea automată a liniilor; util împreună cu comanda p
+    - Exemplu: sed -n '5p' test.txt (Afișează doar linia 5)
+  - sed -i: (In-place) Salvează modificările direct în fișierul original
+    - Exemplu: sed -i 's/vechi/nou/g' test.txt
+  - sed -r: (Extended RegEx) Permite folosirea expresiilor regulate extinse (fără backslash la +, ?, |, ())
+    - Exemplu: sed -r 's/(ana|are)/CUWANT/g' test.txt
+  - sed -f [fisier]: Citește comenzile sed dintr-un fișier extern
+    - Exemplu: sed -f script_sed.sed test.txt
+  - sed 's/text/altceva/I': (Ignore case) Face înlocuirea ignorând diferența de majuscule/minuascule
+    - Exemplu: sed 's/ana/ELEV/I' test.txt
+  - sed 's/text/altceva/w [fisier]': Scrie în [fisier] doar liniile unde s-a produs o înlocuire
+    - Exemplu: sed 's/mere/fructe/w modificari.txt' test.txt
 
 strace - System Trace
   - strace [comanda]: Interceptează apelurile de sistem efectuate de o comandă
@@ -538,12 +546,16 @@ tac - Reverse Cat
     - Exemplu: tac fisier.txt
 
 tr - Translate
-  - tr [set1] [set2]: Înlocuiește caracterele din set1 cu cele din set2
-    - Exemplu: tr "a-z" "A-Z"
-  - tr -d [set]: (Delete) Șterge caracterele specificate
-    - Exemplu: tr -d "0-9"
-  - tr -s [set]: (Squeeze) Reduce secvențele repetate la un singur caracter
-    - Exemplu: tr -s " "
+  - tr [set1] [set2]: Traduce caracterele din set1 în caracterele corespunzătoare din set2
+    - Exemplu: tr 'a-z' 'A-Z' < test.txt (Transformă totul în majuscule)
+  - tr -d [set]: (Delete) Șterge toate caracterele specificate în set
+    - Exemplu: tr -d '0-9' < test.txt (Elimină toate cifrele)
+  - tr -s [set]: (Squeeze) Înlocuiește secvențele de caractere identice repetate cu un singur caracter
+    - Exemplu: tr -s ' ' < test.txt (Elimină spațiile multiple, lăsând unul singur)
+  - tr -c [set]: (Complement) Se referă la toate caracterele care NU fac parte din setul specificat
+    - Exemplu: tr -cd '0-9' < test.txt (Șterge tot ce NU este cifră)
+  - tr -t [set1] [set2]: (Truncate) Taie set1 la lungimea lui set2 înainte de traducere
+    - Exemplu: tr -t 'abcd' '12' < test.txt (Doar a și b vor fi traduse în 1 și 2)
 
 tee - T-splitter
   - tee [fisier]: Scrie în fișier și la ecran simultan
