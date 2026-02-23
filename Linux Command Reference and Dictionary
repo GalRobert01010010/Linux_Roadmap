@@ -102,10 +102,30 @@ find - Search Files
     - Example: sudo find / -name "id_rsa"
 
 grep - Global Regular Expression Print
-  - grep: Search for specific text patterns within files or command output
-    - Example: grep "ERROR" /var/log/syslog
-  - grep -r: Search for a pattern recursively through all files in a directory
-    - Example: grep -r "127.0.0.1" /etc/
+    - i (ignore-case)
+      - Comandă: grep -i "linux" fisier.txt
+      - Efect: Găsește "Linux", "LINUX", "linux" etc. (Ignoră diferența mare/mică).
+    - v (invert-match)
+      - Comandă: grep -v "eroare" log.txt
+      - Efect: Afișează toate liniile care NU conțin cuvântul "eroare" (Filtrare inversă).
+    - r (recursive)
+      - Comandă: grep -r "192.168.1.1" /etc/
+      - Efect: Caută șirul în toate fișierele din directorul specificat și din subdirectoare.
+    - n (line-number)
+      - Comandă: grep -n "main" script.c
+      - Efect: Afișează linia găsită împreună cu numărul ei din fișier.
+    - c (count)
+      - Comandă: grep -c "FAILED" auth.log
+      - Efect: Afișează doar numărul total de linii care conțin potrivirea (nu liniile în sine).
+    - l (files-with-matches)
+      - Comandă: grep -l "TODO" *.py
+      - Efect: Afișează doar numele fișierelor care conțin cuvântul, nu și conținutul.
+    - E (extended-regexp)
+      - Comandă: grep -E "mere|pere" lista.txt
+      - Efect: Activează RegEx extins (nu mai trebuie backslash pentru symbols ca +, |, ?).
+    - w (word-regexp)
+      - Comandă: grep -w "ana" text.txt
+      - Efect: Caută cuvântul întreg. Nu va găsi "ananas" sau "cana".
 
 head - Output First Part of Files
   - head: Afișează implicit primele 10 linii ale unui fișier
