@@ -95,11 +95,37 @@ echo - Output Text
   - echo $PATH: Display the content of an environment variable
     - Example: echo $SHELL
 
-find - Search Files
-  - find: Search for files and directories in a directory hierarchy based on various criteria
-    - Example: find . -type d
-  - find / -name: Search for files by their exact name starting from the root directory
-    - Example: sudo find / -name "id_rsa"
+find - Find Files
+  - find [cale] -name [nume]: Căutare după nume
+    - Exemplu: find /etc -name passwd
+  - find [cale] -type [tip]: Filtrare după tip (f=fișier, d=director)
+    - Exemplu: find . -type d
+  - find [cale] -mtime [zile]: Fișiere modificate în ultimele X zile
+    - Exemplu: find /var/log -mtime -2
+  - find [cale] -exec [comanda] {} \;: Execută o comandă pe rezultatele găsite
+    - Exemplu: find . -name "*.tmp" -exec rm {} \;
+  - find [cale] -user [nume]: Căutare fișiere deținute de un utilizator specific
+    - Exemplu: find /home -user elev
+  - find [cale] -perm [mod]: Căutare după permisiuni (format octal)
+    - Exemplu: find . -perm 777
+  - find [cale] -size [mărime]: Căutare după dimensiune (k=KB, M=MB, G=GB)
+    - Exemplu: find /var/log -size +10M
+  - find [cale] -inum [număr]: Căutare fișier după numărul de Inode
+    - Exemplu: find / -inum 12345
+
+stat - File Status
+  - stat [fisier]: Afișează informații detaliate despre un fișier (Inode, drepturi, timestamp)
+    - Exemplu: stat /etc/shadow
+
+lsblk - List Block Devices
+  - lsblk: Listează dispozitivele de stocare (partiții, discuri)
+    - Exemplu: lsblk
+  - lsblk -f: (Filesystem) Afișează tipul sistemului de fișiere și UUID-ul
+    - Exemplu: lsblk -f
+  - lsblk -d: (Nodes) Afișează doar dispozitivele fizice, fără partiții
+    - Exemplu: lsblk -d
+  - lsblk -o [coloane]: (Output) Afișează doar coloanele specificate (ex: NAME,UUID,SIZE)
+    - Exemplu: lsblk -o NAME,UUID
 
 grep - Global Regular Expression Print
     - i (ignore-case)
@@ -252,8 +278,24 @@ sed -i - Stream Editor (In-place)
     - Example: sed -i 's/localhost/127.0.0.1/g' config.yaml
 
 strace - System Trace
-  - strace: Intercept and record the system calls made and signals received by a process
-    - Example: strace -p 1234
+  - strace [comanda]: Interceptează apelurile de sistem efectuate de o comandă
+    - Exemplu: strace ls
+  - strace -p [PID]: Se atașează de un proces care rulează deja
+    - Exemplu: strace -p 1234
+  - strace -e [apel]: Filtrează după un anumit apel de sistem (ex. open)
+    - Exemplu: strace -e open ls
+
+diff - Difference
+  - diff [f1] [f2]: Compară două fișiere linie cu linie
+    - Exemplu: diff file1.txt file2.txt
+  - diff -u [f1] [f2]: (Unified) Afișează diferențele în format unificat
+    - Exemplu: diff -u file1.txt file2.txt
+  - diff -r [d1] [d2]: (Recursive) Compară conținutul a două directoare
+    - Exemplu: diff -r folder1 folder2
+  - diff -y: (Side-by-side) Afișează fișierele pe două coloane pentru comparare vizuală
+    - Exemplu: diff -y f1.txt f2.txt
+  - diff -q: (Brief) Raportează doar dacă fișierele diferă, fără a arăta liniile
+    - Exemplu: diff -q f1.txt f2.txt
 
 sudo - SuperUser Do
   - sudo: Execute a command with the security privileges of another user (usually root)
@@ -284,6 +326,22 @@ tar - Tape Archive
     - Example: tar -xvf archive.tar
   - tar -czvf: Create a compressed archive using the gzip algorithm (c: create, z: gzip, v: verbose, f: file)
     - Example: tar -czvf backup.tar.gz /home/user
+  - tar -c: (Create) Crearea unei arhive noi
+    - Exemplu: tar -cvf arhiva.tar folder/
+  - tar -x: (Extract) Extragerea conținutului dintr-o arhivă
+    - Exemplu: tar -xvf arhiva.tar
+  - tar -t: (List) Listarea conținutului unei arhive fără extragere
+    - Exemplu: tar -tvf arhiva.tar
+  - tar -z: (Gzip) Compresie/Decompresie folosind gzip (.tar.gz)
+    - Exemplu: tar -zcvf arhiva.tar.gz folder/
+  - tar -j: (Bzip2) Compresie/Decompresie folosind bzip2 (.tar.bz2)
+    - Exemplu: tar -jcvf arhiva.tar.bz2 folder/
+  - tar -f: (File) Specifică numele fișierului arhivă (obligatoriu ultima în grup)
+    - Exemplu: tar -f arhiva.tar
+  - tar -C [cale]: (Directory) Schimbă directorul înainte de execuție (pentru extragere la destinație)
+    - Exemplu: tar -xvf arhiva.tar -C /tmp/
+  - tar -v: (Verbose) Afișează detaliat procesul de arhivare
+    - Exemplu: tar -cvf arhiva.tar folder/
 
 tcpdump - Packet Sniffer
   - tcpdump: Capture and analyze network traffic flowing through a specific interface
@@ -398,6 +456,20 @@ id - Identity
     - Exemplu: id -G
   - id [username]: Afișează informațiile de identitate pentru un alt utilizator specificat
     - Exemplu: id root
+
+pstree - Process Tree
+  - pstree: Afișează ierarhia proceselor sub formă de arbore
+    - Exemplu: pstree
+  - pstree -p: (PIDs) Afișează PID-urile pentru fiecare proces
+    - Exemplu: pstree -p
+  - pstree -u: (Users) Afișează utilizatorul care deține procesul
+    - Exemplu: pstree -u
+
+tree - Directory Tree
+  - tree: Vizualizare ierarhică a directoarelor
+    - Exemplu: tree
+  - tree -L [nivel]: (Level) Limitează adâncimea afișării
+    - Exemplu: tree -L 2
 
 Variabile de Mediu și Speciale (Completare)
   - $PWD: Reține calea absolută către directorul curent (similar cu comanda pwd)
