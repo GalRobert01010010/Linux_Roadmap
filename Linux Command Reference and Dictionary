@@ -242,11 +242,11 @@ ps - Process Status
     - Exemplu: ps -ef
   - ps aux: (Stil BSD) Cel mai folosit mod; afișează procesele tuturor utilizatorilor (a), inclusiv cele fără terminal (x), cu detalii despre consumul de resurse (u)
     - Exemplu: ps aux
-  - ps -u username: Afișează procesele care aparțin unui anumit utilizator
+  - ps -u [username]: Afișează procesele care aparțin unui anumit utilizator
     - Exemplu: ps -u root
-  - ps -p PID: Afișează informații despre un proces specific, identificat prin ID-ul său
+  - ps -p [PID]: Afișează informații despre un proces specific, identificat prin ID-ul său
     - Exemplu: ps -p 1234
-  - ps -C command: Filtrează procesele după numele executabilului
+  - ps -C [command]: Filtrează procesele după numele executabilului
     - Exemplu: ps -C nginx
   - ps --forest: Afișează ierarhia proceselor sub formă de arbore (vizualizează relația părinte-copil)
     - Exemplu: ps -ef --forest
