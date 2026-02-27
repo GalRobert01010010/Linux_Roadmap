@@ -20,17 +20,43 @@ cd - Change Directory
     - Example: cd /var/log
   - cd ..: Move up one directory level
 
-chmod - Change Mode
-  - chmod: Modify file and directory permissions using symbolic or octal restricted bits
-    - Example: chmod 755 script.sh
-  - chmod +x: Grant execute permission to the file owner, group, and others
-    - Example: chmod +x tool.py
+chmod - Change Mode (Modifică permisiunile)
+    - chmod: Schimbă permisiunile de acces (rwx)
+        - Exemplu: chmod 755 script.sh
+    - chmod -R: Schimbă permisiunile în mod recursiv (intră în directoare)
+        - Exemplu: chmod -R 700 /home/user/folder_privat
+    - chmod -f: (Silent) Ignoră mesajele de eroare dacă nu poți modifica un fișier
+        - Exemplu: chmod -f 644 fisier_protejat.conf
+    - chmod -c: (Changes) Raportează doar fișierele care au fost modificate efectiv
+        - Exemplu: chmod -c 777 *.sh
+    - chmod -v: (Verbose) Afișează un mesaj pentru fiecare fișier procesat
+        - Exemplu: chmod -v 600 id_rsa
+    - chmod --reference: Copiază permisiunile de la un fișier sursă la unul țintă
+        - Exemplu: chmod --reference=vechi.txt nou.txt
 
-chown - Change Owner
-  - chown: Change the user and/or group ownership of a file or directory
-    - Example: sudo chown root:root /etc/shadow
-  - chown -R: Change ownership recursively for a directory and its contents
-    - Example: sudo chown -R user:group /home/user/project
+chown - Change Owner (Modifică proprietarul)
+    - chown: Schimbă utilizatorul și/sau grupul posesor
+        - Exemplu: sudo chown robert:elevi proiect.zip
+    - chown -R: Schimbă proprietarul recursiv în toată structura de directoare
+        - Exemplu: sudo chown -R www-data:www-data /var/www/html
+    - chown -h: Schimbă proprietarul legăturii simbolice, nu al destinației
+        - Exemplu: sudo chown -h user:group scurtatura_link
+    - chown -L: (Dereference) Urmează toate legăturile simbolice în mod recursiv
+        - Exemplu: sudo chown -R -L user:group /cale/cu/linkuri
+    - chown -H: Urmează link-ul doar dacă este argumentul principal al comenzii
+        - Exemplu: sudo chown -R -H user:group link_catre_director
+    - chown --from: Schimbă proprietarul doar dacă cel actual este cel specificat
+        - Exemplu: sudo chown --from=root user_nou fisier.log
+
+chgrp - Change Group (Modifică grupul)
+    - chgrp: Schimbă doar grupul posesor al unui fișier
+        - Exemplu: chgrp staff document.pdf
+    - chgrp -R: Schimbă grupul recursiv
+        - Exemplu: sudo chgrp -R sysadmin /var/log/apache2
+    - chgrp --reference: Aplică grupul unui fișier sursă asupra altui fișier
+        - Exemplu: chgrp --reference=sursa.txt tinta.txt
+    - chgrp -c: Raportează doar fișierele cărora li s-a schimbat grupul
+        - Exemplu: chgrp -c sudoers /etc/sudoers.d/config
 
 chroot - Change Root
   - chroot: Run a command or an interactive shell with a specified directory as the root (/)
