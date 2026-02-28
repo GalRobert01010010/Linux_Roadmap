@@ -43,42 +43,42 @@ cd - Change Directory
   - cd ..: Move up one directory level
 
 chmod - Change Mode (Modifică permisiunile)
-    - chmod: Schimbă permisiunile de acces (rwx)
-        - Exemplu: chmod 755 script.sh
-    - chmod -R: Schimbă permisiunile în mod recursiv (intră în directoare)
-        - Exemplu: chmod -R 700 /home/user/folder_privat
-    - chmod -f: (Silent) Ignoră mesajele de eroare dacă nu poți modifica un fișier
-        - Exemplu: chmod -f 644 fisier_protejat.conf
-    - chmod -c: (Changes) Raportează doar fișierele care au fost modificate efectiv
-        - Exemplu: chmod -c 777 *.sh
-    - chmod -v: (Verbose) Afișează un mesaj pentru fiecare fișier procesat
-        - Exemplu: chmod -v 600 id_rsa
-    - chmod --reference: Copiază permisiunile de la un fișier sursă la unul țintă
-        - Exemplu: chmod --reference=vechi.txt nou.txt
+  - chmod: Schimbă permisiunile de acces (rwx)
+      - Exemplu: chmod 755 script.sh
+  - chmod -R: Schimbă permisiunile în mod recursiv (intră în directoare)
+      - Exemplu: chmod -R 700 /home/user/folder_privat
+  - chmod -f: (Silent) Ignoră mesajele de eroare dacă nu poți modifica un fișier
+      - Exemplu: chmod -f 644 fisier_protejat.conf
+  - chmod -c: (Changes) Raportează doar fișierele care au fost modificate efectiv
+      - Exemplu: chmod -c 777 *.sh
+  - chmod -v: (Verbose) Afișează un mesaj pentru fiecare fișier procesat
+      - Exemplu: chmod -v 600 id_rsa
+  - chmod --reference: Copiază permisiunile de la un fișier sursă la unul țintă
+      - Exemplu: chmod --reference=vechi.txt nou.txt
 
 chown - Change Owner (Modifică proprietarul)
-    - chown: Schimbă utilizatorul și/sau grupul posesor
-        - Exemplu: sudo chown robert:elevi proiect.zip
-    - chown -R: Schimbă proprietarul recursiv în toată structura de directoare
-        - Exemplu: sudo chown -R www-data:www-data /var/www/html
-    - chown -h: Schimbă proprietarul legăturii simbolice, nu al destinației
-        - Exemplu: sudo chown -h user:group scurtatura_link
-    - chown -L: (Dereference) Urmează toate legăturile simbolice în mod recursiv
-        - Exemplu: sudo chown -R -L user:group /cale/cu/linkuri
-    - chown -H: Urmează link-ul doar dacă este argumentul principal al comenzii
-        - Exemplu: sudo chown -R -H user:group link_catre_director
-    - chown --from: Schimbă proprietarul doar dacă cel actual este cel specificat
-        - Exemplu: sudo chown --from=root user_nou fisier.log
+  - chown: Schimbă utilizatorul și/sau grupul posesor
+      - Exemplu: sudo chown robert:elevi proiect.zip
+  - chown -R: Schimbă proprietarul recursiv în toată structura de directoare
+      - Exemplu: sudo chown -R www-data:www-data /var/www/html
+  - chown -h: Schimbă proprietarul legăturii simbolice, nu al destinației
+      - Exemplu: sudo chown -h user:group scurtatura_link
+  - chown -L: (Dereference) Urmează toate legăturile simbolice în mod recursiv
+      - Exemplu: sudo chown -R -L user:group /cale/cu/linkuri
+  - chown -H: Urmează link-ul doar dacă este argumentul principal al comenzii
+      - Exemplu: sudo chown -R -H user:group link_catre_director
+  - chown --from: Schimbă proprietarul doar dacă cel actual este cel specificat
+      - Exemplu: sudo chown --from=root user_nou fisier.log
 
 chgrp - Change Group (Modifică grupul)
-    - chgrp: Schimbă doar grupul posesor al unui fișier
-        - Exemplu: chgrp staff document.pdf
-    - chgrp -R: Schimbă grupul recursiv
-        - Exemplu: sudo chgrp -R sysadmin /var/log/apache2
-    - chgrp --reference: Aplică grupul unui fișier sursă asupra altui fișier
-        - Exemplu: chgrp --reference=sursa.txt tinta.txt
-    - chgrp -c: Raportează doar fișierele cărora li s-a schimbat grupul
-        - Exemplu: chgrp -c sudoers /etc/sudoers.d/config
+  - chgrp: Schimbă doar grupul posesor al unui fișier
+      - Exemplu: chgrp staff document.pdf
+  - chgrp -R: Schimbă grupul recursiv
+      - Exemplu: sudo chgrp -R sysadmin /var/log/apache2
+  - chgrp --reference: Aplică grupul unui fișier sursă asupra altui fișier
+      - Exemplu: chgrp --reference=sursa.txt tinta.txt
+  - chgrp -c: Raportează doar fișierele cărora li s-a schimbat grupul
+      - Exemplu: chgrp -c sudoers /etc/sudoers.d/config
 
 chroot - Change Root
   - chroot: Run a command or an interactive shell with a specified directory as the root (/)
@@ -181,21 +181,21 @@ free - Display amount of free and used memory in the system
       - EX: `free -hw`
 
 echo - Output Text
-    - echo: Afișează un șir de text sau valoarea unei variabile în terminal
-        - Exemplu: echo "Hello Linux"
-    - echo $VARIABLE: Afișează conținutul unei variabile de mediu
-        - Exemplu: echo $SHELL
-    - echo -n: Afișează textul fără a adăuga o linie nouă (newline) la final
-        - Exemplu: echo -n "Text fără enter la final"
-    - echo -e: Activează interpretarea caracterelor de tip "backslash escape"
-        - Exemplu \n: echo -e "Linia 1\nLinia 2"
-            - Obs.: \n (newline) mută textul care urmează pe o linie nouă.
-        - Exemplu \t: echo -e "Nume:\tPopescu"
-            - Obs.: \t (horizontal tab) inserează un spațiu de tabulare orizontal, util pentru alinierea textului în coloane.
-        - Exemplu \b: echo -e "Linuxx\b"
-            - Obs.: \b (backspace) șterge caracterul anterior. În exemplul de mai sus, va afișa "Linux" (șterge ultimul 'x').
-    - echo -E: Dezactivează explicit interpretarea caracterelor escape (comportament implicit)
-        - Exemplu: echo -E "Nu se va vedea \n ca linie nouă"
+  - echo: Afișează un șir de text sau valoarea unei variabile în terminal
+      - Exemplu: echo "Hello Linux"
+  - echo $VARIABLE: Afișează conținutul unei variabile de mediu
+      - Exemplu: echo $SHELL
+  - echo -n: Afișează textul fără a adăuga o linie nouă (newline) la final
+      - Exemplu: echo -n "Text fără enter la final"
+  - echo -e: Activează interpretarea caracterelor de tip "backslash escape"
+      - Exemplu \n: echo -e "Linia 1\nLinia 2"
+          - Obs.: \n (newline) mută textul care urmează pe o linie nouă.
+      - Exemplu \t: echo -e "Nume:\tPopescu"
+          - Obs.: \t (horizontal tab) inserează un spațiu de tabulare orizontal, util pentru alinierea textului în coloane.
+      - Exemplu \b: echo -e "Linuxx\b"
+          - Obs.: \b (backspace) șterge caracterul anterior. În exemplul de mai sus, va afișa "Linux" (șterge ultimul 'x').
+  - echo -E: Dezactivează explicit interpretarea caracterelor escape (comportament implicit)
+      - Exemplu: echo -E "Nu se va vedea \n ca linie nouă"
 
 find - Find Files
   - find [cale] -name [nume]: Căutare după nume
@@ -298,30 +298,30 @@ lscpu - Display information about the CPU architecture
       - Exemplu probă: `lscpu -y`
 
 grep - Global Regular Expression Print
-    - i (ignore-case)
-      - Comandă: grep -i "linux" fisier.txt
-      - Efect: Găsește "Linux", "LINUX", "linux" etc. (Ignoră diferența mare/mică).
-    - v (invert-match)
-      - Comandă: grep -v "eroare" log.txt
-      - Efect: Afișează toate liniile care NU conțin cuvântul "eroare" (Filtrare inversă).
-    - r (recursive)
-      - Comandă: grep -r "192.168.1.1" /etc/
-      - Efect: Caută șirul în toate fișierele din directorul specificat și din subdirectoare.
-    - n (line-number)
-      - Comandă: grep -n "main" script.c
-      - Efect: Afișează linia găsită împreună cu numărul ei din fișier.
-    - c (count)
-      - Comandă: grep -c "FAILED" auth.log
-      - Efect: Afișează doar numărul total de linii care conțin potrivirea (nu liniile în sine).
-    - l (files-with-matches)
-      - Comandă: grep -l "TODO" *.py
-      - Efect: Afișează doar numele fișierelor care conțin cuvântul, nu și conținutul.
-    - E (extended-regexp)
-      - Comandă: grep -E "mere|pere" lista.txt
-      - Efect: Activează RegEx extins (nu mai trebuie backslash pentru symbols ca +, |, ?).
-    - w (word-regexp)
-      - Comandă: grep -w "ana" text.txt
-      - Efect: Caută cuvântul întreg. Nu va găsi "ananas" sau "cana".
+  - i (ignore-case)
+    - Comandă: grep -i "linux" fisier.txt
+    - Efect: Găsește "Linux", "LINUX", "linux" etc. (Ignoră diferența mare/mică).
+  - v (invert-match)
+    - Comandă: grep -v "eroare" log.txt
+    - Efect: Afișează toate liniile care NU conțin cuvântul "eroare" (Filtrare inversă).
+  - r (recursive)
+    - Comandă: grep -r "192.168.1.1" /etc/
+    - Efect: Caută șirul în toate fișierele din directorul specificat și din subdirectoare.
+  - n (line-number)
+    - Comandă: grep -n "main" script.c
+    - Efect: Afișează linia găsită împreună cu numărul ei din fișier.
+  - c (count)
+    - Comandă: grep -c "FAILED" auth.log
+    - Efect: Afișează doar numărul total de linii care conțin potrivirea (nu liniile în sine).
+  - l (files-with-matches)
+    - Comandă: grep -l "TODO" *.py
+    - Efect: Afișează doar numele fișierelor care conțin cuvântul, nu și conținutul.
+  - E (extended-regexp)
+    - Comandă: grep -E "mere|pere" lista.txt
+    - Efect: Activează RegEx extins (nu mai trebuie backslash pentru symbols ca +, |, ?).
+  - w (word-regexp)
+    - Comandă: grep -w "ana" text.txt
+    - Efect: Caută cuvântul întreg. Nu va găsi "ananas" sau "cana".
 
 head - Output First Part of Files
   - head: Afișează implicit primele 10 linii ale unui fișier
