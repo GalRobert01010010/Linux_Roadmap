@@ -118,10 +118,21 @@ du - Disk Usage
     - Exemplu: du -h --max-depth=1 /var
 
 echo - Output Text
-  - echo: Print a string of text or the value of a variable to the terminal
-    - Example: echo "Hello Linux"
-  - echo $PATH: Display the content of an environment variable
-    - Example: echo $SHELL
+    - echo: Afișează un șir de text sau valoarea unei variabile în terminal
+        - Exemplu: echo "Hello Linux"
+    - echo $VARIABLE: Afișează conținutul unei variabile de mediu
+        - Exemplu: echo $SHELL
+    - echo -n: Afișează textul fără a adăuga o linie nouă (newline) la final
+        - Exemplu: echo -n "Text fără enter la final"
+    - echo -e: Activează interpretarea caracterelor de tip "backslash escape"
+        - Exemplu \n: echo -e "Linia 1\nLinia 2"
+            - Obs.: \n (newline) mută textul care urmează pe o linie nouă.
+        - Exemplu \t: echo -e "Nume:\tPopescu"
+            - Obs.: \t (horizontal tab) inserează un spațiu de tabulare orizontal, util pentru alinierea textului în coloane.
+        - Exemplu \b: echo -e "Linuxx\b"
+            - Obs.: \b (backspace) șterge caracterul anterior. În exemplul de mai sus, va afișa "Linux" (șterge ultimul 'x').
+    - echo -E: Dezactivează explicit interpretarea caracterelor escape (comportament implicit)
+        - Exemplu: echo -E "Nu se va vedea \n ca linie nouă"
 
 find - Find Files
   - find [cale] -name [nume]: Căutare după nume
@@ -272,6 +283,8 @@ ps - Process Status
     - Exemplu: ps -u root
   - ps -p [PID]: Afișează informații despre un proces specific, identificat prin ID-ul său
     - Exemplu: ps -p 1234
+  - ps -t [terminal]: Restricționează afișarea doar la procesele care rulează în terminalul (TTY) din care ai dat comanda.
+    - Exemplu: ps -t 
   - ps -C [command]: Filtrează procesele după numele executabilului
     - Exemplu: ps -C nginx
   - ps --forest: Afișează ierarhia proceselor sub formă de arbore (vizualizează relația părinte-copil)
