@@ -105,6 +105,18 @@ curl - Client URL
       - EX: `curl -L http://bit.ly/ceva`
   - -I: Afișează doar header-ul HTTP (informații despre fișier, fără a-l descărca).
       - EX: `curl -I https://site.com`
+  - -s: Silent mode. Ascunde bara de progres și mesajele de eroare.
+        - EX: `curl -s https://google.com`
+  - -S: Show error. Se folosește împreună cu -s pentru a tăcea, dar a vorbi DOAR dacă apare o eroare.
+      - EX: `curl -sS https://site-mort.com`
+  - -u [user:parola]: Autentificare HTTP (pentru site-uri protejate).
+      - EX: `curl -u robert:parola123 https://site-privat.com`
+  - -k: Insecure. Permite conexiuni către site-uri cu certificate SSL invalide/expirate.
+      - EX: `curl -k https://site-cu-certificat-auto-semnat.ro`
+  - -X [METODA]: Specifică metoda HTTP (GET, POST, DELETE, PUT).
+      - EX: `curl -X POST https://api.com/date`
+  - -d [date]: Trimite date într-un request POST.
+      - EX: `curl -d "nume=Robert&scor=10" https://concurs.ro/api`
 
 df - Disk Free
       - masoara gradul de ocupare al partitiei la nivel de blocuri
@@ -534,11 +546,27 @@ rmdir - Remove Directory
   - rmdir: Remove an empty directory (fails if the directory contains files)
     - Example: rmdir empty_folder
 
-rsync - Remote Sync
-  - rsync -aHAX --delete: Create a full mirror sync preserving ACLs, Hardlinks, and Attributes while deleting extra files
-    - Example: rsync -aHAX --delete /src/ /backup/
-  - rsync -av: Synchronize files and directories while preserving basic attributes and showing progress
-    - Example: rsync -av /home/user/ /media/usb/
+scp - Secure copy (remote file copy program)
+  - scp [sursă] [destinație]: Copiază un fișier de pe mașina locală pe una remote.
+      - EX: `scp fisier.txt user@192.168.1.10:/home/user/`
+  - -r: Copiază recursiv (pentru directoare întregi).
+      - EX: `scp -r ./proiect user@server:/backup/`
+  - -P [port]: Specifică un port SSH diferit (implicit este 22).
+      - EX: `scp -P 2222 fisier.txt user@server:/tmp/`
+  - -p: Păstrează timpii de modificare și permisiunile originale (Preserve).
+      - EX: `scp -p poza.jpg user@server:/home/`
+
+rsync - A fast, versatile, remote (and local) file-copying tool
+  - -a (Archive): Modul cel mai folosit; păstrează tot (permisiuni, link-uri, timestamp).
+      - EX: `rsync -a folder/ backup/`
+  - -v (Verbose): Afișează detaliat ce fișiere sunt transferate.
+      - EX: `rsync -av sursa/ destinatie/`
+  - -z (Compress): Comprimă datele în timpul transferului (economisește bandă).
+      - EX: `rsync -avz local_dir/ user@remote:/dir/`
+  - --delete: Șterge fișierele din destinație care nu mai există în sursă (oglindire perfectă).
+      - EX: `rsync -av --delete sursa/ destinatie/`
+  - --progress: Afișează o bară de progres și viteza de transfer.
+      - EX: `rsync -av --progress film.mp4 /media/usb/`
 
 sed - Stream Editor
   - sed -e [comanda]: Permite specificarea mai multor comenzi de editare într-o singură linie
@@ -691,6 +719,16 @@ wget - The non-interactive network downloader
       - EX: `wget -b https://site.com/arhiva.tar.gz`
   - -r: Descarcă recursiv (poate descărca un site întreg).
       - EX: `wget -r https://site.com/imagini/`
+  - -q: Quiet mode. La fel ca -s de la curl, oprește orice output în terminal.
+        - EX: `wget -q https://site.com/fisier.txt`
+  - --limit-rate=[viteza]: Limitează viteza de download (ca să nu "omori" banda).
+      - EX: `wget --limit-rate=100k https://site.com/iso_mare.iso`
+  - -t [numar]: Încearcă de X ori dacă descărcarea eșuează (Tries).
+      - EX: `wget -t 5 https://site-instabil.com/date.zip`
+  - -N: Timestamping. Descarcă fișierul DOAR dacă cel de pe server este mai nou decât cel local.
+      - EX: `wget -N https://site.com/lista_preturi.pdf`
+  - -P [director]: Salvează fișierul într-un director specific, nu în cel curent.
+      - EX: `wget -P ~/Downloads/Proiecte https://site.com/cod.zip`
 
 who / w / whoami - User Tracking
   - whoami: Afișează doar numele de utilizator (username) al celui care rulează comanda
