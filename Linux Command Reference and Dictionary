@@ -139,6 +139,29 @@ du - Disk Usage
   - du --max-depth=1: Limitează afișarea la un anumit nivel de adâncime (foarte util pentru organizare)
     - Exemplu: du -h --max-depth=1 /var
 
+free - Display amount of free and used memory in the system
+  - free: Afișează memoria în kilobytes (implicit).
+      - EX: `free`
+  - -b: Afișează memoria în bytes.
+      - EX: `free -b`
+  - -k: Afișează memoria în kilobytes.
+      - EX: `free -k`
+  - -m: Afișează memoria în megabytes.
+      - EX: `free -m`
+  - -g: Afișează memoria în gigabytes.
+      - EX: `free -g`
+  - -h: Format lizibil (Human Readable - alege automat unitatea optimă).
+      - EX: `free -h`
+      - Obs.: Cel mai folosit steag pentru o citire rapidă.
+  - -t: Afișează o linie suplimentară cu totalul (RAM + Swap).
+      - EX: `free -ht`
+  - -s [secunde]: Actualizează statisticile la un interval de timp (mod continuu).
+      - EX: `free -h -s 3`
+  - -c [număr]: Se oprește după un număr specific de actualizări.
+      - EX: `free -h -c 5`
+  - -w: Wide mode (separă coloanele de buffer și cache pentru claritate).
+      - EX: `free -hw`
+
 echo - Output Text
     - echo: Afișează un șir de text sau valoarea unei variabile în terminal
         - Exemplu: echo "Hello Linux"
@@ -179,14 +202,82 @@ stat - File Status
     - Exemplu: stat /etc/shadow
 
 lsblk - List Block Devices
-  - lsblk: Listează dispozitivele de stocare (partiții, discuri)
-    - Exemplu: lsblk
-  - lsblk -f: (Filesystem) Afișează tipul sistemului de fișiere și UUID-ul
-    - Exemplu: lsblk -f
-  - lsblk -d: (Nodes) Afișează doar dispozitivele fizice, fără partiții
-    - Exemplu: lsblk -d
-  - lsblk -o [coloane]: (Output) Afișează doar coloanele specificate (ex: NAME,UUID,SIZE)
-    - Exemplu: lsblk -o NAME,UUID
+  - lsblk: Afișează dispozitivele de stocare sub formă de arbore.
+      - Exemplu probă: `lsblk`
+      - Output: Afișează sda (disc) și sda1, sda2 (partiții).
+  - -a: Afișează toate dispozitivele, inclusiv cele goale sau RAM-disks.
+      - Exemplu probă: `lsblk -a`
+  - -f: Afișează sistemul de fișiere (FSTYPE) și UUID-ul.
+      - Exemplu probă: `lsblk -f`
+      - Output: `sda1 ext4 <UUID>` (Afișează dacă e Linux sau Windows).
+  - -l: Format listă (fără ierarhie de tip arbore).
+      - Exemplu probă: `lsblk -l`
+  - -m: Afișează informații despre proprietar și permisiuni (Mode).
+      - Exemplu probă: `lsblk -m`
+  - -p: Afișează calea completă a dispozitivului.
+      - Exemplu probă: `lsblk -p`
+      - Output: `/dev/sda1` în loc de `sda1`.
+  - -o: Specifică doar anumite coloane.
+      - Exemplu probă: `lsblk -o NAME,SIZE,MOUNTPOINT`
+  - -d: Ignoră partițiile (afișează doar discul fizic).
+      - Exemplu probă: `lsblk -d`
+
+lspci - List PCI Devices
+  - lspci: Listare simplă a controllerelor PCI.
+      - Exemplu probă: `lspci`
+  - -v: Detalii suplimentare (Verbose).
+      - Exemplu probă: `lspci -v`
+  - -vv: Detalii și mai multe (Very Verbose).
+      - Exemplu probă: `lspci -vv`
+  - -n: Afișează ID-urile numerice pentru Vendor/Device.
+      - Exemplu probă: `lspci -n`
+      - Output: `8086:15d8` (Intel Corporation).
+  - -nn: Afișează și numele și ID-ul numeric.
+      - Exemplu probă: `lspci -nn`
+  - -t: Afișează ierarhia sub formă de arbore.
+      - Exemplu probă: `lspci -t`
+  - -s: Filtrează după adresa de bus.
+      - Exemplu probă: `lspci -s 00:02.0`
+  - -k: Afișează driverul de kernel folosit.
+      - Exemplu probă: `lspci -k`
+      - Output: `Kernel driver in use: i915`
+
+lsusb - List USB Devices
+  - lsusb: Listare simplă.
+      - Exemplu probă: `lsusb`
+      - Output: `Bus 001 Device 002: ID 046d:c52b Logitech, Inc.`
+  - -v: Detalii tehnice complete (extrem de lung).
+      - Exemplu probă: `lsusb -v`
+  - -s: Filtrează după bus și număr dispozitiv.
+      - Exemplu probă: `lsusb -s 001:002`
+  - -d: Filtrează după ID Vendor:Product.
+      - Exemplu probă: `lsusb -d 046d:c52b`
+  - -t: Afișează topologia porturilor (viteza și ierarhia).
+      - Exemplu probă: `lsusb -t`
+      - Output: `/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M`
+
+lscpu - Display information about the CPU architecture
+  - lscpu: Afișează un rezumat complet al arhitecturii procesorului.
+      - Exemplu probă: `lscpu`
+      - Output: Afișează Vendor ID, Model name, CPU MHz, L1/L2/L3 cache.
+  - -a: Afișează atât CPU-urile active, cât și pe cele inactive (offline).
+      - Exemplu probă: `lscpu -a`
+  - -b: Afișează informațiile doar pentru CPU-urile online (active).
+      - Exemplu probă: `lscpu -b`
+  - -c: Afișează informațiile doar pentru CPU-urile offline.
+      - Exemplu probă: `lscpu -c`
+  - -e: Afișează informațiile într-un format tabelar lizibil pentru oameni.
+      - Exemplu probă: `lscpu -e`
+      - Output: Coloane cu CPU, CORE, SOCKET, NODE.
+  - -J: Generare output în format JSON.
+      - Exemplu probă: `lscpu -J`
+  - -p: Afișează informațiile într-un format optimizat pentru parsare (separat prin virgulă).
+      - Exemplu probă: `lscpu -p`
+      - Obs.: Util în scripturi de automatizare.
+  - -x: Afișează informațiile în format hexazecimal pentru anumite câmpuri.
+      - Exemplu probă: `lscpu -x`
+  - -y: Afișează informații extinse despre topologia cache-ului.
+      - Exemplu probă: `lscpu -y`
 
 grep - Global Regular Expression Print
     - i (ignore-case)
@@ -260,15 +351,89 @@ locate - Fast File Find
   - locate: Find files quickly by name using a pre-built system database (updated by updatedb)
     - Example: locate .bashrc
 
-ls - List
-  - ls: List directory contents, showing files, directories, and links
-    - Example: ls /bin
-  - ls -la: Show all files (including hidden) in a long format with detailed attributes
-    - Example: ls -la
+ls - List Directory Contents
+  - -a: Afișează toate fișierele (inclusiv cele ascunse care încep cu `.`).
+      - Exemplu probă: `ls -a`
+      - Output: `. .. .bashrc .config Documente`
+  - -l: Format lung cu detalii (permisiuni, proprietar, dimensiune).
+      - Exemplu probă: `ls -l`
+      - Output: `-rw-r--r-- 1 student student 4096 Feb 28 12:00 file.txt`
+  - -h: Dimensiuni lizibile (Human Readable). Se folosește cu -l.
+      - Exemplu probă: `ls -lh`
+      - Output: `-rw-r--r-- 1 user user 1.2G Feb 28 12:00 film.mkv`
+  - -S: Sortează după dimensiune (cele mai mari primele).
+      - Exemplu probă: `ls -lS`
+      - Output: Listează fișierele de la cel mai mare la cel mai mic.
+  - -t: Sortează după timpul modificării (cele mai noi primele).
+      - Exemplu probă: `ls -lt`
+      - Output: Cele mai recente fișiere apar în partea de sus.
+  - -r: Inversează ordinea sortării.
+      - Exemplu probă: `ls -ltr`
+      - Output: Cele mai vechi fișiere apar ultimele (foarte util pentru log-uri).
+  - -R: Listare recursivă (include subdirectoare).
+      - Exemplu probă: `ls -R`
+      - Output: Listează tot arborele de directoare de sub locația curentă.
+  - -d: Afișează informații despre director, nu despre conținutul lui.
+      - Exemplu probă: `ls -ld /etc`
+      - Output: `drwxr-xr-x 128 root root 12288 Feb 28 10:00 /etc`
+  - -i: Afișează numărul de Inode (identificatorul unic pe disc).
+      - Exemplu probă: `ls -i`
+      - Output: `144231 file.txt`
+  - -1: Afișează un singur fișier pe fiecare linie.
+      - Exemplu probă: `ls -1`
+      - Output: Util pentru scripturi care procesează nume de fișiere.
+  - -F: Adaugă indicator tip fișier (/ pentru folder, * pentru executabil).
+      - Exemplu probă: `ls -F`
+      - Output: `script.sh* folder/ text.txt`
 
-lsof -i - List Open Files (Network)
-  - lsof -i: List all active processes that have opened network sockets
-    - Example: sudo lsof -i :22
+lshw - List Hardware
+  - lshw: Afișează o listă detaliată a întregului hardware detectat.
+      - Comandă terminal: sudo lshw
+  - -short: Afișează hardware-ul într-un format compact (cale hardware, clasă, descriere).
+      - Comandă terminal: sudo lshw -short
+      - Obs.: Cel mai utilizat steag pentru o privire de ansamblu rapidă.
+  - -class [categorie]: Filtrează rezultatele după o anumită clasă de hardware.
+      - Comandă terminal: sudo lshw -class processor
+      - Categorii comune: memory, storage, network, display, bridge, disk.
+  - -C [categorie]: Alias (prescurtare) pentru steagul -class.
+      - Comandă terminal: sudo lshw -C network
+  - -html: Generează un raport complet în format HTML (bun pentru documentație).
+      - Comandă terminal: sudo lshw -html > hardware_report.html
+  - -xml: Generează output în format XML (util pentru scripturi de automatizare).
+      - Comandă terminal: sudo lshw -xml
+  - -json: Generează output în format JSON (standard pentru aplicații moderne).
+      - Comandă terminal: sudo lshw -json
+  - -businfo: Afișează informații despre magistrale (bus-uri), util pentru adrese PCI/USB.
+      - Comandă terminal: sudo lshw -businfo
+  - -sanitize: Ascunde informațiile sensibile (cum ar fi numerele de serie/serials).
+      - Comandă terminal: sudo lshw -sanitize
+  - -numeric: Afișează ID-urile numerice (pentru vendor și product) în loc de nume.
+      - Comandă terminal: sudo lshw -numeric
+  - -version: Afișează versiunea utilitarului lshw instalat.
+      - Comandă terminal: lshw -version
+
+lsof - List Open Files
+  - lsof: Listează absolut toate fișierele deschise de toate procesele (foarte lung).
+      - Exemplu probă: `sudo lsof`
+  - -u [user]: Listează fișierele deschise de un anumit utilizator.
+      - Exemplu probă: `lsof -u student`
+  - -p [PID]: Listează toate fișierele deschise de un proces specific (folosind PID-ul).
+      - Exemplu probă: `lsof -p 1234`
+  - -i: Listează toate fișierele de rețea (conexiuni active, porturi deschise).
+      - Exemplu probă: `lsof -i`
+  - -i :[port]: Filtrează conexiunile pe un port anume.
+      - Exemplu probă: `lsof -i :80`
+      - Obs.: Esențial la Olimpiadă pentru a vedea ce program ocupă un port.
+  - -t: Afișează doar PID-urile (util pentru a trimite output-ul către kill).
+      - Exemplu probă: `kill -9 $(lsof -t -u student)`
+  - +D [director]: Listează toate procesele care accesează fișiere dintr-un director (recursiv).
+      - Exemplu probă: `lsof +D /var/log`
+  - -c [nume]: Listează fișierele deschise de procesele care încep cu un anumit nume.
+      - Exemplu probă: `lsof -c firefox`
+  - -n: Nu convertește adresele IP în nume de domenii (face comanda mult mai rapidă).
+      - Exemplu probă: `lsof -i -n`
+  - -h: Afișează ajutorul (help) pentru comandă.
+      - Exemplu probă: `lsof -h`
 
 man - Manual
   - man: Display the reference manual for a specific command or system component
