@@ -730,6 +730,58 @@ wget - The non-interactive network downloader
   - -P [director]: Salvează fișierul într-un director specific, nu în cel curent.
       - EX: `wget -P ~/Downloads/Proiecte https://site.com/cod.zip`
 
+ping - Trimite cereri ICMP ECHO_REQUEST către gazde din rețea
+  - -c [număr]: Specifică numărul de pachete (Count). Esențial în Linux, unde ping rulează la infinit altfel.
+      - EX: `ping -c 4 google.com`
+  - -i [secunde]: Intervalul de timp între pachete.
+      - EX: `ping -i 0.5 8.8.8.8` (Trimite pachete mai rapid).
+  - -w [secunde]: Timp maxim de așteptare (Timeout).
+      - EX: `ping -w 5 google.com` (Se oprește după 5 secunde, indiferent de pachete).
+  - -s [octeți]: Schimbă dimensiunea pachetului (Size).
+      - EX: `ping -s 1000 8.8.8.8` (Testează conexiunea cu pachete mari).
+  - -t [valoare]: Setează TTL (Time To Live). Specifică prin câte routere poate trece pachetul.
+        - EX: `ping -t 5 8.8.8.8` (Dacă destinația e la mai mult de 5 hop-uri distanță, pachetul moare).
+  - -W [secunde]: Timeout-ul pentru fiecare răspuns individual.
+      - EX: `ping -W 1 192.168.1.1` (Așteaptă doar o secundă per pachet).
+  - -L: Previne trimiterea pachetelor către adrese de multicast (Loopback suppression).
+      - EX: `ping -L 224.0.0.1`
+  - -p [pattern]: Umple pachetul cu un anumit șablon hexazecimal (util pentru testat erori de transmisie).
+        - EX: `ping -p ff 8.8.8.8` (Trimite pachete pline de 1-uri).
+  - -U: Afișează timpul de utilizator (User-to-User latency).
+      - EX: `ping -U google.com`
+  - -D: Afișează un timestamp în fața fiecărei linii (util pentru log-uri de lungă durată).
+      - EX: `ping -D 8.8.8.8`
+
+traceroute - Print the route packets trace to network host
+  - -n: Nu efectuează rezoluția DNS (afișează doar IP-uri, mult mai rapid).
+      - EX: `traceroute -n 8.8.8.8`
+  - -m [max_hops]: Setează numărul maxim de noduri prin care poate trece (implicit 30).
+      - EX: `traceroute -m 15 google.com`
+  - -w [secunde]: Timp de așteptare pentru răspunsul fiecărui nod (timeout per hop).
+      - EX: `traceroute -w 2 1.1.1.1`
+  - -q [n]: Trimite un număr specific de pachete de sondare per hop (implicit 3).
+      - EX: `traceroute -q 1 8.8.8.8`
+  - -I: Folosește ICMP ECHO în loc de pachete UDP (uneori trece de firewall-uri).
+      - EX: `traceroute -I google.com`
+  - -T: Folosește pachete TCP (util pentru a vedea dacă un port specific e blocat pe traseu).
+      - EX: `traceroute -T -p 80 google.com`
+  - -p [port]: Specifică portul de destinație (folosit împreună cu -T sau -U).
+      - EX: `traceroute -p 443 8.8.8.8`
+
+nslookup - Query Internet name servers interactively
+  - [domeniu]: Traducerea de bază (A record).
+      - EX: `nslookup google.com`
+  - [domeniu] [server]: Interoghează un anumit server DNS, nu pe cel implicit.
+      - EX: `nslookup google.com 1.1.1.1`
+  - -type=[tip]: Filtrează răspunsul după tipul de înregistrare (A, MX, TXT, etc.).
+      - EX: `nslookup -type=mx yahoo.com`
+  - -debug: Afișează detalii tehnice despre pachetele DNS trimise și primite.
+      - EX: `nslookup -debug site.ro`
+  - -timeout=[secunde]: Setează timpul de așteptare pentru un răspuns de la server.
+      - EX: `nslookup -timeout=10 google.com`
+  - -retry=[număr]: De câte ori să reincerce interogarea dacă serverul nu răspunde.
+      - EX: `nslookup -retry=5 google.com`
+
 who / w / whoami - User Tracking
   - whoami: Afișează doar numele de utilizator (username) al celui care rulează comanda
     - Exemplu: whoami
