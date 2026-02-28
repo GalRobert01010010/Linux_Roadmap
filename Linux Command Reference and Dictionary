@@ -320,14 +320,33 @@ ps - Process Status
 jobs - List active jobs
   - jobs: Afișează starea job-urilor pornite în sesiunea curentă.
     - Comandă terminal: jobs
-  - -l: Afișează PID-ul procesului alături de numărul job-ului.
+  - -l : Afișează PID-ul procesului alături de numărul job-ului.
     - Comandă terminal: jobs -l
-  - -p: Afișează doar PID-urile proceselor (fără alte detalii).
+         `student@uso:~$ sleep 1000 &`
+         `[1] 10533`
+         `student@uso:~$ jobs -l`
+         `[1]+ 10533 Running                 sleep 1000 &`
+         Obs.: Apare coloana a doua care indică PID-ul (Process ID) 10533.
+  - -p : Afișează doar PID-urile proceselor.
     - Comandă terminal: jobs -p
-  - -r: Afișează doar job-urile care sunt în starea "Running".
+         `student@uso:~$ jobs -p`
+         `10533`
+         Obs.: Util când vrei să transmiți PID-ul direct altei comenzi, ex: `kill -9 $(jobs -p)`.
+  - -r : Afișează doar job-urile care sunt în starea "Running".
     - Comandă terminal: jobs -r
-  - -s: Afișează doar job-urile care sunt în starea "Stopped".
+         `student@uso:~$ sleep 2000 &`
+         `[2] 10540`
+         `student@uso:~$ nano` (Apasă Ctrl+Z pentru suspendare)
+         `[3]+  Stopped                 nano`
+         `student@uso:~$ jobs -r`
+         `[1]-  Running                 sleep 1000 &`
+         `[2]+  Running                 sleep 2000 &`
+         Obs.: Job-ul [3] cu Nano a fost filtrat din listă deoarece starea lui este "Stopped", nu "Running".
+  - -s : Afișează doar job-urile care sunt în starea "Stopped".
     - Comandă terminal: jobs -s
+         `student@uso:~$ jobs -s`
+         `[3]+  Stopped                 nano`
+         Obs.: Afișează exclusiv procesele care au primit semnalul de suspendare (SIGTSTP) prin Ctrl+Z.
   - -n: Afișează doar job-urile care și-au schimbat starea de la ultima notificare.
     - Comandă terminal: jobs -n
 
