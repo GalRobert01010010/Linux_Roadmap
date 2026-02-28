@@ -9,11 +9,33 @@ awk - Pattern Processor
   - awk 'NR==n': Afișează doar linia cu numărul n
     - Exemplu: awk 'NR==5' fisier.txt
 
-cat - Concatenate Files
-  - cat: Display the entire content of files to standard output
-    - Example: cat /etc/hostname
-  - cat -n: Display content with line numbers
-    - Example: cat -n script.sh
+cat - Concatenate and Display Files
+  - cat: Afișează întreg conținutul unui fișier în terminal
+      - Exemplu: cat fisier.txt
+  - cat -n: Afișează conținutul fișierului numerotând toate liniile
+      - Exemplu: cat -n script.sh
+      - Obs.: Numerotează absolut tot, inclusiv liniile goale. Util pentru debugging.
+  - cat -b: Numerotează doar liniile care conțin text
+      - Exemplu: cat -b text.txt
+      - Obs.: Sare peste liniile goale la numărătoare, oferind o structură mai curată.
+  - cat -s: Comprimă liniile goale consecutive într-o singură linie goală
+      - Exemplu: cat -s fisier.txt
+      - Obs.: Curăță output-ul dacă fișierul are prea multe spații libere inutile între paragrafe.
+  - cat -E: Afișează un simbol "$" la finalul fiecărei linii
+      - Exemplu: cat -E fisier.txt
+      - Obs.: Vizualizezi exact unde se termină rândul; util pentru a găsi spații sau tab-uri lăsate din greșeală la final.
+  - cat -T: Afișează caracterele TAB sub forma "^I"
+      - Exemplu: cat -T cod.c
+      - Obs.: Te ajută să distingi între spații (Space) și Tab-uri în interiorul codului.
+  - cat -A: Afișează toate caracterele non-imprimabile (echivalent cu -vET)
+      - Exemplu: cat -A fisier_invizibil.txt
+      - Obs.: "Arată tot", inclusiv sfârșit de linie și tab-uri; este modul de diagnoză completă.
+  - cat >: Creează un fișier nou sau suprascrie (șterge tot) unul existent cu textul introdus
+      - Exemplu: cat > note.txt (se închide cu Ctrl+D)
+      - Obs.: Atenție! Dacă fișierul există, conținutul vechi este distrus instantaneu.
+  - cat >>: Adaugă text la finalul unui fișier fără a șterge ce era deja acolo
+      - Exemplu: cat >> note.txt
+      - Obs.: Metoda sigură de a completa un fișier de configurare sau un jurnal (log).
 
 cd - Change Directory
   - cd: Change the current working directory in the shell hierarchy
@@ -294,6 +316,20 @@ ps - Process Status
       - --sort=: Specifică ordinea în care vor fi afișate rândurile (sortarea).
          -pcpu: Acesta este detaliul cheie: pcpu înseamnă procentul de utilizare CPU (%CPU).
       Obs. Semnul minus (-) din față indică o sortare descrescătoare; Dacă era +pcpu sau doar pcpu, sortarea era crescătoare.
+
+jobs - List active jobs
+  - jobs: Afișează starea job-urilor pornite în sesiunea curentă.
+    - Comandă terminal: jobs
+  - -l: Afișează PID-ul procesului alături de numărul job-ului.
+    - Comandă terminal: jobs -l
+  - -p: Afișează doar PID-urile proceselor (fără alte detalii).
+    - Comandă terminal: jobs -p
+  - -r: Afișează doar job-urile care sunt în starea "Running".
+    - Comandă terminal: jobs -r
+  - -s: Afișează doar job-urile care sunt în starea "Stopped".
+    - Comandă terminal: jobs -s
+  - -n: Afișează doar job-urile care și-au schimbat starea de la ultima notificare.
+    - Comandă terminal: jobs -n
 
 pwd - Print Working Directory
   - pwd: Print the full absolute path of the current working directory
