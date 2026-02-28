@@ -95,10 +95,16 @@ cp - Copy
     - Example: cp -r /src /backup
 
 curl - Client URL
-  - curl: Transfer data from or to a server using protocols like HTTP, FTP, or SMTP
-    - Example: curl https://ifconfig.me
-  - curl -o: Save the downloaded content to a specific file
-    - Example: curl -o index.html https://google.com
+  - curl [URL]: Afișează conținutul fișierului (codul sursă HTML) în terminal.
+        - EX: `curl https://google.com`
+  - -O (O mare): Salvează fișierul cu numele original de pe server.
+      - EX: `curl -O https://site.com/imagine.jpg`
+  - -o (o mic): Salvează fișierul cu un nume ales de tine.
+      - EX: `curl -o poza.jpg https://site.com/img_01.jpg`
+  - -L: Urmărește redirectările (esential pentru URL-uri scurte).
+      - EX: `curl -L http://bit.ly/ceva`
+  - -I: Afișează doar header-ul HTTP (informații despre fișier, fără a-l descărca).
+      - EX: `curl -I https://site.com`
 
 df - Disk Free
       - masoara gradul de ocupare al partitiei la nivel de blocuri
@@ -674,9 +680,17 @@ uptime - System Run Time
   - uptime -V: (Version) Afișează versiunea utilitarului uptime
     - Exemplu: uptime -V
 
-wget - Web Get
-  - wget: Download files from the web using HTTP, HTTPS, or FTP protocols
-    - Example: wget https://example.com/file.zip
+wget - The non-interactive network downloader
+  - wget [URL]: Descarcă fișierul de la adresa specificată în folderul curent.
+      - EX: `wget https://exemplu.com/fisier.zip`
+  - -O [nume]: Salvează fișierul cu un alt nume.
+      - EX: `wget -O program.exe https://site.com/file.exe`
+  - -c: Continuă o descărcare întreruptă (Continue).
+      - EX: `wget -c https://site.com/film_mare.iso`
+  - -b: Descarcă în fundal (Background).
+      - EX: `wget -b https://site.com/arhiva.tar.gz`
+  - -r: Descarcă recursiv (poate descărca un site întreg).
+      - EX: `wget -r https://site.com/imagini/`
 
 who / w / whoami - User Tracking
   - whoami: Afișează doar numele de utilizator (username) al celui care rulează comanda
