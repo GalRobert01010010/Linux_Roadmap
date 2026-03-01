@@ -240,6 +240,20 @@ lsblk - List Block Devices
   - -d: Ignoră partițiile (afișează doar discul fizic).
       - Exemplu probă: `lsblk -d`
 
+fdisk - Opțiuni de Afișare (Display Options)
+  - -u (Units): Schimbă unitatea de măsură (sectoare sau cilindri). Implicit sunt sectoarele.
+      - EX: `sudo fdisk -u=cylinders -l` (Afișează tabela bazată pe cilindri).
+  - -t (Type): Permite doar vizualizarea unui anumit tip de tabelă de partiții (dos, gpt, sun, sgi).
+      - EX: `sudo fdisk -t gpt -l` (Filtrează să vezi doar discurile cu tabelă modernă GPT).
+  - -v (Version): Afișează versiunea utilitarului (util pentru a vedea dacă suportă GPT).
+      - EX: `fdisk -v`
+  - -l (List): Afișează toate partițiile de pe toate discurile detectate.
+        - EX: `sudo fdisk -l`
+  - [dispozitiv]: Descarcă utilitarul pentru un disc specific (ex: /dev/sda).
+      - EX: `sudo fdisk /dev/nvme0n1`
+  - -s (Size): Afișează dimensiunea unei partiții specifice în blocuri (mai rar folosit acum).
+      - EX: `sudo fdisk -s /dev/sda1`
+
 lspci - List PCI Devices
   - lspci: Listare simplă a controllerelor PCI.
       - Exemplu probă: `lspci`
@@ -350,6 +364,22 @@ htop - Interactive Process Viewer
 ifconfig - Interface Config (Legacy)
   - ifconfig: Display or configure network interface parameters (IP, Netmask, Status)
     - Example: ifconfig eth0
+
+ip addr (sau ip a) - Gestionarea adreselor și interfețelor
+  - -4 (IPv4): Afișează doar adresele de tip IPv4 (elimină IPv6 pentru claritate).
+      - EX: `ip -4 addr`
+  - -6 (IPv6): Afișează doar adresele de tip IPv6.
+      - EX: `ip -6 addr`
+  - -br (Brief): Afișează informația sub formă de tabel scurt (Nume | Stare | IP).
+      - EX: `ip -br addr`
+  - -c (Color): Colorează interfețele și stările (UP/DOWN) pentru a le vedea dintr-o privire.
+      - EX: `ip -c addr`
+  - show [interfață]: Arată detalii doar pentru o placă specifică (ex: eth0).
+      - EX: `ip addr show wlp4s0`
+  - link set [interfață] up/down: Activează sau dezactivează placa de rețea.
+      - EX: `sudo ip link set eno1 down`
+  - route show: Afișează tabela de rutare (unde vezi IP-ul routerului/Gateway).
+      - EX: `ip route show`
 
 ip route show - Routing Table
   - ip route show: Display the system's IP routing table managed by the kernel
@@ -472,8 +502,24 @@ mv - Move/Rename
     - Example: mv old.txt new.txt
 
 netstat -tuln - Network Statistics
-  - netstat -tuln: List all listening TCP and UDP ports numerically without resolving hostnames
-    - Example: sudo netstat -tuln
+  - -tuln: Vezi toate porturile TCP/UDP care ascultă, cu IP numeric și numele programului.
+      - Ex: sudo netstat -tuln
+  - -a (All): Afișează toate conexiunile și porturile care ascultă (listening).
+      - EX: `netstat -a`
+  - -t (TCP): Filtrează și afișează doar conexiunile de tip TCP.
+      - EX: `netstat -at`
+  - -u (UDP): Filtrează și afișează doar conexiunile de tip UDP.
+      - EX: `netstat -au`
+  - -l (Listening): Afișează doar porturile care "ascultă" (așteaptă conexiuni).
+      - EX: `netstat -l`
+  - -n (Numeric): Afișează adresele și porturile sub formă numerică (nu caută nume de domenii, mult mai rapid).
+      - EX: `netstat -an`
+  - -p (Programs): Afișează PID-ul și numele programului care deține acea conexiune (necesită `sudo`).
+      - EX: `sudo netstat -p`
+  - -r (Routing): Afișează tabela de rutare (similar cu comanda `route`).
+      - EX: `netstat -r`
+  - -i (Interfaces): Afișează statistici despre interfețele de rețea (pachete trimise/primite, erori).
+      - EX: `netstat -i`
 
 ps - Process Status
   - ps: Afișează procesele active din terminalul curent al utilizatorului
@@ -650,9 +696,21 @@ tar - Tape Archive
   - tar -v: (Verbose) Afișează detaliat procesul de arhivare
     - Exemplu: tar -cvf arhiva.tar folder/
 
-tcpdump - Packet Sniffer
-  - tcpdump: Capture and analyze network traffic flowing through a specific interface
-    - Example: sudo tcpdump -i eth0
+tcpdump - Packet Sniffer / Network Analyzer
+  - -i (Interface): Specifică placa de rețea pe care asculți (ex: eth0, wlan0).
+    - EX: `sudo tcpdump -i eth0`
+  - -n (No DNS): Nu convertește IP-urile în nume de domenii (face procesarea mult mai rapidă).
+    - EX: `sudo tcpdump -i eth0 -n`
+  - -c (Count): Se oprește după ce capturează un număr specific de pachete.
+    - EX: `sudo tcpdump -i any -c 10`
+  - -v / -vv / -vvv (Verbose): Afișează mai multe detalii tehnice despre pachete.
+    - EX: `sudo tcpdump -i eth0 -vv`
+  - -A (ASCII): Afișează conținutul pachetelor în format text (util pentru a vedea parole în HTTP).
+    - EX: `sudo tcpdump -i eth0 -A`
+  - -w (Write): Salvează captura într-un fișier .pcap pentru a fi deschis ulterior cu Wireshark.
+    - EX: `sudo tcpdump -i eth0 -w captura_mea.pcap`
+  - -r (Read): Citește un fișier salvat anterior.
+    - EX: `sudo tcpdump -r captura_mea.pcap`
 
 top - Table of Processes
   - top: Provide a dynamic, real-time view of running processes and system resource usage
