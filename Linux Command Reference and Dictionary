@@ -378,7 +378,7 @@ ip addr (sau ip a) - Gestionarea adreselor și interfețelor
       - EX: `ip addr show wlp4s0`
   - link set [interfață] up/down: Activează sau dezactivează placa de rețea.
       - EX: `sudo ip link set eno1 down`
-  - route show: Afișează tabela de rutare (unde vezi IP-ul routerului/Gateway).
+  - route show: Afișează tabela de rutare (unde vezi IP-ul routerului/Gateway). Afiseaza adresele IP ale interfetelor de retea de pe un sistem Linux.
       - EX: `ip route show`
 
 ip route show - Routing Table
@@ -789,6 +789,8 @@ wget - The non-interactive network downloader
       - EX: `wget -P ~/Downloads/Proiecte https://site.com/cod.zip`
 
 ping - Trimite cereri ICMP ECHO_REQUEST către gazde din rețea
+  - -a (Audible): Scoate un sunet (beep) de fiecare dată când primește un răspuns.
+        - EX: `ping -a 1.1.1.1` (Util când verifici cabluri și nu te uiți la monitor).
   - -c [număr]: Specifică numărul de pachete (Count). Esențial în Linux, unde ping rulează la infinit altfel.
       - EX: `ping -c 4 google.com`
   - -i [secunde]: Intervalul de timp între pachete.
@@ -798,7 +800,7 @@ ping - Trimite cereri ICMP ECHO_REQUEST către gazde din rețea
   - -s [octeți]: Schimbă dimensiunea pachetului (Size).
       - EX: `ping -s 1000 8.8.8.8` (Testează conexiunea cu pachete mari).
   - -t [valoare]: Setează TTL (Time To Live). Specifică prin câte routere poate trece pachetul.
-        - EX: `ping -t 5 8.8.8.8` (Dacă destinația e la mai mult de 5 hop-uri distanță, pachetul moare).
+      - EX: `ping -t 5 8.8.8.8` (Dacă destinația e la mai mult de 5 hop-uri distanță, pachetul moare).
   - -W [secunde]: Timeout-ul pentru fiecare răspuns individual.
       - EX: `ping -W 1 192.168.1.1` (Așteaptă doar o secundă per pachet).
   - -L: Previne trimiterea pachetelor către adrese de multicast (Loopback suppression).
