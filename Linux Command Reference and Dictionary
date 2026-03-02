@@ -37,6 +37,32 @@ cat - Concatenate and Display Files
       - Exemplu: cat >> note.txt
       - Obs.: Metoda sigură de a completa un fișier de configurare sau un jurnal (log).
 
+less - Paginator avansat
+  - less [FISIER]: Deschide fișierul pentru citire interactivă.
+      - EX: less /etc/passwd
+  - -N: Afișează numărul liniilor în partea stângă.
+      - EX: less -N /etc/passwd
+  - -S: Taie liniile lungi (chop long lines) pentru a păstra formatarea.
+      - EX: less -S /var/log/syslog
+  - -i: Ignoră diferența între litere mari și mici la căutarea cu /.
+      - EX: less -i /var/log/auth.log
+  - -M: Afișează o bară de stare detaliată (procentaj, rânduri) la subsol.
+      - EX: less -M /etc/services
+  - -p [model]: Deschide fișierul direct la prima apariție a cuvântului.
+      - EX: less -p root /etc/group
+
+more - Paginator simplu
+  - more [FISIER]: Afișează conținutul fișierului pagină cu pagină.
+      - EX: more /etc/fstab
+  - -d: Afișează instrucțiuni de navigare (prompt) la finalul paginii.
+      - EX: more -d /etc/fstab
+  - -p: Curăță ecranul înainte de a afișa o nouă pagină de text.
+      - EX: more -p /var/log/messages
+  - +[număr]: Începe afișarea conținutului de la numărul liniei specificate.
+      - EX: more +100 /etc/services
+  - -s: Comprimă mai multe linii goale succesive într-o singură linie.
+      - EX: more -s fisier.txt
+
 cd - Change Directory
   - cd: Change the current working directory in the shell hierarchy
     - Example: cd /var/log
@@ -179,6 +205,20 @@ free - Display amount of free and used memory in the system
       - EX: `free -h -c 5`
   - -w: Wide mode (separă coloanele de buffer și cache pentru claritate).
       - EX: `free -hw`
+
+vmstat - Virtual Memory Statistics
+  - vmstat: Afișează un raport unic al activității sistemului.
+      - EX: vmstat
+  - [interval] [count]: Rulează de X ori la un interval de Y secunde.
+      - EX: vmstat 2 10
+  - -s: Afișează un tabel de statistici detaliate (event counters).
+      - EX: vmstat -s
+  - -d: Afișează statistici specifice pentru activitatea discurilor (disk stats).
+      - EX: vmstat -d
+  - -S [unitate]: Schimbă unitatea de măsură (k, K, m, M).
+      - EX: vmstat -S M
+  - -a: Afișează memoria activă și inactivă (active/inactive memory).
+      - EX: vmstat -a
 
 echo - Output Text
   - echo: Afișează un șir de text sau valoarea unei variabile în terminal
@@ -695,6 +735,28 @@ tar - Tape Archive
     - Exemplu: tar -xvf arhiva.tar -C /tmp/
   - tar -v: (Verbose) Afișează detaliat procesul de arhivare
     - Exemplu: tar -cvf arhiva.tar folder/
+
+zip - Arhivator compatibil cross-platform
+  - -r zip: Recursive. Include toate subdirectoarele și fișierele din folderul specificat.
+      - EX: -r zip arhiva.zip /home/user/proiect
+  - -e zip: Encrypt. Adaugă o parolă arhivei create.
+      - EX: -e zip date_private.zip fisier.txt
+  - -u zip: Update. Adaugă sau înlocuiește doar fișierele care s-au modificat de la ultima arhivare.
+      - EX: -u zip arhiva.zip fisier_nou.txt
+
+unzip - Extragere arhive zip
+  - -l unzip: List. Afișează conținutul arhivei fără a o extrage.
+      - EX: -l unzip arhiva.zip
+  - -d [cale] unzip: Directory. Extrage fișierele într-un folder specificat.
+      - EX: -d /tmp/extrase unzip arhiva.zip
+
+gzip / bzip2 / xz - Compresoare individuale
+  - -d gzip/bzip2/xz: Decompress. Desface fișierul comprimat (echivalent cu gunzip/bunzip2/unxz).
+      - EX: -d gzip document.gz
+  - -k gzip/bzip2/xz: Keep. Păstrează fișierul original după ce a creat versiunea comprimată.
+      - EX: -k xz fisier_mare.bin
+  - -9 gzip/bzip2/xz: Best. Folosește nivelul maxim de compresie (mai lent, dar fișier mai mic).
+      - EX: -9 bzip2 date.csv
 
 tcpdump - Packet Sniffer / Network Analyzer
   - -i (Interface): Specifică placa de rețea pe care asculți (ex: eth0, wlan0).
