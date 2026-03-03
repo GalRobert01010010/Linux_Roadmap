@@ -640,11 +640,19 @@ jobs - List active jobs
 pwd - Print Working Directory
   - pwd: Print the full absolute path of the current working directory
 
-rm - Remove
-  - rm: Delete files or directories from the system
-    - Example: rm file.txt
-  - rm -rf: Forcefully and recursively delete a directory and its entire contents
-    - Example: rm -rf /tmp/test_dir
+rm - Ștergerea fișierelor și directoarelor
+  - rm -i: Interactive. Îți cere confirmarea înainte de fiecare ștergere (Siguranță).
+      - EX: rm -i fisier.txt
+  - rm -f: Force. Șterge fișierele fără să ceară confirmare și ignoră fișierele care nu există.
+      - EX: rm -f fisier_inexistent.txt
+  - rm -r: Recursive. Șterge un director și tot conținutul acestuia (subdirectoare și fișiere).
+      - EX: rm -r director_proiect/
+  - rm -rf: Force Recursive. Cea mai puternică formă; șterge tot dintr-o cale fără nicio întrebare.
+      - EX: rm -rf /tmp/test_dir
+  - rm -v: Verbose. Afișează numele fiecărui fișier pe măsură ce este șters.
+      - EX: rm -v *.o
+  - rm -d: Directory. Șterge un director gol (similar cu rmdir).
+      - EX: rm -d folder_gol/
 
 rmdir - Remove Directory
   - rmdir: Remove an empty directory (fails if the directory contains files)
@@ -973,6 +981,72 @@ id - Identity
     - Exemplu: id -G
   - id [username]: Afișează informațiile de identitate pentru un alt utilizator specificat
     - Exemplu: id root
+
+pinky - Versiune "lightweight" pentru finger (User Information Lookup)
+  - pinky -l: Long format. Afișează informații detaliate, inclusiv directorul home și shell-ul utilizatorului.
+      - EX: pinky -l student
+  - pinky -s: Short format. Afișează formatul implicit (nume, terminal, timp login).
+      - EX: pinky -s
+  - pinky -w: Omits real name. În formatul scurt, nu mai afișează numele real al utilizatorului.
+      - EX: pinky -w
+  - pinky -i: Omits remote host. În formatul scurt, ascunde numele calculatorului de pe care este logat utilizatorul.
+      - EX: pinky -i
+  - pinky -q: Omits column headers. Nu afișează capul de tabel (util pentru scripturi).
+      - EX: pinky -q
+
+getcap - Afișarea capabilităților setate pe fișiere
+  - getcap [cale_fișier]: Afișează capabilitățile pentru un fișier specific.
+      - EX: getcap /usr/bin/ping
+  - getcap -r [director]: Recursive. Caută în tot directorul și subdirectoarele sale fișiere care au capabilități.
+      - EX: getcap -r /bin
+  - getcap -v [cale_fișier]: Verbose. Afișează fișierul chiar dacă nu are nicio capabilitate setată (util pentru confirmare).
+      - EX: getcap -v /bin/ls
+
+            *Capabilitati*
+
+* CAP_NET_RAW - Utilizarea sockeților RAW (Sarcina ping)
+  - Rol: Permite crearea de pachete ICMP/IP personalizate.
+  - EX: sudo setcap cap_net_raw+ep /bin/ping
+
+* CAP_NET_BIND_SERVICE - Bind pe porturi privilegiate
+  - Rol: Permite proceselor non-root să asculte pe porturi sub 1024 (ex: 80, 443).
+  - EX: sudo setcap cap_net_bind_service+ep /usr/sbin/nginx
+
+* CAP_NET_ADMIN - Administrarea rețelei
+  - Rol: Permite configurarea interfețelor, rutelor, tabelelor IP și a firewall-ului.
+  - EX: sudo setcap cap_net_admin+ep /usr/sbin/iptables
+
+* CAP_FOWNER - Bypass la verificările de proprietate (Owner)
+  - Rol: Permite modificarea permisiunilor (chmod/chown) pe orice fișier, indiferent de cine este proprietarul.
+  - EX: sudo setcap cap_fowner+ep /cale/executabil
+
+* CAP_KILL - Transmiterea semnalelor către orice proces
+  - Rol: Permite unui proces să trimită semnale (ex: SIGKILL, SIGTERM) către procese care aparțin altor utilizatori.
+  - EX: sudo setcap cap_kill+ep /cale/executabil
+
+* CAP_CHOWN - Schimbarea proprietarului fișierelor
+  - Rol: Permite executabilului să ruleze comanda chown pe orice fișier din sistem.
+  - EX: sudo setcap cap_chown+ep /cale/executabil
+
+* CAP_DAC_OVERRIDE - Ignorarea permisiunilor (rwx)
+  - Rol: Permite citirea, scrierea și executarea oricărui fișier, ignorând bitii de permisiuni.
+  - EX: sudo setcap cap_dac_override+ep /cale/executabil
+
+* CAP_SYS_TIME - Modificarea timpului de sistem
+  - Rol: Permite setarea ceasului sistemului sau a ceasului de timp real (RTC).
+  - EX: sudo setcap cap_sys_time+ep /usr/sbin/ntpd
+
+* CAP_SYS_REBOOT - Repornirea sistemului
+  - Rol: Permite apelarea funcției de reboot sau închiderea sistemului.
+  - EX: sudo setcap cap_sys_reboot+ep /sbin/reboot
+
+setcap - Definirea sau eliminarea capabilităților pe fișiere
+  - setcap [capabilitate+flags] [cale_fișier]: Atribuie o putere specifică unui fișier.
+      - EX: sudo setcap cap_net_admin+ep ./proiect_retea
+  - setcap -r [cale_fișier]: Remove. Șterge absolut toate capabilitățile de pe un fișier.
+      - EX: sudo setcap -r ./proiect_retea
+  - setcap -q: Quiet. Rulează comanda fără a afișa mesaje de eroare sau confirmare (util în scripturi).
+      - EX: sudo setcap -q cap_net_raw+ep ./test_ping
 
 pstree - Process Tree
   - pstree: Afișează ierarhia proceselor sub formă de arbore
