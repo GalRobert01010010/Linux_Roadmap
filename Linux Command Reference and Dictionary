@@ -423,10 +423,24 @@ ifconfig - Utilitar de configurare a interfețelor de rețea (Pachetul net-tools
   - ifconfig [interfață] -promisc: Disable Promisc. Dezactivează modul promiscuu (observă semnul minus).
       - EX: ifconfig eth0 -promisc
 
+traceroute - Trace Route
+  - traceroute: Determină și afișează ruta (drumul) pachetelor către o stație destinație.
+      - EX: traceroute google.com
+  - -n: Afișează adresele IP numeric (nu încearcă să afle numele de domeniu).
+      - EX: traceroute -n google.com
+  - -m [hops]: Max hops. Specifică numărul maxim de noduri până la destinație.
+      - EX: traceroute -m 20 google.com
+  - -q [n]: Queries. Specifică numărul de pachete trimise către fiecare hop.
+      - EX: traceroute -q 1 google.com
+  - -w [sec]: Wait. Specifică timpul de așteptare pentru un răspuns de la un hop.
+      - EX: traceroute -w 2 google.com
+  - -p [port]: Port. Specifică portul de destinație utilizat în sondare.
+      - EX: traceroute -p 80 google.com
+
 ip addr (sau ip a) - Gestionarea adreselor și interfețelor
-  - -4 (IPv4): Afișează doar adresele de tip IPv4 (elimină IPv6 pentru claritate).
+  - -4 (IPv4): Afișează doar adresele de tip IPv4. (elimină IPv6 pentru claritate).
       - EX: `ip -4 addr`
-  - -6 (IPv6): Afișează doar adresele de tip IPv6.
+  - -6 (IPv6): Afișează doar adresele de tip IPv6. (elimină IPv4 pentru claritate).
       - EX: `ip -6 addr`
   - -br (Brief): Afișează informația sub formă de tabel scurt (Nume | Stare | IP).
       - EX: `ip -br addr`
@@ -555,9 +569,21 @@ mount -o remount,rw - Remount
   - mount -o remount,rw: Change the state of an already mounted filesystem to read-write
     - Example: mount -o remount,rw /
 
-mv - Move/Rename
-  - mv: Move files or directories to a new location or rename them
-    - Example: mv old.txt new.txt
+mv - Move or Rename Files
+  - -i (Interactive): Te întreabă înainte să suprascrie un fișier care există deja la destinație.
+      - EX: mv -i sursa.txt destinatie.txt
+  - -f (Force): Suprascrie tot la destinație fără să te întrebe nimic, ignorând orice protecție.
+      - EX: mv -f sursa.txt destinatie.txt
+  - -n (No clobber): Nu suprascrie niciodată un fișier existent; mutarea este anulată dacă destinația există.
+      - EX: mv -n sursa.txt destinatie.txt
+  - -u (Update): Mută fișierul doar dacă sursa este mai nouă decât cel de la destinație.
+      - EX: mv -u sursa.txt destinatie.txt
+  - -v (Verbose): Arată în timp real ce fișiere sunt mutate și unde.
+      - EX: mv -v *.txt folder/
+  - -t (Target directory): Permite scrierea destinației înaintea fișierelor pe care vrei să le muți.
+      - EX: mv -t folder/ fisier1 fisier2
+  - -b (Backup): Face o copie de rezervă a fișierului de la destinație înainte ca acesta să fie șters/înlocuit.
+      - EX: mv -b sursa.txt destinatie.txt
 
 netstat -tuln - Network Statistics
   - -tuln: Vezi toate porturile TCP/UDP care ascultă, cu IP numeric și numele programului.
@@ -740,27 +766,23 @@ tail - Output Last Part of Files
   - tail -c [bytes]: Afișează ultimii octeți (bytes) specificați
     - Exemplu: tail -c 100 data.txt
 
-tar - Tape Archive
-  - tar: Create or extract archive files (Tape Archives)
-    - Example: tar -xvf archive.tar
-  - tar -czvf: Create a compressed archive using the gzip algorithm (c: create, z: gzip, v: verbose, f: file)
-    - Example: tar -czvf backup.tar.gz /home/user
-  - tar -c: (Create) Crearea unei arhive noi
-    - Exemplu: tar -cvf arhiva.tar folder/
-  - tar -x: (Extract) Extragerea conținutului dintr-o arhivă
-    - Exemplu: tar -xvf arhiva.tar
-  - tar -t: (List) Listarea conținutului unei arhive fără extragere
-    - Exemplu: tar -tvf arhiva.tar
-  - tar -z: (Gzip) Compresie/Decompresie folosind gzip (.tar.gz)
-    - Exemplu: tar -zcvf arhiva.tar.gz folder/
-  - tar -j: (Bzip2) Compresie/Decompresie folosind bzip2 (.tar.bz2)
-    - Exemplu: tar -jcvf arhiva.tar.bz2 folder/
-  - tar -f: (File) Specifică numele fișierului arhivă (obligatoriu ultima în grup)
-    - Exemplu: tar -f arhiva.tar
-  - tar -C [cale]: (Directory) Schimbă directorul înainte de execuție (pentru extragere la destinație)
-    - Exemplu: tar -xvf arhiva.tar -C /tmp/
-  - tar -v: (Verbose) Afișează detaliat procesul de arhivare
-    - Exemplu: tar -cvf arhiva.tar folder/
+tar - Tape Archiver
+  - -c (Create): Creează o arhivă nouă.
+      - EX: tar -cf arhiva.tar folder/
+  - -x (Extract): Extrage fișierele dintr-o arhivă.
+      - EX: tar -xf arhiva.tar
+  - -t (List): Afișează conținutul arhivei fără a o extrage.
+      - EX: tar -tf arhiva.tar
+  - -z (Gzip): Folosește compresia gzip (.tar.gz).
+      - EX: tar -czf arhiva.tar.gz folder/
+  - -j (Bzip2): Folosește compresia bzip2 (.tar.bz2).
+      - EX: tar -cjf arhiva.tar.bz2 folder/
+  - -f (File): Specifică numele arhivei (trebuie să fie ultimul steag înainte de nume).
+      - EX: tar -f arhiva.tar
+  - -v (Verbose): Afișează progresul operațiunii (frecvent în subiecte ca 'afisare date suplimentare').
+      - EX: tar -cvf arhiva.tar folder/
+  - -C (Directory): Schimbă directorul înainte de a extrage (destinația).
+      - EX: tar -xf arhiva.tar -C /destinatie/
 
 zip - Arhivator compatibil cross-platform
   - -r zip: Recursive. Include toate subdirectoarele și fișierele din folderul specificat.
@@ -804,9 +826,17 @@ top - Table of Processes
   - top: Provide a dynamic, real-time view of running processes and system resource usage
     - Example: top
 
-touch - Create/Update File
-  - touch: Create an empty file or update the access/modification timestamps of an existing file
-    - Example: touch new_file.txt
+touch - Crearea fișierelor și modificarea timpilor
+  - touch -a: Access time. Modifică doar timpul ultimei accesări.
+      - EX: touch -a fisier.txt
+  - touch -m: Modification time. Modifică doar timpul ultimei modificări.
+      - EX: touch -m fisier.txt
+  - touch -c: No create. NU creează fișierul dacă acesta nu există deja. (daca nu exista nu il creeaza. daca exista ii modifica data ultimei accesari)
+      - EX: touch -c fisier_inexistent.txt
+  - touch -r: Reference. Copiază timpii de la un fișier la altul.
+      - EX: touch -r sursa.txt destinatie.txt
+  - touch -t: Timestamp. Setează o dată și oră specifică (format: [[CC]YY]MMDDhhmm[.ss]).
+      - EX: touch -t 202601011200 fisier.txt (Setează data la 1 Ian 2026, ora 12:00)
 
 tty - Terminal Name
   - tty: Print the file name of the terminal device currently connected to the standard input
@@ -825,17 +855,17 @@ uname - Unix Name
     - Exemplu: uname -s
   - uname -n: Afișează numele de rețea al mașinii (hostname)
     - Exemplu: uname -n
-  - uname -r: Afișează versiunea de release a kernelului (esențial pentru compatibilitatea driverelor)
+  - uname -r (release): Afișează versiunea de release a kernelului (esențial pentru compatibilitatea driverelor)
     - Exemplu: uname -r
-  - uname -v: Afișează versiunea detaliată de kernel și data la care a fost compilat
+  - uname -v (version): Afișează versiunea detaliată de kernel și data la care a fost compilat
     - Exemplu: uname -v
-  - uname -m: Afișează arhitectura hardware a mașinii (ex: x86_64)
-    - Exemplu: uname -m
-  - uname -p: Afișează tipul procesorului (adesea "unknown" în unele distribuții)
+  - uname -m (machine architecture): Afișează arhitectura hardware a mașinii (ex: x86_64)
+    - Exemplu: uname -m (machine architecture)
+  - uname -p (processor type): Afișează tipul procesorului (adesea "unknown" în unele distribuții)
     - Exemplu: uname -p
   - uname -i: Afișează platforma hardware (adesea "unknown")
     - Exemplu: uname -i
-  - uname -o: Afișează numele sistemului de operare (ex: GNU/Linux)
+  - uname -o (operating system): Afișează numele sistemului de operare (ex: GNU/Linux)
     - Exemplu: uname -o
 
 unzip - Extract ZIP
@@ -1151,6 +1181,32 @@ tee - T-splitter
     - Exemplu: ls | tee output.txt
   - tee -a: (Append) Adaugă la fișier fără să-l suprascrie
     - Exemplu: echo "log" | tee -a sistem.log
+
+printenv - Print Environment Variables
+  - printenv: Afișează toate variabilele de mediu exportate în sesiunea curentă.
+      - EX: printenv
+  - [variable]: Afișează valoarea unei variabile specifice fără a folosi simbolul $.
+      - EX: printenv HOME
+  - -0 (null): Termină fiecare linie cu un caracter null în loc de linie nouă.
+      - EX: printenv -0
+  - --help: Afișează ajutorul rapid pentru utilizarea comenzii.
+      - EX: printenv --help
+  - --version: Afișează informații despre versiunea utilitarului.
+      - EX: printenv --version
+
+env - Run a program in a modified environment / Print environment
+  - env: Afișează toate variabilele de mediu actuale (identic cu printenv fără argumente).
+      - EX: env
+  - -i (Ignore environment): Pornește un program într-un mediu complet gol (fără variabilele de mediu moștenite).
+      - EX: env -i bash
+  - -u (Unset): Rulează o comandă după ce elimină o variabilă specifică din mediu.
+      - EX: env -u HOME bash
+  - [variable=value]: Rulează o comandă cu o variabilă setată temporar doar pentru acea execuție.
+      - EX: env VAR=123 ./program_test
+  - -0 (null): Termină fiecare linie cu un caracter null (la fel ca la printenv).
+      - EX: env -0
+  - -S (Split-string): Folosit în scripturi (shebang) pentru a trece mai mulți parametri unui interpretor.
+      - EX: #!/usr/bin/env -S python3 -u
 
 Variabile de Mediu și Speciale (Completare)
   - $PWD: Reține calea absolută către directorul curent (similar cu comanda pwd)
