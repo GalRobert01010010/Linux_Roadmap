@@ -329,6 +329,7 @@ lsusb - List USB Devices
       - Output: `/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M`
 
 lscpu - Display information about the CPU architecture
+  Obs. Se poate accesa si cu 'cat /proc/cpuinfo'.
   - lscpu: Afișează un rezumat complet al arhitecturii procesorului.
       - Exemplu probă: `lscpu`
       - Output: Afișează Vendor ID, Model name, CPU MHz, L1/L2/L3 cache.
@@ -565,9 +566,20 @@ mkdir - Make Directory
   - mkdir -p: Create nested parent directories as needed
     - Example: mkdir -p /tmp/a/b/c
 
-mount -o remount,rw - Remount
-  - mount -o remount,rw: Change the state of an already mounted filesystem to read-write
-    - Example: mount -o remount,rw /
+mount - Mount File System
+  Obs. Se poate accesa si cu 'cat /proc/mounts'.
+  - mount: Afișează toate sistemele de fișiere montate în prezent.
+      - EX: mount
+  - mount [dispozitiv] [director]: Montează un dispozitiv într-un punct de montare specificat.
+      - EX: mount /dev/sdb1 /mnt/usb
+  - -t [tip]: Type. Specifică tipul sistemului de fișiere (vfat, ntfs, ext4, iso9660).
+      - EX: mount -t ext4 /dev/sdb2 /mnt/data
+  - -o [opțiuni]: Options. Permite specificarea unor parametri suplimentari (ro, rw, loop).
+      - EX: mount -o ro /dev/sdb1 /mnt/readonly
+  - -a: All. Montează toate sistemele de fișiere menționate în /etc/fstab.
+      - EX: mount -a
+  - umount [punct_montare]: Demontează (scoate) un sistem de fișiere.
+      - EX: umount /mnt/usb
 
 mv - Move or Rename Files
   - -i (Interactive): Te întreabă înainte să suprascrie un fișier care există deja la destinație.
