@@ -401,9 +401,27 @@ htop - Interactive Process Viewer
   - htop: An interactive, colorized process monitor with mouse support and horizontal scrolling
     - Example: htop
 
-ifconfig - Interface Config (Legacy)
-  - ifconfig: Display or configure network interface parameters (IP, Netmask, Status)
-    - Example: ifconfig eth0
+ifconfig - Utilitar de configurare a interfețelor de rețea (Pachetul net-tools)
+  - ifconfig -a: All. Afișează toate interfețele de rețea (active și inactive).
+      - EX: ifconfig -a
+  - ifconfig -s: Short. Afișează un tabel rezumat cu statisticile de trafic.
+      - EX: ifconfig -s
+  - ifconfig [interfață] up: Up. Pornește o interfață de rețea specifică.
+      - EX: ifconfig eth0 up
+  - ifconfig [interfață] down: Down. Oprește o interfață de rețea specifică.
+      - EX: ifconfig eth0 down
+  - ifconfig [interfață] [IP]: Address. Atribuie o adresă IP unei interfețe.
+      - EX: ifconfig eth0 192.168.1.100
+  - ifconfig [interfață] netmask [mască]: Netmask. Setează masca de rețea.
+      - EX: ifconfig eth0 netmask 255.255.255.0
+  - ifconfig [interfață] hw ether [MAC]: Hardware. Schimbă adresa MAC a plăcii.
+      - EX: ifconfig eth0 hw ether 00:AA:BB:CC:DD:EE
+  - ifconfig [interfață] mtu [valoare]: MTU. Setează dimensiunea maximă a pachetelor.
+      - EX: ifconfig eth0 mtu 1500
+  - ifconfig [interfață] promisc: Promiscuous. Activează modul de interceptare totală a traficului.
+      - EX: ifconfig eth0 promisc
+  - ifconfig [interfață] -promisc: Disable Promisc. Dezactivează modul promiscuu (observă semnul minus).
+      - EX: ifconfig eth0 -promisc
 
 ip addr (sau ip a) - Gestionarea adreselor și interfețelor
   - -4 (IPv4): Afișează doar adresele de tip IPv4 (elimină IPv6 pentru claritate).
@@ -970,19 +988,31 @@ tree - Directory Tree
   - tree -L [nivel]: (Level) Limitează adâncimea afișării
     - Exemplu: tree -L 2
 
-cut - Column Extractor
-  - cut -d [delimitator]: Specifică simbolul care separă coloanele
-    - Exemplu: cut -d ":" -f 1 /etc/passwd
-  - cut -f [număr]: Selectează doar câmpul (coloana) specificat
-    - Exemplu: cut -f 1,3 date.txt
-  - cut -c [interval]: Selectează doar caracterele de la pozițiile specificate
-    - Exemplu: cut -c 1-10 text.txt
+cut - Extragerea secțiunilor din fiecare linie a fișierelor
+  - cut -d [delimitator]: Delimiter. Specifică simbolul care separă coloanele (implicit este Tab).
+      - EX: cut -d ":" -f 1 /etc/passwd
+  - cut -f [listă]: Fields. Selectează coloanele (câmpurile) dorite.
+      - EX: cut -f 1,3 fisier.tsv
+  - cut -c [listă]: Characters. Selectează doar anumite poziții de caractere din linie.
+      - EX: cut -c 1-10 fisier.txt
+  - cut -b [listă]: Bytes. Selectează doar anumiți bytes (util pentru fișiere cu codificare fixă).
+      - EX: cut -b 1-5 fisier.txt
+  - cut --complement: Complement. Inversează selecția (afișează tot în afară de ce ai selectat cu -f sau -c).
+      - EX: cut -d " " -f 1 --complement fisier.txt
+  - cut -s: Only-delimited. Nu afișează liniile care nu conțin delimitatorul specificat.
+      - EX: cut -d ":" -s -f 1 fisier.txt
 
-nl - Number Lines
-  - nl -b a: (Body all) Numerotează toate liniile, inclusiv cele goale
-    - Exemplu: nl -b a fisier.txt
-  - nl -n [format]: Specifică formatul numerotării (rz = cu zerouri în față)
-    - Exemplu: nl -n rz fisier.txt
+nl - Numerotarea liniilor unui fișier
+  - nl -b [stil]: Body. Setează stilul de numerotare (a=toate, t=doar cele cu text).
+      - EX: nl -b a fisier.txt
+  - nl -i [valoare]: Increment. Schimbă pasul de numerotare.
+      - EX: nl -i 5 fisier.txt
+  - nl -v [număr]: Starting-value. Începe numerotarea de la un alt număr.
+      - EX: nl -v 100 fisier.txt
+  - nl -s [separator]: Separator. Adaugă un caracter între număr și text.
+      - EX: nl -s ". " fisier.txt
+  - nl -w [număr]: Width. Setează lățimea coloanei pentru număr.
+      - EX: nl -w 3 fisier.txt
 
 wc - Word Count
   - wc -l: (Lines) Afișează numărul de linii
