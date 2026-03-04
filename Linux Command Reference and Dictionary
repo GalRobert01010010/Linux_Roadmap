@@ -1220,6 +1220,52 @@ env - Run a program in a modified environment / Print environment
   - -S (Split-string): Folosit în scripturi (shebang) pentru a trece mai mulți parametri unui interpretor.
       - EX: #!/usr/bin/env -S python3 -u
 
+### Manageri de pachete (Debian/Ubuntu)
+- apt: Advanced Package Tool. Versiunea modernă și interactivă.
+    - update: Actualizează lista de pachete din depozite.
+        - EX: sudo apt update
+    - install: Instalează un pachet nou și dependențele acestuia.
+        - EX: sudo apt install vim
+    - remove: Șterge un pachet, dar păstrează fișierele de configurare.
+        - EX: sudo apt remove nginx
+    - purge: Șterge pachetul complet, inclusiv fișierele de configurare.
+        - EX: sudo apt purge nginx
+
+- apt-get: Versiunea clasică, optimizată pentru scripturi.
+    - -y: Yes. Confirmă automat toate întrebările (util în automatizări).
+        - EX: sudo apt-get install -y git
+    - dist-upgrade: Gestionează inteligent schimbările de dependențe la upgrade-ul sistemului.
+        - EX: sudo apt-get dist-upgrade
+
+### Manageri de pachete (Red Hat/Fedora/CentOS)
+- dnf: Dandified YUM. Succesorul lui yum.
+    - check-update: Verifică ce pachete au actualizări disponibile fără a le descărca.
+        - EX: dnf check-update
+    - groupinstall: Instalează un grup întreg de pachete (ex. un mediu grafic).
+        - EX: sudo dnf groupinstall "Development Tools"
+
+### Manageri de pachete (Arch Linux)
+- pacman: Package Manager. Folosește flag-uri formate din litere.
+    - -S: Sync. Instalează un pachet din depozite.
+        - EX: sudo pacman -S firefox
+    - -Sy: Sync + Refresh. Actualizează listele și apoi instalează.
+        - EX: sudo pacman -Sy
+    - -Syu: Sync + Refresh + Upgrade. Actualizează tot sistemul.
+        - EX: sudo pacman -Syu
+    - -Rns: Remove + No-save + Syps (recursive). Șterge pachetul, configurațiile și dependențele inutile.
+        - EX: sudo pacman -Rns vlc
+
+### Compilatoare (C/C++)
+- gcc / clang: GNU Compiler Collection și, respectiv, front-end-ul pentru LLVM.
+    - -o: Output. Specifică numele fișierului executabil rezultat.
+        - EX: gcc main.c -o programul_meu
+    - -Wall: Warnings all. Afișează toate avertismentele de erori posibile în cod.
+        - EX: clang -Wall hello.c
+    - -c: Compile. Compilează codul în fișier obiect (.o) fără a face linking.
+        - EX: gcc -c sursa.c
+    - -v: Verbose. Afișează detalii despre pașii interni de compilare.
+        - EX: gcc -v main.c
+
 Variabile de Mediu și Speciale (Completare)
   - $PWD: Reține calea absolută către directorul curent (similar cu comanda pwd)
     - Exemplu: echo "Sunt în directorul: $PWD"
