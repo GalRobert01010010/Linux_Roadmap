@@ -220,6 +220,37 @@ vmstat - Virtual Memory Statistics
   - -a: Afișează memoria activă și inactivă (active/inactive memory).
       - EX: vmstat -a
 
+fsck: Utilitar pentru verificarea și repararea sistemelor de fișiere.
+    - -A: Verifică toate sistemele de fișiere listate în /etc/fstab dintr-o singură rulare.
+        - EX: sudo fsck -A
+    - -C: Afișează o bară de progres (completion bar) în timpul verificării.
+        - EX: sudo fsck -C /dev/sdb1
+    - -M: Nu verifică sistemele de fișiere care sunt deja montate (evită coruperea datelor).
+        - EX: sudo fsck -M /dev/sdb1
+    - -N: (Dry run) Doar afișează ce ar face, fără să execute nicio modificare reală.
+        - EX: sudo fsck -N /dev/sdb1
+    - -R: Sari peste sistemul de fișiere root (utilizat împreună cu -A).
+        - EX: sudo fsck -AR
+    - -V: (Verbose) Afișează detalii suplimentare despre fiecare pas executat.
+        - EX: sudo fsck -V /dev/sdb1
+    - -y: Răspunde automat cu "Yes" la toate întrebările de reparare (mod interactiv dezactivat).
+        - EX: sudo fsck -y /dev/sdb1
+    - -a: Repară automat sistemul de fișiere fără a pune întrebări (nu este recomandat pe sisteme foarte corupte).
+        - EX: sudo fsck -a /dev/sdb1
+
+mkfs: Utilitar pentru formatarea și crearea sistemelor de fișiere.
+    - -t [tip]: Specifică tipul sistemului de fișiere dorit (ext4, vfat, xfs, etc.).
+        - EX: sudo mkfs -t ext4 /dev/sdb1
+    - -V: (Verbose) Afișează detalii despre procesul de creare și parametrii aleși.
+        - EX: sudo mkfs -V /dev/sdb1
+    - -c: Verifică dacă există blocuri defecte (bad blocks) pe disc înainte de formatare.
+        - EX: sudo mkfs -c /dev/sdb1
+    - -l [fisier]: Citește lista de blocuri defecte dintr-un fișier extern.
+    - -L [nume]: Atribuie o etichetă (label) volumului nou creat (numele partitiei).
+        - EX: sudo mkfs.ext4 -L "BACKUP" /dev/sdb1
+    - -m [procent]: Rezervă un procent din spațiu pentru utilizatorul root (default 5%).
+        - EX: sudo mkfs.ext4 -m 1 /dev/sdb1 (rezervă doar 1%)
+
 echo - Output Text
   - echo: Afișează un șir de text sau valoarea unei variabile în terminal
       - Exemplu: echo "Hello Linux"
@@ -1169,12 +1200,26 @@ join - Join on Field
     - Exemplu: join -1 1 -2 1 fisier1.txt fisier2.txt
 
 rev - Reverse Characters
-  - rev: Inversează ordinea caracterelor din fiecare linie
-    - Exemplu: echo "123" | rev
+  - Inversează ordinea caracterelor pe fiecare linie a fișierului sau din stdin.
+    - EX: echo "Linux" | rev
+  - -V (Version): Afișează informații despre versiunea utilitarului.
+      - EX: rev -V
+  - -h (Help): Afișează un scurt mesaj de ajutor și opțiunile disponibile.
+      - EX: rev -h
+  - stdin: Dacă nu este specificat un fișier, rev citește direct de la tastatură/pipe.
+      - EX: ls | rev
 
 tac - Reverse Cat
-  - tac: Afișează liniile în ordine inversă (ultima devine prima)
-    - Exemplu: tac fisier.txt
+  - Afișează conținutul unui fișier inversând ordinea liniilor (ultima linie devine prima).
+    - EX: tac fisier.txt
+  - -b (Before): Atașează separatorul înaintea conținutului, nu după el.
+      - EX: tac -b fisier.txt
+  - -r (Regex): Interpretează separatorul ca fiind o expresie regulată.
+      - EX: tac -r -s 'regex' fisier.txt
+  - -s (Separator): Folosește un șir de caractere specific ca separator în loc de linie nouă.
+      - EX: tac -s ',' fisier.txt
+  - --help: Afișează manualul rapid de utilizare.
+      - EX: tac --help
 
 tr - Translate
   - tr [set1] [set2]: Traduce caracterele din set1 în caracterele corespunzătoare din set2
@@ -1189,10 +1234,18 @@ tr - Translate
     - Exemplu: tr -t 'abcd' '12' < test.txt (Doar a și b vor fi traduse în 1 și 2)
 
 tee - T-splitter
-  - tee [fisier]: Scrie în fișier și la ecran simultan
-    - Exemplu: ls | tee output.txt
-  - tee -a: (Append) Adaugă la fișier fără să-l suprascrie
-    - Exemplu: echo "log" | tee -a sistem.log
+  - Citește de la stdin și scrie simultan la stdout și în unul sau mai multe fișiere.
+      - EX: ls | tee lista.txt
+  - -a (Append): Adaugă datele la finalul fișierului fără a suprascrie conținutul existent.
+      - EX: echo "Data" | tee -a log.txt
+  - -i (Ignore interrupts): Ignoră semnalele de întrerupere (SIGINT) pentru a preveni oprirea scrierii.
+      - EX: command | tee -i fisier.log
+  - -p: Verifică și diagnostichează erorile de scriere către ieșiri care nu sunt pipe.
+      - EX: command | tee -p output.txt
+  - --help: Afișează manualul rapid de utilizare.
+      - EX: tee --help
+  - /dev/null: Folosit pentru a vedea rezultatul pe ecran dar a ignora salvarea lui.
+      - EX: command | tee /dev/null
 
 printenv - Print Environment Variables
   - printenv: Afișează toate variabilele de mediu exportate în sesiunea curentă.
