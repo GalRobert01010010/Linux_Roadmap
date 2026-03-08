@@ -429,10 +429,6 @@ history - Command History
   - history: Display the list of commands previously executed in the current session
     - Example: history | grep "ssh"
 
-htop - Interactive Process Viewer
-  - htop: An interactive, colorized process monitor with mouse support and horizontal scrolling
-    - Example: htop
-
 ifconfig - Utilitar de configurare a interfețelor de rețea (Pachetul net-tools)
   - ifconfig -a: All. Afișează toate interfețele de rețea (active și inactive).
       - EX: ifconfig -a
@@ -648,6 +644,35 @@ netstat -tuln - Network Statistics
   - -i (Interfaces): Afișează statistici despre interfețele de rețea (pachete trimise/primite, erori).
       - EX: `netstat -i`
 
+ss - Socket Statistics (Înlocuitorul modern pentru netstat)
+  - ss: Afișează o listă a tuturor conexiunilor deschise (non-listening)
+      - EX: ss
+  - -t: (TCP) Afișează doar socheturile de tip TCP.
+      - EX: ss -t
+  - -u: (UDP) Afișează doar socheturile de tip UDP.
+      - EX: ss -u
+  - -l: (Listening) Afișează doar porturile care "ascultă" (servere active).
+      - EX: ss -l
+  - -a: (All) Afișează toate socheturile (atât cele care ascultă, cât și cele stabilite).
+      - EX: ss -a
+  - -p: (Processes) Afișează procesul (PID și nume) care utilizează sochetul.
+      - EX: sudo ss -p
+      - Obs.: Necesită sudo pentru a vedea procesele altor utilizatori.
+  - -n: (Numeric) Nu încearcă să rezolve numele serviciilor (afișează 80 în loc de http).
+      - EX: ss -an
+      - Obs.: Mult mai rapid, nu depinde de DNS sau de fișierul /etc/services.
+  - -i: (Internal) Afișează statistici interne de TCP (RTT, mărime fereastră, etc.).
+      - EX: ss -ti
+  - -s: (Summary) Afișează un raport scurt cu statistici pe tipuri de protocoale.
+      - EX: ss -s
+  - -4 / -6: Filtrează conexiunile după versiunea de IP (IPv4 sau IPv6).
+      - EX: ss -t4
+  - -K: (Kill) Forțează închiderea unui sochet (util în debugging avansat).
+      - EX: sudo ss -K dst 192.168.1.5
+  - [filtru]: Permite filtrarea după stare (established, syn-sent, etc.) sau port.
+      - EX: ss -at '( dport = :80 or sport = :80 )'
+      - Obs.: Foarte util pentru a vedea traficul pe un port specific (ex: HTTP).
+
 ps - Process Status
   - ps: Afișează procesele active din terminalul curent al utilizatorului
     - Exemplu: ps
@@ -672,6 +697,34 @@ ps - Process Status
       - --sort=: Specifică ordinea în care vor fi afișate rândurile (sortarea).
          -pcpu: Acesta este detaliul cheie: pcpu înseamnă procentul de utilizare CPU (%CPU).
       Obs. Semnul minus (-) din față indică o sortare descrescătoare; Dacă era +pcpu sau doar pcpu, sortarea era crescătoare.
+
+pgrep - Process Grep (Găsește procese după nume)
+  - pgrep [nume]: Afișează PID-ul (ID-ul procesului) pentru programul specificat.
+      - EX: pgrep bash
+  - -l: (List) Afișează atât PID-ul, cât și numele procesului (pentru confirmare vizuală).
+      - EX: pgrep -l ssh
+  - -u [user]: Filtrează rezultatele pentru a vedea doar procesele unui anumit utilizator.
+      - EX: pgrep -u student python
+  - -c: (Count) Afișează doar numărul total de procese care se potrivesc cu numele.
+      - EX: pgrep -c apache
+  - -a: (Full command line) Afișează linia de comandă completă folosită la pornirea procesului.
+      - EX: pgrep -a java
+  - -n: (Newest) Afișează doar cel mai recent proces pornit cu acel nume.
+      - EX: pgrep -n chrome
+  - -o: (Oldest) Afișează doar cel mai vechi proces pornit (primul instanțiat).
+      - EX: pgrep -o firefox
+
+pkill - Process Kill (Omoară procese după nume)
+  - pkill [nume]: Trimite semnalul de terminare (SIGTERM) tuturor proceselor cu acel nume.
+      - EX: pkill firefox
+  - -9: (SIGKILL) Forțează închiderea imediată a procesului (fără salvare de date).
+      - EX: pkill -9 vlc
+  - -u [user]: Omoară doar procesele care aparțin utilizatorului specificat.
+      - EX: sudo pkill -u elev bash
+  - -t [terminal]: Omoară procesele care rulează pe un anumit terminal (ex: tty1).
+      - EX: sudo pkill -t pts/0
+  - -f: (Full) Potrivește numele cu întreaga linie de comandă, nu doar cu numele executabilului.
+      - EX: pkill -f "script_test.sh"
 
 jobs - List active jobs
   - jobs: Afișează starea job-urilor pornite în sesiunea curentă.
@@ -865,9 +918,37 @@ tcpdump - Packet Sniffer / Network Analyzer
   - -r (Read): Citește un fișier salvat anterior.
     - EX: `sudo tcpdump -r captura_mea.pcap`
 
-top - Table of Processes
-  - top: Provide a dynamic, real-time view of running processes and system resource usage
-    - Example: top
+top - Table of Processes (Monitorizare în timp real)
+  - top: Afișează lista dinamică a proceselor și resursele consumate (CPU, RAM).
+      - EX: top
+  - -d [secunde]: (Delay) Setează intervalul de actualizare a ecranului.
+      - EX: top -d 1
+  - -u [user]: Monitorizează doar procesele utilizatorului specificat.
+      - EX: top -u root
+  - -p [PID]: Monitorizează doar un proces specific (sau o listă de PID-uri).
+      - EX: top -p 1234,5678
+  - -n [număr]: (Iterations) Se închide automat după un număr specific de actualizări.
+      - EX: top -n 5 > raport_procese.txt
+  - -b: (Batch mode) Util pentru a trimite output-ul către un fișier sau altă comandă (fără interfață).
+      - EX: top -b -n 1
+
+htop - Interactive Process Viewer (Monitorizare vizuală avansată)
+  - htop: Deschide interfața interactivă implicită.
+      - EX: htop
+  - -d [zecimi]: (Delay) Setează intervalul de reîmprospătare în zecimi de secundă (ex: 10 = 1 secundă).
+      - EX: htop -d 5
+  - -C: (No color) Pornește în mod monocrom (util dacă terminalul de la concurs are probleme cu culorile).
+      - EX: htop -C
+  - -u [user]: Afișează la pornire doar procesele utilizatorului specificat.
+      - EX: htop -u root
+  - -p [PID,PID...]: Monitorizează doar procesele cu ID-urile specificate.
+      - EX: htop -p 1024,2048
+  - -s [coloană]: (Sort) Setează coloana după care se face sortarea la pornire (ex: PERCENT_CPU).
+      - EX: htop -s PERCENT_MEM
+  - -t: (Tree) Pornește direct în modul de vizualizare ierarhică (arbore de procese).
+      - EX: htop -t
+  - --readonly: (Restricted) Dezactivează funcțiile de "Kill" și "Nice" din interfață (mod doar de vizualizare).
+      - EX: htop --readonly
 
 touch - Crearea fișierelor și modificarea timpilor
   - touch -a: Access time. Modifică doar timpul ultimei accesări.
