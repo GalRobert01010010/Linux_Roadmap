@@ -182,6 +182,9 @@ find - Find Files
     - Exemplu: find /var/log -size +10M
   - find [cale] -inum [număr]: Căutare fișier după numărul de Inode
     - Exemplu: find / -inum 12345
+    Obs. Comanda find . -name "*.log" -mtime -1 -exec grep "Critical" {} + caută în directorul curent 
+        toate fișierele cu extensia .log modificate în ultimele 24 de ore și extrage din ele, printr-o 
+        singură scanare eficientă, toate liniile care conțin cuvântul Critical.
 
 Situatie: Trebuie să creezi o copie de rezervă completă a proiectului tău, care să păstreze exact 
         drepturile de execuție ale scripturilor, pentru a o trimite spre corectare.
@@ -274,6 +277,31 @@ cp (Copy) - Copierea fisierelor si directoarelor
       - EX: cp -v poza.jpg /media/usb/
   - -a (Archive): Este un "super-steag" care include -r si -p, plus pastrarea legaturilor simbolice. Ideal pentru backup.
       - EX: cp -a /home/user/proiect /backup/
+
+Situatie: Vrei să conectezi manual o unitate de stocare (stick, HDD extern) la un dosar din sistemul tău pentru a-i accesa sau salva datele.
+mount - Conectarea dispozitivelor la ierarhia de fisiere
+  - -t (Type): Specifica manual tipul de sistem de fisiere (vfat, ntfs, ext4).
+      - EX: mount -t vfat /dev/sdb1 /mnt/stick
+  - -o (Options): Adauga parametri de acces, cum ar fi read-only sau permisiuni specifice.
+      - EX: mount -o ro /dev/sdb1 /mnt/stick
+  - -a (All): Monteaza toate dispozitivele mentionate in fisierul de configurare /etc/fstab.
+      - EX: mount -a
+  - -r (Read-only): Monteaza dispozitivul in mod protejat, fara a putea scrie pe el.
+      - EX: mount -r /dev/sdb1 /mnt/stick
+  - -v (Verbose): Afiseaza detalii despre procesul de montare in terminal.
+      - EX: mount -v /dev/sdb1 /mnt/stick
+
+umount - Deconectarea dispozitivelor din sistem
+  - -a (All): Incearca sa demonteze toate sistemele de fisiere listate in /etc/mtab.
+      - EX: umount -a
+  - -f (Force): Forteaza demontarea in cazul unui sistem de fisiere indisponibil (ex: share de retea cazut).
+      - EX: umount -f /mnt/share
+  - -l (Lazy): Demonteaza sistemul imediat ce nu mai este "ocupat" de niciun proces.
+      - EX: umount -l /mnt/usb
+  - -r (Read-only): Daca demontarea esueaza, incearca sa remonteze dispozitivul in mod "doar citire".
+      - EX: umount -r /mnt/usb
+  - -v (Verbose): Confirma succesul demontarii prin mesaje in terminal.
+      - EX: umount -v /mnt/usb
 
 nginx - Server Web si Reverse Proxy de inalta performanta
   - -v (Version): Afiseaza versiunea de Nginx instalata pe sistem.
@@ -502,7 +530,7 @@ vmstat - Virtual Memory Statistics
   - -a: Afișează memoria activă și inactivă (active/inactive memory).
       - EX: vmstat -a
 
-fsck: Utilitar pentru verificarea și repararea sistemelor de fișiere.
+fsck (File System Consistency Check): Utilitar pentru verificarea și repararea sistemelor de fișiere.
     - -A: Verifică toate sistemele de fișiere listate în /etc/fstab dintr-o singură rulare.
         - EX: sudo fsck -A
     - -C: Afișează o bară de progres (completion bar) în timpul verificării.
