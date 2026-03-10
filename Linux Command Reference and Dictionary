@@ -86,7 +86,7 @@ kill - Trimiterea semnalelor catre un proces specific (prin PID)
       - EX: kill -- -1234
   - -0 (Check): Nu trimite un semnal real, ci doar verifica daca procesul cu acel PID mai exista si daca ai dreptul sa ii trimiti semnale.
       - EX: kill -0 1234
-  - %%: Se refera intotdeauna la job-ul curent (cel marcat cu + in lista jobs).
+  - %+ (sau %%): Se refera intotdeauna la job-ul curent (cel marcat cu + in lista jobs).
       - EX: kill %%
   - %-: Se refera la job-ul anterior (cel marcat cu - in lista jobs).
       - EX: kill %-
@@ -121,6 +121,159 @@ pkill - Oprirea proceselor dupa nume sau atribute
       - EX: pkill -o chrome
   - -t [TTY] (Terminal): Opreste toate procesele care ruleaza pe un anumit terminal specificat.
       - EX: pkill -t pts/0
+
+Situatie: Lucrezi într-un singur terminal și vrei să gestionezi mai multe programe 
+        simultan (unele puse în pauză, altele rulând în fundal), fără să deschizi alte tab-uri.
+jobs - List active jobs
+  - jobs: Afișează starea job-urilor pornite în sesiunea curentă.
+    - Comandă terminal: jobs
+          student@uso:~$ sleep 1000 &
+          [1] 10533
+          student@uso:~$ jobs
+          [1]+  Running                 sleep 1000 &
+  - -l : Afișează PID-ul procesului alături de numărul job-ului.
+    - Comandă terminal: jobs -l
+         `student@uso:~$ sleep 1000 &`
+         `[1] 10533`
+         `student@uso:~$ jobs -l`
+         `[1]+ 10533 Running                 sleep 1000 &`
+         Obs.: Apare coloana a doua care indică PID-ul (Process ID) 10533.
+  - -p : Afișează doar PID-urile proceselor.
+    - Comandă terminal: jobs -p
+         `student@uso:~$ jobs -p`
+         `10533`
+         Obs.: Util când vrei să transmiți PID-ul direct altei comenzi, ex: `kill -9 $(jobs -p)`.
+  - -r (Running): Afișează doar job-urile care sunt în starea "Running".
+    - Comandă terminal: jobs -r
+         `student@uso:~$ sleep 2000 &`
+         `[2] 10540`
+         `student@uso:~$ nano` (Apasă Ctrl+Z pentru suspendare)
+         `[3]+  Stopped                 nano`
+         `student@uso:~$ jobs -r`
+         `[1]-  Running                 sleep 1000 &`
+         `[2]+  Running                 sleep 2000 &`
+         Obs.: Job-ul [3] cu Nano a fost filtrat din listă deoarece starea lui este "Stopped", nu "Running".
+  - -s (Stopped): Afișează doar job-urile care sunt în starea "Stopped".
+    - Comandă terminal: jobs -s
+         `student@uso:~$ jobs -s`
+         `[3]+  Stopped                 nano`
+         Obs.: Afișează exclusiv procesele care au primit semnalul de suspendare (SIGTSTP) prin Ctrl+Z.
+  - -n: Afișează doar job-urile care și-au schimbat starea de la ultima notificare.
+    - Comandă terminal: jobs -n
+
+2. Gestiunea Fișierelor și Arhivare
+
+Situație: Trebuie să găsești rapid un fișier folosind specificatii ale sale.
+find - Find Files
+  - find [cale] -name [nume]: Căutare după nume
+    - Exemplu: find /etc -name passwd
+  - find [cale] -type [tip]: Filtrare după tip (f=fișier, d=director)
+    - Exemplu: find . -type d
+  - find [cale] -mtime [zile]: Fișiere modificate în ultimele X zile
+    - Exemplu: find /var/log -mtime -2
+  - find [cale] -exec [comanda] {} \;: Execută o comandă pe rezultatele găsite
+    - Exemplu: find . -name "*.tmp" -exec rm {} \; (sterge toate fisierele care se termina cu ".tmp" pe rand)
+    - Exemplu: find . -name "*.tmp" -exec rm {} +; (sterge toate fisierele care se termina cu ".tmp" de-o data)
+  - find [cale] -user [nume]: Căutare fișiere deținute de un utilizator specific
+    - Exemplu: find /home -user elev
+  - find [cale] -perm [mod]: Căutare după permisiuni (format octal)
+    - Exemplu: find . -perm 777
+  - find [cale] -size [mărime]: Căutare după dimensiune (k=KB, M=MB, G=GB)
+    - Exemplu: find /var/log -size +10M
+  - find [cale] -inum [număr]: Căutare fișier după numărul de Inode
+    - Exemplu: find / -inum 12345
+
+Situatie: Trebuie să creezi o copie de rezervă completă a proiectului tău, care să păstreze exact 
+        drepturile de execuție ale scripturilor, pentru a o trimite spre corectare.
+tar - Arhivarea si comprimarea fisierelor (Tape Archive)
+  - -c (Create): Creeaza o arhiva noua.
+      - EX: tar -cvf arhiva.tar folder/
+  - -x (Extract): Extrage continutul unei arhive existente.
+      - EX: tar -xvf arhiva.tar
+  - -v (Verbose): Afiseaza pe ecran lista fisierelor in timp ce sunt procesate.
+      - EX: tar -cvf backup.tar .
+  - -f (File): Specifica numele fisierului arhiva (trebuie sa fie ultimul steag inainte de nume).
+      - EX: tar -f proiect.tar -cv [GRESIT - ordinea conteaza!] -> tar -cvf proiect.tar
+  - -z (gzip): Comprima arhiva folosind algoritmul gzip (rezulta extensia .tar.gz).
+      - EX: tar -czvf solutie.tar.gz ./cod_sursa
+  - -j (bzip2): Comprima arhiva folosind bzip2 (compresie mai buna, dar mai lenta; extensie .tar.bz2).
+      - EX: tar -cjvf arhiva_mica.tar.bz2 ./date_mari
+  - -t (List): Listeaza continutul unei arhive fara sa o extraga.
+      - EX: tar -tvf arhiva.tar.gz
+  - -C (Directory): Schimbă directorul înainte de a extrage (destinația).
+      - EX: tar -xf arhiva.tar -C /destinatie/
+
+Situatie: Vrei să comprimi un folder cu documente astfel încât să poată fi deschis 
+        ușor pe orice sistem de operare (Windows/Linux/Mac).
+zip - Crearea arhivelor comprimate in format .zip
+  - zip [nume_arhiva.zip] [fisier]: Creeaza o arhiva simpla dintr-un singur fisier.
+      - EX: zip documente.zip raport.txt
+  - -r (Recursive): Arhiveaza un intreg director si tot ce contine acesta (subfoldere si fisiere).
+      - EX: zip -r proiect.zip ./folder_proiect
+  - -e (Encrypt): Protejeaza arhiva cu o parola (util pentru securizarea solutiilor).
+      - EX: zip -e -r securizat.zip ./date_sensibile
+  - -9 (Compression Level): Foloseste cel mai inalt nivel de compresie (cel mai mic fisier rezultat).
+      - EX: zip -9 -r arhiva_mica.zip ./date
+  - -u (Update): Adauga sau actualizeaza doar fisierele care s-au schimbat de la ultima arhivare.
+      - EX: zip -u proiect.zip script.py
+  - -d (Delete): Sterge un fisier specific din interiorul unei arhive deja existente.
+      - EX: zip -d proiect.zip fisier_inutil.tmp
+
+Situatie: Vrei să comprimi un singur fișier de date foarte mare, păstrând și originalul pentru siguranță.
+gzip / bzip2 / xz - Compresoare pentru fisiere individuale
+  - -d (Decompress): Desface fisierul comprimat.
+      - EX: gzip -d document.gz (sau gunzip document.gz)
+  - -k (Keep): Pastreaza fisierul original. In mod normal, gzip sterge originalul dupa compresie!
+      - EX: xz -k fisier_mare.bin
+  - -9 (Best): Nivel maxim de compresie.
+      - EX: bzip2 -9 date.csv
+
+Situatie: Ai o arhivă ZIP (posibil de pe Windows) și vrei să o extragi ordonat într-un folder separat, nu peste tot.
+unzip - Extragerea si gestionarea arhivelor ZIP
+  - -l (List): Vezi lista de fisiere si marimea lor fara sa le dezarhivezi.
+      - EX: unzip -l subiecte.zip
+  - -d [cale] (Directory): Trimite toate fisierele extrase intr-un folder specific.
+      - EX: unzip arhiva.zip -d ./subiecte_concurs
+  - -o (Overwrite): Suprascrie fisierele existente fara sa mai ceara confirmare.
+      - EX: unzip -o update.zip
+  - -P [parola] (Password): Extrage o arhiva protejata introducand parola direct in comanda.
+      - EX: unzip -P secret123 arhiva.zip
+
+Situatie: Cauți o setare sau o eroare specifică într-o grămadă de fișiere de cod și vrei 
+        să știi exact unde și de câte ori apare, fără să le deschizi pe rând.
+grep - Filtrarea si cautarea textului folosind tipare
+  - -i (Ignore Case): Gaseste textul indiferent daca e scris cu litere mari sau mici.
+      - EX: grep -i linux fisier.txt
+  - -v (Invert Match): Iti arata tot ce NU contine textul cautat (util pentru curatat log-uri).
+      - EX: grep -v eroare log.txt
+  - -r (Recursive): Cauta in toate fisierele dintr-un folder si din subfolderele acestuia.
+      - EX: grep -r 192.168.1.1 /etc/
+  - -n (Line Number): Afiseaza numarul liniei unde a fost gasit textul.
+      - EX: grep -n main script.c
+  - -c (Count): Iti spune doar cate linii contin textul, fara sa le afiseze.
+      - EX: grep -c FAILED auth.log
+  - -l (Files with matches): Afiseaza doar numele fisierelor care contin textul, util pentru scripturi.
+      - EX: grep -l TODO *.py
+  - -E (Extended RegEx): Permite folosirea operatorilor logici precum SAU (|) fara caractere de escape.
+      - EX: grep -E mere|pere lista.txt
+  - -w (Word Regexp): Gaseste doar cuvantul intreg, ignorand derivatele (ex: ana, nu ananas).
+      - EX: grep -w ana text.txt
+
+Situatie: Vrei să faci o copie de siguranță a unui fișier sau să multiplici un întreg director 
+        cu tot ce conține, păstrând data creării și permisiunile.
+cp (Copy) - Copierea fisierelor si directoarelor
+  - -r (Recursive): Obligatoriu pentru a copia un director cu toate subfolderele si fisierele din el.
+      - EX: cp -r folder_sursa folder_destinatie
+  - -p (Preserve): Pastreaza atributele originale: permisiuni, proprietar si data ultimei modificari.
+      - EX: cp -p script.sh backup_script.sh
+  - -i (Interactive): Te intreaba inainte sa suprascrie un fisier care exista deja la destinatie.
+      - EX: cp -i date.txt /backup/
+  - -u (Update): Copiaza doar daca fisierul sursa este mai nou decat cel de la destinatie sau daca acesta lipseste.
+      - EX: cp -u *.c ./proiect_vechi/
+  - -v (Verbose): Afiseaza ce se intampla in timp real (sursa -> destinatie).
+      - EX: cp -v poza.jpg /media/usb/
+  - -a (Archive): Este un "super-steag" care include -r si -p, plus pastrarea legaturilor simbolice. Ideal pentru backup.
+      - EX: cp -a /home/user/proiect /backup/
 
 nginx - Server Web si Reverse Proxy de inalta performanta
   - -v (Version): Afiseaza versiunea de Nginx instalata pe sistem.
@@ -247,11 +400,7 @@ clear - Clear Screen
   - clear: Wipe the terminal screen and scrollback buffer for a clean workspace
     - Example: clear
 
-cp - Copy
-  - cp: Copy files or directories from a source to a destination
-    - Example: cp config.old config.new
-  - cp -r: Copy directories recursively including all subfolders and files
-    - Example: cp -r /src /backup
+
 
 curl - Client URL
   - curl [URL]: Afișează conținutul fișierului (codul sursă HTML) în terminal.
@@ -401,23 +550,7 @@ echo - Output Text
   - echo -E: Dezactivează explicit interpretarea caracterelor escape (comportament implicit)
       - Exemplu: echo -E "Nu se va vedea \n ca linie nouă"
 
-find - Find Files
-  - find [cale] -name [nume]: Căutare după nume
-    - Exemplu: find /etc -name passwd
-  - find [cale] -type [tip]: Filtrare după tip (f=fișier, d=director)
-    - Exemplu: find . -type d
-  - find [cale] -mtime [zile]: Fișiere modificate în ultimele X zile
-    - Exemplu: find /var/log -mtime -2
-  - find [cale] -exec [comanda] {} \;: Execută o comandă pe rezultatele găsite
-    - Exemplu: find . -name "*.tmp" -exec rm {} \;
-  - find [cale] -user [nume]: Căutare fișiere deținute de un utilizator specific
-    - Exemplu: find /home -user elev
-  - find [cale] -perm [mod]: Căutare după permisiuni (format octal)
-    - Exemplu: find . -perm 777
-  - find [cale] -size [mărime]: Căutare după dimensiune (k=KB, M=MB, G=GB)
-    - Exemplu: find /var/log -size +10M
-  - find [cale] -inum [număr]: Căutare fișier după numărul de Inode
-    - Exemplu: find / -inum 12345
+
 
 stat - File Status
   - stat [fisier]: Afișează informații detaliate despre un fișier (Inode, drepturi, timestamp)
@@ -516,31 +649,7 @@ lscpu - Display information about the CPU architecture
   - -y: Afișează informații extinse despre topologia cache-ului.
       - Exemplu probă: `lscpu -y`
 
-grep - Global Regular Expression Print
-  - i (ignore-case)
-    - Comandă: grep -i "linux" fisier.txt
-    - Efect: Găsește "Linux", "LINUX", "linux" etc. (Ignoră diferența mare/mică).
-  - v (invert-match)
-    - Comandă: grep -v "eroare" log.txt
-    - Efect: Afișează toate liniile care NU conțin cuvântul "eroare" (Filtrare inversă).
-  - r (recursive)
-    - Comandă: grep -r "192.168.1.1" /etc/
-    - Efect: Caută șirul în toate fișierele din directorul specificat și din subdirectoare.
-  - n (line-number)
-    - Comandă: grep -n "main" script.c
-    - Efect: Afișează linia găsită împreună cu numărul ei din fișier.
-  - c (count)
-    - Comandă: grep -c "FAILED" auth.log
-    - Efect: Afișează doar numărul total de linii care conțin potrivirea (nu liniile în sine).
-  - l (files-with-matches)
-    - Comandă: grep -l "TODO" *.py
-    - Efect: Afișează doar numele fișierelor care conțin cuvântul, nu și conținutul.
-  - E (extended-regexp)
-    - Comandă: grep -E "mere|pere" lista.txt
-    - Efect: Activează RegEx extins (nu mai trebuie backslash pentru symbols ca +, |, ?).
-  - w (word-regexp)
-    - Comandă: grep -w "ana" text.txt
-    - Efect: Caută cuvântul întreg. Nu va găsi "ananas" sau "cana".
+
 
 head - Output First Part of Files
   - head: Afișează implicit primele 10 linii ale unui fișier
@@ -635,12 +744,6 @@ ip route show - Gestionarea tabelei de rutare si a cailor de date
 journalctl - Systemd Logs
   - journalctl: Query and display logs collected by the systemd-journald service
     - Example: journalctl -xe
-
-kill - Terminate Process
-  - kill: Send a signal (default SIGTERM) to a process to request its termination
-    - Example: kill 1234
-  - kill -9: Send the SIGKILL signal to forcefully and immediately terminate a process
-    - Example: kill -9 1234
 
 locate - Fast File Find
   - locate: Find files quickly by name using a pre-built system database (updated by updatedb)
@@ -855,44 +958,7 @@ pgrep - Process Grep (Găsește procese după nume)
       - EX: pgrep -o firefox
 
 
-Situatie: Lucrezi într-un singur terminal și vrei să gestionezi mai multe programe 
-        simultan (unele puse în pauză, altele rulând în fundal), fără să deschizi alte tab-uri.
-jobs - List active jobs
-  - jobs: Afișează starea job-urilor pornite în sesiunea curentă.
-    - Comandă terminal: jobs
-          student@uso:~$ sleep 1000 &
-          [1] 10533
-          student@uso:~$ jobs
-          [1]+  Running                 sleep 1000 &
-  - -l : Afișează PID-ul procesului alături de numărul job-ului.
-    - Comandă terminal: jobs -l
-         `student@uso:~$ sleep 1000 &`
-         `[1] 10533`
-         `student@uso:~$ jobs -l`
-         `[1]+ 10533 Running                 sleep 1000 &`
-         Obs.: Apare coloana a doua care indică PID-ul (Process ID) 10533.
-  - -p : Afișează doar PID-urile proceselor.
-    - Comandă terminal: jobs -p
-         `student@uso:~$ jobs -p`
-         `10533`
-         Obs.: Util când vrei să transmiți PID-ul direct altei comenzi, ex: `kill -9 $(jobs -p)`.
-  - -r : Afișează doar job-urile care sunt în starea "Running".
-    - Comandă terminal: jobs -r
-         `student@uso:~$ sleep 2000 &`
-         `[2] 10540`
-         `student@uso:~$ nano` (Apasă Ctrl+Z pentru suspendare)
-         `[3]+  Stopped                 nano`
-         `student@uso:~$ jobs -r`
-         `[1]-  Running                 sleep 1000 &`
-         `[2]+  Running                 sleep 2000 &`
-         Obs.: Job-ul [3] cu Nano a fost filtrat din listă deoarece starea lui este "Stopped", nu "Running".
-  - -s : Afișează doar job-urile care sunt în starea "Stopped".
-    - Comandă terminal: jobs -s
-         `student@uso:~$ jobs -s`
-         `[3]+  Stopped                 nano`
-         Obs.: Afișează exclusiv procesele care au primit semnalul de suspendare (SIGTSTP) prin Ctrl+Z.
-  - -n: Afișează doar job-urile care și-au schimbat starea de la ultima notificare.
-    - Comandă terminal: jobs -n
+
 
 pwd - Print Working Directory
   - pwd: Print the full absolute path of the current working directory
@@ -997,45 +1063,9 @@ tail - Output Last Part of Files
   - tail -c [bytes]: Afișează ultimii octeți (bytes) specificați
     - Exemplu: tail -c 100 data.txt
 
-tar - Tape Archiver
-  - -c (Create): Creează o arhivă nouă.
-      - EX: tar -cf arhiva.tar folder/
-  - -x (Extract): Extrage fișierele dintr-o arhivă.
-      - EX: tar -xf arhiva.tar
-  - -t (List): Afișează conținutul arhivei fără a o extrage.
-      - EX: tar -tf arhiva.tar
-  - -z (Gzip): Folosește compresia gzip (.tar.gz).
-      - EX: tar -czf arhiva.tar.gz folder/
-  - -j (Bzip2): Folosește compresia bzip2 (.tar.bz2).
-      - EX: tar -cjf arhiva.tar.bz2 folder/
-  - -f (File): Specifică numele arhivei (trebuie să fie ultimul steag înainte de nume).
-      - EX: tar -f arhiva.tar
-  - -v (Verbose): Afișează progresul operațiunii (frecvent în subiecte ca 'afisare date suplimentare').
-      - EX: tar -cvf arhiva.tar folder/
-  - -C (Directory): Schimbă directorul înainte de a extrage (destinația).
-      - EX: tar -xf arhiva.tar -C /destinatie/
 
-zip - Arhivator compatibil cross-platform
-  - -r zip: Recursive. Include toate subdirectoarele și fișierele din folderul specificat.
-      - EX: -r zip arhiva.zip /home/user/proiect
-  - -e zip: Encrypt. Adaugă o parolă arhivei create.
-      - EX: -e zip date_private.zip fisier.txt
-  - -u zip: Update. Adaugă sau înlocuiește doar fișierele care s-au modificat de la ultima arhivare.
-      - EX: -u zip arhiva.zip fisier_nou.txt
 
-unzip - Extragere arhive zip
-  - -l unzip: List. Afișează conținutul arhivei fără a o extrage.
-      - EX: -l unzip arhiva.zip
-  - -d [cale] unzip: Directory. Extrage fișierele într-un folder specificat.
-      - EX: -d /tmp/extrase unzip arhiva.zip
 
-gzip / bzip2 / xz - Compresoare individuale
-  - -d gzip/bzip2/xz: Decompress. Desface fișierul comprimat (echivalent cu gunzip/bunzip2/unxz).
-      - EX: -d gzip document.gz
-  - -k gzip/bzip2/xz: Keep. Păstrează fișierul original după ce a creat versiunea comprimată.
-      - EX: -k xz fisier_mare.bin
-  - -9 gzip/bzip2/xz: Best. Folosește nivelul maxim de compresie (mai lent, dar fișier mai mic).
-      - EX: -9 bzip2 date.csv
 
 tcpdump - Packet Sniffer / Network Analyzer
   - -i (Interface): Specifică placa de rețea pe care asculți (ex: eth0, wlan0).
