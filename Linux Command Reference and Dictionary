@@ -45,9 +45,13 @@ top - Monitorizarea dinamica a proceselor si resurselor de sistem
       - EX: top -i
   - -c (Command): Afiseaza calea completa a comenzii care a lansat procesul.
       - EX: top -c
+  - -s (Secure Mode): Afiseaza procesele in format read-only, deci nu permite efectuarea de modificari.
+      - EX: top -s
   - -o [camp] (Order): Sorteaza procesele dupa o coloana specifica (ex: %CPU sau %MEM).
       - EX: top -o %MEM
 
+Situatie: Vrei o interfata interactiva, colorata si moderna care sa iti permita sa navighezi cu mouse-ul sau cu 
+        sagetile pentru a inchide procese ori pentru a vedea grafic consumul pe fiecare nucleu de procesor (CPU) in parte.
 htop - Interactive Process Viewer (Monitorizare vizuală avansată)
   - htop: Deschide interfața interactivă implicită.
       - EX: htop
@@ -65,6 +69,58 @@ htop - Interactive Process Viewer (Monitorizare vizuală avansată)
       - EX: htop -t
   - --readonly: (Restricted) Dezactivează funcțiile de "Kill" și "Nice" din interfață (mod doar de vizualizare).
       - EX: htop --readonly
+
+Situatie: Ai procese cu nume identice, dar vrei sa opresti chirurgical doar pe cel blocat, folosind ID-ul sau unic (PID).
+kill - Trimiterea semnalelor catre un proces specific (prin PID)
+  - -l (List): Afiseaza toate numele si numerele semnalelor pe care le poti trimite (util daca uiti codul pentru SIGKILL).
+      - EX: kill -l
+  - -9 (SIGKILL): Opreste fortat si imediat procesul; sistemul de operare il elimina fara nicio notificare.
+      - EX: kill -9 1234
+  - -15 (SIGTERM): Solicita procesului sa se inchida normal (este semnalul implicit daca nu specifici altul).
+      - EX: kill 1234
+  - -s [semnal] (Signal): Permite specificarea semnalului prin nume in loc de numar.
+      - EX: kill -s SIGKILL 1234
+  - -1 (SIGHUP) (un fel de Refresh): Spune procesului sa isi actualizeze fisierele de configurare cu noile modificari fara sa se opreasca de tot.
+      - EX: kill -1 1234
+  - -- [PID]: Folosit pentru a trimite semnale proceselor care au PID-uri negative (grupuri de procese).
+      - EX: kill -- -1234
+  - -0 (Check): Nu trimite un semnal real, ci doar verifica daca procesul cu acel PID mai exista si daca ai dreptul sa ii trimiti semnale.
+      - EX: kill -0 1234
+  - %%: Se refera intotdeauna la job-ul curent (cel marcat cu + in lista jobs).
+      - EX: kill %%
+  - %-: Se refera la job-ul anterior (cel marcat cu - in lista jobs).
+      - EX: kill %-
+
+Situatie: Vrei sa opresti sau sa inchizi toate procesele care au acelasi nume (de exemplu, toate 
+        ferestrele unui browser care s-a blocat) fara sa cauti manual ID-ul (PID) fiecaruia.
+pkill - Oprirea proceselor dupa nume sau atribute
+  - -9 (SIGKILL): Forteaza oprirea imediata a proceselor fara sa le mai lase sa salveze datele.
+      - EX: pkill -9 nginx
+      - Situatie: Cand un proces este blocat complet (frozen), nu mai raspunde la nicio alta comanda si consuma resurse inutil, fiind necesara eliminarea lui bruta din memorie.
+  - -15 (SIGTERM): Trimite o cerere de inchidere politicoasa, permitand procesului sa isi curete fisierele temporare si sa inchida conexiunile.
+      - EX: pkill -15 firefox
+      - Situatie: Cand vrei sa inchizi un program care functioneaza normal, oferindu-i sansa sa salveze progresul lucrului si sa nu lase fisiere corupte in urma.
+  - -2 (SIGINT): Intrerupe procesul exact ca si cum ai apasa tastele Ctrl+C in terminal.
+      - EX: pkill -2 ping
+      - Situatie: Cand un proces ruleaza in terminal si vrei sa il opresti normal, permitandu-i sa afiseze statistici finale inainte de inchidere.
+  - -19 (SIGSTOP): Ingheata procesul instantaneu (Pause). Procesul ramane in memorie, dar nu mai consuma procesor.
+      - EX: pkill -19 script_greu
+      - Situatie: Cand un proces consuma mult CPU si ai nevoie de resurse rapid pentru altceva, dar nu vrei sa pierzi progresul procesului si vrei sa il reiei mai tarziu.
+  - -20 (SIGTSTP): Cere procesului sa se suspende (echivalent cu Ctrl+Z). Este o pauza mai "usoara" decat SIGSTOP, deoarece procesul poate alege sa ignore semnalul.
+      - EX: pkill -20 htop
+      - Situatie: Cand vrei sa trimiti un program in background pentru a elibera linia de comanda a terminalului, dar sa il poti aduce inapoi cu comanda fg.
+  - -f (Full): Cauta tiparul (pattern-ul) in toata linia de comanda care a lansat procesul, nu doar in numele executabilului, si apoi inchide procesele gasite.
+      - EX: pkill -f script_python.py
+  - -u [utilizator] (User): Opreste doar procesele care apartin unui anumit utilizator specificat.
+      - EX: pkill -u student
+  - -i (Ignore case): Ignora diferenta dintre litere mari si mici atunci cand cauti numele procesului.
+      - EX: pkill -i FIREFOX
+  - -n (Newest): Opreste doar cel mai recent proces lansat care se potriveste numelui cautat.
+      - EX: pkill -n bash
+  - -o (Oldest): Opreste doar cel mai vechi proces (primul lansat) care se potriveste numelui cautat.
+      - EX: pkill -o chrome
+  - -t [TTY] (Terminal): Opreste toate procesele care ruleaza pe un anumit terminal specificat.
+      - EX: pkill -t pts/0
 
 nginx - Server Web si Reverse Proxy de inalta performanta
   - -v (Version): Afiseaza versiunea de Nginx instalata pe sistem.
@@ -798,21 +854,16 @@ pgrep - Process Grep (Găsește procese după nume)
   - -o: (Oldest) Afișează doar cel mai vechi proces pornit (primul instanțiat).
       - EX: pgrep -o firefox
 
-pkill - Process Kill (Omoară procese după nume)
-  - pkill [nume]: Trimite semnalul de terminare (SIGTERM) tuturor proceselor cu acel nume.
-      - EX: pkill firefox
-  - -9: (SIGKILL) Forțează închiderea imediată a procesului (fără salvare de date).
-      - EX: pkill -9 vlc
-  - -u [user]: Omoară doar procesele care aparțin utilizatorului specificat.
-      - EX: sudo pkill -u elev bash
-  - -t [terminal]: Omoară procesele care rulează pe un anumit terminal (ex: tty1).
-      - EX: sudo pkill -t pts/0
-  - -f: (Full) Potrivește numele cu întreaga linie de comandă, nu doar cu numele executabilului.
-      - EX: pkill -f "script_test.sh"
 
+Situatie: Lucrezi într-un singur terminal și vrei să gestionezi mai multe programe 
+        simultan (unele puse în pauză, altele rulând în fundal), fără să deschizi alte tab-uri.
 jobs - List active jobs
   - jobs: Afișează starea job-urilor pornite în sesiunea curentă.
     - Comandă terminal: jobs
+          student@uso:~$ sleep 1000 &
+          [1] 10533
+          student@uso:~$ jobs
+          [1]+  Running                 sleep 1000 &
   - -l : Afișează PID-ul procesului alături de numărul job-ului.
     - Comandă terminal: jobs -l
          `student@uso:~$ sleep 1000 &`
