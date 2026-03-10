@@ -1,6 +1,83 @@
 > Linux Command Reference and Dictionary:
     Unified documentation for essential system utilities
- 
+
+1. Managementul Resurselor și Proceselor
+
+Situatie: Vrei sa capturezi o poza fixa (snapshot) a proceselor care ruleaza in acest moment pentru a vedea cine a lansat un anumit program sau ce ID are un proces blocat.
+ps - Process Status
+  - ps: Afișează procesele active din terminalul curent al utilizatorului
+    - Exemplu: ps
+  - ps -e sau ps -A: Afișează absolut toate procesele care rulează pe sistem
+    - Exemplu: ps -e
+  - ps -f: Afișează formatul complet (full-format), adăugând coloane pentru UID, PPID și ora pornirii
+    - Exemplu: ps -ef
+  - ps aux: (Stil BSD) Cel mai folosit mod; afișează procesele tuturor utilizatorilor (a), inclusiv cele fără terminal (x), cu detalii despre consumul de resurse (u)
+    - Exemplu: ps aux
+  - ps -u [username]: Afișează procesele care aparțin unui anumit utilizator
+    - Exemplu: ps -u root
+  - ps -p [PID]: Afișează informații despre un proces specific, identificat prin ID-ul său
+    - Exemplu: ps -p 1234
+  - ps -t [terminal]: Restricționează afișarea doar la procesele care rulează în terminalul (TTY) din care ai dat comanda.
+    - Exemplu: ps -t 
+  - ps -C [command]: Filtrează procesele după numele executabilului
+    - Exemplu: ps -C nginx
+  - ps --forest: Afișează ierarhia proceselor sub formă de arbore (vizualizează relația părinte-copil)
+    - Exemplu: ps -ef --forest
+  - ps -eo pcpu,pmem,comm: Afișează doar coloane personalizate (ex: %CPU, %Memorie, Nume Comandă)
+    - Exemplu: ps -eo pid,ppid,cmd --sort=-pcpu
+      - --sort=: Specifică ordinea în care vor fi afișate rândurile (sortarea).
+         -pcpu: Acesta este detaliul cheie: pcpu înseamnă procentul de utilizare CPU (%CPU).
+      Obs. Semnul minus (-) din față indică o sortare descrescătoare; Dacă era +pcpu sau doar pcpu, sortarea era crescătoare.
+
+Situatie: Vrei sa vezi in timp real care proces iti consuma procesorul (CPU) sau memoria (RAM) si sa monitorizezi starea generala a sistemului.
+top - Monitorizarea dinamica a proceselor si resurselor de sistem
+  - -d [secunde] (Delay): Seteaza intervalul de reimprospatare a ecranului.
+      - EX: top -d 1
+  - -u [utilizator] (User): Afiseaza doar procesele care apartin unui anumit utilizator.
+      - EX: top -u root
+  - -p [PID] (PID): Monitorizeaza doar un proces specific identificat prin ID-ul sau.
+      - EX: top -p 1234
+  - -n [numar] (Iterations): Se opreste automat dupa ce actualizeaza ecranul de cateva ori.
+      - EX: top -n 5
+  - -b (Batch): Ruleaza fara interfata interactiva, util pentru a salva datele intr-un fisier.
+      - EX: top -b -n 1 > resurse.txt
+  - -i (Idle): Ascunde procesele care nu fac nimic (cele "adormite").
+      - EX: top -i
+  - -c (Command): Afiseaza calea completa a comenzii care a lansat procesul.
+      - EX: top -c
+  - -o [camp] (Order): Sorteaza procesele dupa o coloana specifica (ex: %CPU sau %MEM).
+      - EX: top -o %MEM
+
+htop - Interactive Process Viewer (Monitorizare vizuală avansată)
+  - htop: Deschide interfața interactivă implicită.
+      - EX: htop
+  - -d [secunde] (Delay): Seteaza intervalul de reimprospatare a ecranului.
+      - EX: htop -d 5
+  - -C: (No color) Pornește în mod monocrom (util dacă terminalul de la concurs are probleme cu culorile).
+      - EX: htop -C
+  - -u [user]: Afișează la pornire doar procesele utilizatorului specificat.
+      - EX: htop -u root
+  - -p [PID,PID...]: Monitorizează doar procesele cu ID-urile specificate.
+      - EX: htop -p 1024,2048
+  - -s [coloană]: (Sort) Setează coloana după care se face sortarea la pornire (ex: PERCENT_CPU).
+      - EX: htop -s PERCENT_MEM
+  - -t: (Tree) Pornește direct în modul de vizualizare ierarhică (arbore de procese).
+      - EX: htop -t
+  - --readonly: (Restricted) Dezactivează funcțiile de "Kill" și "Nice" din interfață (mod doar de vizualizare).
+      - EX: htop --readonly
+
+nginx - Server Web si Reverse Proxy de inalta performanta
+  - -v (Version): Afiseaza versiunea de Nginx instalata pe sistem.
+      - EX: nginx -v
+  - -t (Test): Verifica daca fisierele de configurare (nginx.conf) sunt scrise corect fara a reporni serverul.
+      - EX: sudo nginx -t
+  - -s reload (Signal): Reincarca setarile fara a opri conexiunile active ale vizitatorilor.
+      - EX: sudo nginx -s reload
+  - -s stop: Opreste imediat procesul Nginx.
+      - EX: sudo nginx -s stop
+  - -T: Afiseaza configuratia curenta direct in terminal (util pentru debug).
+      - EX: nginx -T
+
 awk - Pattern Processor
   - awk '{print $n}': Afișează coloana n
     - Exemplu: awk '{print $1}' date.txt
@@ -481,9 +558,23 @@ ip addr (sau ip a) - Gestionarea adreselor și interfețelor
   - route show: Afișează tabela de rutare (unde vezi IP-ul routerului/Gateway). Afiseaza adresele IP ale interfetelor de retea de pe un sistem Linux.
       - EX: `ip route show`
 
-ip route show - Routing Table
-  - ip route show: Display the system's IP routing table managed by the kernel
-    - Example: ip route show
+ip route show - Gestionarea tabelei de rutare si a cailor de date
+  - -4 (IPv4): Afiseaza doar rutele specifice protocolului IPv4 (elimina IPv6 pentru claritate).
+      - EX: ip -4 route
+  - -6 (IPv6): Afiseaza doar rutele specifice protocolului IPv6 (elimina IPv4 pentru claritate).
+      - EX: ip -6 route
+  - -c (Color): Coloreaza destinatiile si interfetele pentru a le vedea dintr-o privire.
+      - EX: ip -c route
+  - show default: Afiseaza direct poarta de iesire (Gateway) a sistemului catre internet.
+      - EX: ip route show default
+  - get [IP]: Calculeaza si afiseaza exact ce interfata si ce ruta va folosi un pachet pentru o destinatie.
+      - EX: ip route get 8.8.8.8
+  - add [retea] via [gateway]: Adauga o ruta manuala catre o alta retea prin intermediul unui router specific.
+      - EX: sudo ip route add 10.0.0.0/24 via 192.168.1.1
+  - del [retea]: Sterge o ruta existenta din tabela de rutare a sistemului.
+      - EX: sudo ip route del 10.0.0.0/24
+  - flush cache: Curata rapid tabela de rutare temporara pentru a forta sistemul sa recalculeze rutele.
+      - EX: sudo ip route flush cache
 
 journalctl - Systemd Logs
   - journalctl: Query and display logs collected by the systemd-journald service
@@ -673,30 +764,23 @@ ss - Socket Statistics (Înlocuitorul modern pentru netstat)
       - EX: ss -at '( dport = :80 or sport = :80 )'
       - Obs.: Foarte util pentru a vedea traficul pe un port specific (ex: HTTP).
 
-ps - Process Status
-  - ps: Afișează procesele active din terminalul curent al utilizatorului
-    - Exemplu: ps
-  - ps -e sau ps -A: Afișează absolut toate procesele care rulează pe sistem
-    - Exemplu: ps -e
-  - ps -f: Afișează formatul complet (full-format), adăugând coloane pentru UID, PPID și ora pornirii
-    - Exemplu: ps -ef
-  - ps aux: (Stil BSD) Cel mai folosit mod; afișează procesele tuturor utilizatorilor (a), inclusiv cele fără terminal (x), cu detalii despre consumul de resurse (u)
-    - Exemplu: ps aux
-  - ps -u [username]: Afișează procesele care aparțin unui anumit utilizator
-    - Exemplu: ps -u root
-  - ps -p [PID]: Afișează informații despre un proces specific, identificat prin ID-ul său
-    - Exemplu: ps -p 1234
-  - ps -t [terminal]: Restricționează afișarea doar la procesele care rulează în terminalul (TTY) din care ai dat comanda.
-    - Exemplu: ps -t 
-  - ps -C [command]: Filtrează procesele după numele executabilului
-    - Exemplu: ps -C nginx
-  - ps --forest: Afișează ierarhia proceselor sub formă de arbore (vizualizează relația părinte-copil)
-    - Exemplu: ps -ef --forest
-  - ps -eo pcpu,pmem,comm: Afișează doar coloane personalizate (ex: %CPU, %Memorie, Nume Comandă)
-    - Exemplu: ps -eo pid,ppid,cmd --sort=-pcpu
-      - --sort=: Specifică ordinea în care vor fi afișate rândurile (sortarea).
-         -pcpu: Acesta este detaliul cheie: pcpu înseamnă procentul de utilizare CPU (%CPU).
-      Obs. Semnul minus (-) din față indică o sortare descrescătoare; Dacă era +pcpu sau doar pcpu, sortarea era crescătoare.
+dig - (Domain Information Gropper): Interogarea serverelor de nume (DNS Lookup)
+  - @[server] (Server): Specifica un server DNS anume pentru interogare in loc de cel implicit.
+      - EX: dig @8.8.8.8 google.com
+  - -x (Reverse Lookup): Gaseste numele domeniului asociat unei adrese IP specifice.
+      - EX: dig -x 8.8.8.8
+  - +short (Short): Afiseaza doar raspunsul final (IP-ul), eliminand toate detaliile tehnice.
+      - EX: dig google.com +short
+  - +trace (Trace): Urmareste tot drumul interogarii DNS de la serverele root pana la destinatie.
+      - EX: dig google.com +trace
+  - any (Any): Solicita toate tipurile de inregistrari DNS disponibile pentru un domeniu.
+      - EX: dig google.com any
+  - mx / ns / txt (Type): Cere doar un anumit tip de inregistrare (Mail, Name Server, Text).
+      - EX: dig google.com mx
+  - +noall +answer (Filter): Ascunde tot output-ul si afiseaza doar sectiunea cu raspunsul.
+      - EX: dig google.com +noall +answer
+  - -p [port] (Port): Specifica un port diferit daca serverul DNS nu ruleaza pe portul standard 53.
+      - EX: dig @127.0.0.1 -p 5353 google.com
 
 pgrep - Process Grep (Găsește procese după nume)
   - pgrep [nume]: Afișează PID-ul (ID-ul procesului) pentru programul specificat.
@@ -918,37 +1002,7 @@ tcpdump - Packet Sniffer / Network Analyzer
   - -r (Read): Citește un fișier salvat anterior.
     - EX: `sudo tcpdump -r captura_mea.pcap`
 
-top - Table of Processes (Monitorizare în timp real)
-  - top: Afișează lista dinamică a proceselor și resursele consumate (CPU, RAM).
-      - EX: top
-  - -d [secunde]: (Delay) Setează intervalul de actualizare a ecranului.
-      - EX: top -d 1
-  - -u [user]: Monitorizează doar procesele utilizatorului specificat.
-      - EX: top -u root
-  - -p [PID]: Monitorizează doar un proces specific (sau o listă de PID-uri).
-      - EX: top -p 1234,5678
-  - -n [număr]: (Iterations) Se închide automat după un număr specific de actualizări.
-      - EX: top -n 5 > raport_procese.txt
-  - -b: (Batch mode) Util pentru a trimite output-ul către un fișier sau altă comandă (fără interfață).
-      - EX: top -b -n 1
 
-htop - Interactive Process Viewer (Monitorizare vizuală avansată)
-  - htop: Deschide interfața interactivă implicită.
-      - EX: htop
-  - -d [zecimi]: (Delay) Setează intervalul de reîmprospătare în zecimi de secundă (ex: 10 = 1 secundă).
-      - EX: htop -d 5
-  - -C: (No color) Pornește în mod monocrom (util dacă terminalul de la concurs are probleme cu culorile).
-      - EX: htop -C
-  - -u [user]: Afișează la pornire doar procesele utilizatorului specificat.
-      - EX: htop -u root
-  - -p [PID,PID...]: Monitorizează doar procesele cu ID-urile specificate.
-      - EX: htop -p 1024,2048
-  - -s [coloană]: (Sort) Setează coloana după care se face sortarea la pornire (ex: PERCENT_CPU).
-      - EX: htop -s PERCENT_MEM
-  - -t: (Tree) Pornește direct în modul de vizualizare ierarhică (arbore de procese).
-      - EX: htop -t
-  - --readonly: (Restricted) Dezactivează funcțiile de "Kill" și "Nice" din interfață (mod doar de vizualizare).
-      - EX: htop --readonly
 
 touch - Crearea fișierelor și modificarea timpilor
   - touch -a: Access time. Modifică doar timpul ultimei accesări.
@@ -991,6 +1045,24 @@ uname - Unix Name
     - Exemplu: uname -i
   - uname -o (operating system): Afișează numele sistemului de operare (ex: GNU/Linux)
     - Exemplu: uname -o
+
+hostname - Vizualizarea si setarea numelui sistemului (Hostname)
+  - -i (IP address): Afiseaza adresele IP asociate numelui de host (de obicei IP-ul local).
+      - EX: hostname -i
+  - -I (All IP addresses): Afiseaza toate adresele IP ale tuturor interfetelor de retea active.
+      - EX: hostname -I
+  - -f (Fully Qualified Domain Name): Afiseaza numele complet al domeniului (FQDN).
+      - EX: hostname -f
+  - -d (Domain): Afiseaza doar numele domeniului din care face parte masina.
+      - EX: hostname -d
+  - -s (Short): Afiseaza doar prima parte a numelui de host, pana la primul punct.
+      - EX: hostname -s
+  - -a (Alias): Afiseaza numele de alias (porecla) al masinii, daca acesta exista.
+      - EX: hostname -a
+  - [nume_nou] (Set): Schimba numele host-ului pe loc (necesita drepturi de root).
+      - EX: sudo hostname MasinaMeaNoua
+  - -v (Verbose): Afiseaza detalii suplimentare despre operatiunea executata.
+      - EX: hostname -v
 
 unzip - Extract ZIP
   - unzip: List, test, or extract files from a ZIP compressed archive
@@ -1053,6 +1125,25 @@ ping - Trimite cereri ICMP ECHO_REQUEST către gazde din rețea
       - EX: `ping -U google.com`
   - -D: Afișează un timestamp în fața fiecărei linii (util pentru log-uri de lungă durată).
       - EX: `ping -D 8.8.8.8`
+
+mtr - Diagnosticarea in timp real a retelei si urmarirea pachetelor (My Traceroute)
+    - combina functionalitatile utilitarelor 'ping' si 'traceroute'
+  - -r (Report): Ruleaza un numar de cicluri si apoi afiseaza un raport static (bun pentru log-uri).
+      - EX: mtr -r google.com
+  - -c [numar] (Count): Stabileste cate pachete sa trimita catre fiecare punct de pe traseu.
+      - EX: mtr -c 10 google.com
+  - -n (No-DNS): Afiseaza doar adresele IP, fara sa incerce sa afle numele domeniilor (este mult mai rapid).
+      - EX: mtr -n google.com
+  - -g (Graphics): Ruleaza intr-o interfata grafica simpla (daca este disponibila).
+      - EX: mtr -g google.com
+  - -u (UDP): Foloseste pachete UDP in loc de ICMP (util daca routerele blocheaza ping-ul clasic).
+      - EX: mtr -u google.com
+  - -i [secunde] (Interval): Stabileste pauza intre pachetele trimise.
+      - EX: mtr -i 0.5 google.com
+  - -w (Wide): Afiseaza numele intreg al host-ului in raport.
+      - EX: mtr -rw google.com
+  - -4 / -6: Forteaza folosirea protocolului IPv4 sau IPv6.
+      - EX: mtr -4 google.com
 
 traceroute - Print the route packets trace to network host
   - -n: Nu efectuează rezoluția DNS (afișează doar IP-uri, mult mai rapid).
