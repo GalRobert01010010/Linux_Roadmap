@@ -303,6 +303,78 @@ umount - Deconectarea dispozitivelor din sistem
   - -v (Verbose): Confirma succesul demontarii prin mesaje in terminal.
       - EX: umount -v /mnt/usb
 
+Situatie: Dorești să actualizezi un folder de backup (local sau la distanță) transferând doar părțile modificate 
+        din fișiere, nu tot conținutul, pentru a economisi timp și bandă de rețea.
+rsync - A fast, versatile, remote (and local) file-copying tool
+  - -a (Archive): Modul cel mai folosit; păstrează tot (permisiuni, link-uri, timestamp).
+      - EX: rsync -a folder/ backup/
+  - -v (Verbose): Afișează detaliat ce fișiere sunt transferate.
+      - EX: rsync -av sursa/ destinatie/
+  - -z (Compress): Comprimă datele în timpul transferului (economisește bandă).
+      - EX: rsync -avz local_dir/ user@remote:/dir/
+  - --delete: Șterge fișierele din destinație care nu mai există în sursă (oglindire perfectă).
+      - EX: rsync -av --delete sursa/ destinatie/
+  - --progress: Afișează o bară de progres și viteza de transfer.
+      - EX: rsync -av --progress film.mp4 /media/usb/
+
+Situatie: Dorești să trimiți fișiere sau directoare între două calculatoare aflate în rețea într-un mod securizat, folosind criptarea oferită de protocolul SSH.
+scp - Secure Copy (Network Security / File Transfer)
+  - scp [sursă] [destinație]: Permite transferul simplu al unui fișier către un server de la distanță.
+      - EX: scp fisier.txt user@192.168.1.10:/home/user/
+  - -r: Vrei să trimiți un folder întreg care conține subdirectoare și multiple fișiere către o altă locație (Recursiv).
+      - EX: scp -r ./proiect user@server:/backup/
+  - -P [port]: Serverul tău de destinație nu folosește portul standard SSH (22) din motive de securitate, deci trebuie să specifici portul corect.
+      - EX: scp -P 2222 fisier.txt user@server:/tmp/
+  - -p: Dorești ca fișierul ajuns la destinație să aibă exact aceeași dată de creare și aceleași permisiuni (rwx) ca originalul (Preserve).
+      - EX: scp -p poza.jpg user@server:/home/
+
+Situatie: Dorești să oglindești un director local către o destinație la distanță în timp real (instantaneu), folosind evenimentele de kernel (inotify) pentru a declanșa sincronizarea automat.
+lsyncd - Live Syncing Daemon (File System Monitoring / Mirroring)
+  - -nodaemon: Rulează procesul în prim-plan (foreground), fără a-l trimite în fundal.
+      - EX: lsyncd -nodaemon /etc/lsyncd.conf.lua
+  - -rsync: Specifică utilizarea rsync ca motor de transfer (modul implicit de operare).
+      - EX: lsyncd -rsync /sursa/ /destinatie/
+  - -rsyncssh: Combină monitorizarea locală cu transferul securizat prin protocolul SSH (Network Security Protocol).
+      - EX: lsyncd -rsyncssh /sursa/ user@remote:/dest/
+  - -log [level]: Setează nivelul de detaliere al jurnalizării (ex: all, events, status).
+      - EX: lsyncd -log events /etc/lsyncd.conf.lua
+  - -help: Afișează toate opțiunile și steagurile disponibile pentru configurarea serviciului.
+      - EX: lsyncd -help
+
+Situatie: Ai o partiție brută (raw) pe un HDD sau stick USB și vrei să o transformi într-un volum utilizabil pe care sistemul de operare să poată salva fișiere.
+mkfs - Make Filesystem (Filesystem Administration)
+  - -t [tip]: Specifică tipul sistemului de fișiere dorit (ext4, vfat, xfs).
+      - EX: sudo mkfs -t ext4 /dev/sdb1
+  - -V: Afișează detalii tehnice despre procesul de creare și parametrii aleși (Verbose).
+      - EX: sudo mkfs -V /dev/sdb1
+  - -c: Verifică existența sectoarelor defecte (bad blocks) înainte de a scrie structura.
+      - EX: sudo mkfs -c /dev/sdb1
+  - -L [nume]: Atribuie o etichetă (label) volumului pentru identificare ușoară în managerul de fișiere.
+      - EX: sudo mkfs.ext4 -L STICK /dev/sdb1
+  - -m [procent]: Rezervă o porțiune din spațiu (implicit 5%) exclusiv pentru utilizatorul root, pentru a preveni blocarea sistemului dacă discul se umple.
+      - EX: sudo mkfs.ext4 -m 1 /dev/sdb1
+  - -F: Forțează scrierea sistemului de fișiere chiar dacă partiția pare ocupată sau montată (Periculos).
+      - EX: sudo mkfs.ext4 -F /dev/sdb1
+
+Situatie: Sistemul de operare a fost oprit forțat (pană de curent) și, la repornire, primești erori de citire sau fișiere corupte pe o anumită partiție.
+fsck - File System Consistency Check (File System Maintenance)
+  - -A: Verifică dintr-o singură comandă toate partițiile configurate în sistem pentru a asigura integritatea întregului ansamblu de stocare.
+      - EX: sudo fsck -A
+  - -C: Vrei să urmărești vizual cât mai are procesul de scanare pe o partiție foarte mare, pentru a estima timpul de finalizare.
+      - EX: sudo fsck -C /dev/sdb1
+  - -M: Vrei să eviți cu orice preț coruperea datelor prin rularea accidentală a verificării pe o partiție care este deja utilizată de sistem.
+      - EX: sudo fsck -M /dev/sdb1
+  - -N: Vrei să testezi ce comenzi de reparare ar fi executate, fără a modifica efectiv datele de pe disc (mod de simulare).
+      - EX: sudo fsck -N /dev/sdb1
+  - -R: Dorești să verifici toate discurile secundare prin fstab, dar să sari peste partiția sistemului de operare (root) care este deja montată.
+      - EX: sudo fsck -AR
+  - -V: Ai nevoie de un raport detaliat al fiecărei etape de scanare pentru a depana o problemă complexă de hardware.
+      - EX: sudo fsck -V /dev/sdb1
+  - -y: Ai sute de erori de reparat și nu dorești să apeși tasta Y manual pentru fiecare mică neconcordanță găsită.
+      - EX: sudo fsck -y /dev/sdb1
+  - -a: Vrei o reparație rapidă și complet automată, potrivită pentru scripturi de mentenanță la boot-ul sistemului.
+      - EX: sudo fsck -a /dev/sdb1
+
 nginx - Server Web si Reverse Proxy de inalta performanta
   - -v (Version): Afiseaza versiunea de Nginx instalata pe sistem.
       - EX: nginx -v
@@ -530,36 +602,9 @@ vmstat - Virtual Memory Statistics
   - -a: Afișează memoria activă și inactivă (active/inactive memory).
       - EX: vmstat -a
 
-fsck (File System Consistency Check): Utilitar pentru verificarea și repararea sistemelor de fișiere.
-    - -A: Verifică toate sistemele de fișiere listate în /etc/fstab dintr-o singură rulare.
-        - EX: sudo fsck -A
-    - -C: Afișează o bară de progres (completion bar) în timpul verificării.
-        - EX: sudo fsck -C /dev/sdb1
-    - -M: Nu verifică sistemele de fișiere care sunt deja montate (evită coruperea datelor).
-        - EX: sudo fsck -M /dev/sdb1
-    - -N: (Dry run) Doar afișează ce ar face, fără să execute nicio modificare reală.
-        - EX: sudo fsck -N /dev/sdb1
-    - -R: Sari peste sistemul de fișiere root (utilizat împreună cu -A).
-        - EX: sudo fsck -AR
-    - -V: (Verbose) Afișează detalii suplimentare despre fiecare pas executat.
-        - EX: sudo fsck -V /dev/sdb1
-    - -y: Răspunde automat cu "Yes" la toate întrebările de reparare (mod interactiv dezactivat).
-        - EX: sudo fsck -y /dev/sdb1
-    - -a: Repară automat sistemul de fișiere fără a pune întrebări (nu este recomandat pe sisteme foarte corupte).
-        - EX: sudo fsck -a /dev/sdb1
 
-mkfs: Utilitar pentru formatarea și crearea sistemelor de fișiere.
-    - -t [tip]: Specifică tipul sistemului de fișiere dorit (ext4, vfat, xfs, etc.).
-        - EX: sudo mkfs -t ext4 /dev/sdb1
-    - -V: (Verbose) Afișează detalii despre procesul de creare și parametrii aleși.
-        - EX: sudo mkfs -V /dev/sdb1
-    - -c: Verifică dacă există blocuri defecte (bad blocks) pe disc înainte de formatare.
-        - EX: sudo mkfs -c /dev/sdb1
-    - -l [fisier]: Citește lista de blocuri defecte dintr-un fișier extern.
-    - -L [nume]: Atribuie o etichetă (label) volumului nou creat (numele partitiei).
-        - EX: sudo mkfs.ext4 -L "BACKUP" /dev/sdb1
-    - -m [procent]: Rezervă un procent din spațiu pentru utilizatorul root (default 5%).
-        - EX: sudo mkfs.ext4 -m 1 /dev/sdb1 (rezervă doar 1%)
+
+
 
 echo - Output Text
   - echo: Afișează un șir de text sau valoarea unei variabile în terminal
@@ -1019,17 +1064,7 @@ scp - Secure copy (remote file copy program)
   - -p: Păstrează timpii de modificare și permisiunile originale (Preserve).
       - EX: `scp -p poza.jpg user@server:/home/`
 
-rsync - A fast, versatile, remote (and local) file-copying tool
-  - -a (Archive): Modul cel mai folosit; păstrează tot (permisiuni, link-uri, timestamp).
-      - EX: `rsync -a folder/ backup/`
-  - -v (Verbose): Afișează detaliat ce fișiere sunt transferate.
-      - EX: `rsync -av sursa/ destinatie/`
-  - -z (Compress): Comprimă datele în timpul transferului (economisește bandă).
-      - EX: `rsync -avz local_dir/ user@remote:/dir/`
-  - --delete: Șterge fișierele din destinație care nu mai există în sursă (oglindire perfectă).
-      - EX: `rsync -av --delete sursa/ destinatie/`
-  - --progress: Afișează o bară de progres și viteza de transfer.
-      - EX: `rsync -av --progress film.mp4 /media/usb/`
+
 
 sed - Stream Editor
   - sed -e [comanda]: Permite specificarea mai multor comenzi de editare într-o singură linie
