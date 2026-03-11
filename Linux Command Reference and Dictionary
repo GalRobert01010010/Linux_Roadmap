@@ -565,6 +565,15 @@ du - Disk Usage
   - du --max-depth=1: Limitează afișarea la un anumit nivel de adâncime (foarte util pentru organizare)
     - Exemplu: du -h --max-depth=1 /var
 
+Situatie: Dorești să efectuezi calcule aritmetice într-un mod mai lizibil, similar limbajelor de programare, fără a folosi paranteze duble la atribuire.
+let - Shell Built-in (Arithmetic Evaluation)
+  - let: Evaluează o expresie aritmetică și atribuie rezultatul direct variabilei.
+      - EX: let result=5+3
+  - let ++ / --: Permite incrementarea sau decrementarea rapidă a unei variabile existente.
+      - EX: let result++
+  - let "expresie": Folosești ghilimele dacă vrei să incluzi spații pentru o mai bună lizibilitate a codului.
+      - EX: let "result = 10 * 2"
+
 free - Display amount of free and used memory in the system
   - free: Afișează memoria în kilobytes (implicit).
       - EX: `free`
