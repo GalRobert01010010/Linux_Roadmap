@@ -1558,6 +1558,41 @@ tr - Translate
   - tr -t [set1] [set2]: (Truncate) Taie set1 la lungimea lui set2 înainte de traducere
     - Exemplu: tr -t 'abcd' '12' < test.txt (Doar a și b vor fi traduse în 1 și 2)
 
+Situatie: Vrei sa intrerupi executia scriptului pana cand procesul sin beckground se termina si apoi sa se sincronizeze shell-ul cu procesul.
+wait - Process synchronization (Așteaptă finalizarea proceselor)
+  - wait [PID/JobSpec]: Suspendă execuția scriptului până când procesul sau jobul specificat se termină.
+      - EX: wait 1234
+  - [fără argumente]: Așteaptă finalizarea tuturor proceselor copil (child processes) lansate din shell-ul curent.
+      - EX: command1 & command2 & wait
+  - -n (Next): Așteaptă până când oricare dintre procesele trimise în background se termină, apoi continuă.
+      - EX: wait -n $PID1 $PID2
+  - -f (Force): Forțează wait să aștepte ca procesul să iasă (terminate), chiar dacă acesta a fost doar oprit/suspendat (SIGSTOP).
+      - EX: wait -f %1
+  - -p [varname]: Se folosește împreună cu -n pentru a stoca PID-ul procesului care tocmai s-a terminat într-o variabilă.
+      - EX: wait -n -p terminat_pid
+  - $!: Variabilă specială care reține PID-ul ultimului proces trimis în fundal, des folosită cu wait.
+      - EX: command & wait $!
+
+Situatie: Vrei să te asiguri că fișierele temporare sau procesele copil sunt șterse/închise corect 
+        atunci când un script este întrerupt neașteptat (ex: CTRL+C) sau se termină cu eroare.
+trap - Signal Handler (Gestionarea semnalelor și a evenimentelor)
+  - Definește o comandă sau o funcție care să fie executată automat atunci când shell-ul primește semnale specifice.
+      - EX: trap cleanup SIGINT
+  - [comanda] [semnal]: Mapează o acțiune pe un semnal specific.
+      - EX: trap "echo La revedere" EXIT
+  - -l (List): Afișează toate semnalele disponibile pe care sistemul le poate intercepta.
+      - EX: trap -l
+  - -p (Print): Afișează toate regulile trap definite în prezent în scriptul curent.
+      - EX: trap -p
+  - "" (Ignore): Ignoră complet semnalul specificat; util pentru a face un script "imun" la întreruperi.
+      - EX: trap "" SIGINT
+  - - (Reset): Resetează modul de gestionare a semnalului la valorile implicite ale sistemului.
+      - EX: trap - SIGINT
+  - EXIT: Semnal special (fictiv) care se declanșează la finalizarea scriptului, indiferent de motiv.
+      - EX: trap "rm -f temp_file" EXIT
+      - trap "rm -f /tmp/script.lock" EXIT: Garantează rularea comenzii rm în momentul în care shell-ul se închide.
+          - EX: trap "echo Scriptul s-a oprit" EXIT
+
 tee - T-splitter
   - Citește de la stdin și scrie simultan la stdout și în unul sau mai multe fișiere.
       - EX: ls | tee lista.txt
