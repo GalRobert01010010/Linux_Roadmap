@@ -387,13 +387,33 @@ nginx - Server Web si Reverse Proxy de inalta performanta
   - -T: Afiseaza configuratia curenta direct in terminal (util pentru debug).
       - EX: nginx -T
 
+Situație: Ai un fișier cu date (ex: log-uri, liste de utilizatori) și vrei să extragi, să calculezi sau să reformatezi coloanele.
+Text Processing - AWK Programming Language (Advanced Data Manipulation)
 awk - Pattern Processor
-  - awk '{print $n}': Afișează coloana n
-    - Exemplu: awk '{print $1}' date.txt
-  - awk -F [sep]: Specifică separatorul de coloane
-    - Exemplu: awk -F ":" '{print $1}' /etc/passwd
+  - awk: Utilitar pentru scanarea și procesarea tiparelor de text pe coloane.
+      - EX: awk '{print $1, $3}' date.txt (Afișează doar coloanele 1 și 3 din fișier).
+  - -F [field delimitator]: Specifică separatorul de câmpuri (default este spațiul).
+      - EX: awk -F ':' '{print $1}' /etc/passwd (Folosește ':' ca separator pentru a extrage numele utilizatorilor).
+            echo "/usr/local/bin" | awk -F '/' '{print $NF}' (Folosește '/' ca separator si NF reprezinta ultima coloana).
+            awk -F '[:/]' '{print $1}' fisier.txt (Foloseste : si / ca separatori)
+  - -v [variabilă]: Definește o variabilă externă care poate fi folosită în interiorul scriptului.
+      - EX: awk -v prag=50 '$3 > prag {print $1}' date.txt (Afișează coloana 1 dacă coloana 3 depășește valoarea 50).
+  - -f [fișier]: Execută un script awk salvat într-un fișier separat.
+      - EX: awk -f script.awk date.txt (Util pentru scripturi lungi și complexe).
   - awk 'NR==n': Afișează doar linia cu numărul n
     - Exemplu: awk 'NR==5' fisier.txt
+
+Text Processing - AWK Built-in Variables (The Essentials)
+  - $0: Variabilă care stochează întreaga linie (Record) curentă.
+      - EX: awk '{print $0}' (Afișează tot conținutul).
+  - $1...$n: Variabile pentru accesarea coloanelor (Fields) individuale.
+      - EX: awk '{print $1}' (Afișează prima coloană).
+  - $NF: Variabilă care accesează conținutul ultimei coloane din linie.
+      - EX: awk '{print $NF}' (Util pentru a extrage ultima valoare dintr-un log variabil).
+  - NR: Variabilă internă care reține numărul curent al liniei (Number of Record).
+      - EX: awk '{print NR, $0}' (Numerotează toate liniile dintr-un fișier).
+  - NF: Variabilă internă care reține numărul total de coloane de pe linia curentă.
+      - EX: awk '{print NF}' (Afișează câte coloane are fiecare rând).
 
 cat - Concatenate and Display Files
   - cat: Afișează întreg conținutul unui fișier în terminal
@@ -832,6 +852,8 @@ locate - Fast File Find
     - Example: locate .bashrc
 
 ls - List Directory Contents
+  - -v: comanda implicită care sortează alfabetic/numeric conținutul.
+      - Exemplu probă: `ls -v`
   - -a: Afișează toate fișierele (inclusiv cele ascunse care încep cu `.`).
       - Exemplu probă: `ls -a`
       - Output: `. .. .bashrc .config Documente`
@@ -1074,22 +1096,31 @@ scp - Secure copy (remote file copy program)
       - EX: `scp -p poza.jpg user@server:/home/`
 
 
-
+Situație: Vrei să cauți și să înlocuiești automat un anumit tipar de text sau să filtrezi 
+        rânduri specifice dintr-un flux mare de date fără a deschide manual fișierul.
 sed - Stream Editor
+  - sed 's/vechi/nou/': Substituție (înlocuiește prima apariție pe linie).
+  - sed 's/vechi/nou/g': Global (înlocuiește TOATE aparițiile de pe linie).
   - sed -e [comanda]: Permite specificarea mai multor comenzi de editare într-o singură linie
     - Exemplu: sed -e 's/ana/ANA/' -e 's/mere/MERE/' test.txt
-  - sed -n: (Quiet/Silent) Suprimă afișarea automată a liniilor; util împreună cu comanda p
-    - Exemplu: sed -n '5p' test.txt (Afișează doar linia 5)
+  - sed -n: (Quiet/Silent) Suprimă afișarea automată a liniilor (sed nu mai afiseaza de la sine pe ecran); util împreună cu comanda p
+    - Exemplu: sed -n '5p' test.txt (Afișează (print - p) doar linia 5, asa cum a mentionat structura '5p')
+    - Exemplu: sed -n '1,10p' (Afișează doar primele 10 linii).
   - sed -i: (In-place) Salvează modificările direct în fișierul original
     - Exemplu: sed -i 's/vechi/nou/g' test.txt
   - sed -r: (Extended RegEx) Permite folosirea expresiilor regulate extinse (fără backslash la +, ?, |, ())
-    - Exemplu: sed -r 's/(ana|are)/CUWANT/g' test.txt
+    - Exemplu: sed -r 's/(ana|are)/CUVANT/g' test.txt
   - sed -f [fisier]: Citește comenzile sed dintr-un fișier extern
     - Exemplu: sed -f script_sed.sed test.txt
   - sed 's/text/altceva/I': (Ignore case) Face înlocuirea ignorând diferența de majuscule/minuascule
     - Exemplu: sed 's/ana/ELEV/I' test.txt
   - sed 's/text/altceva/w [fisier]': Scrie în [fisier] doar liniile unde s-a produs o înlocuire
     - Exemplu: sed 's/mere/fructe/w modificari.txt' test.txt
+  Obs. În sed, orice literă pusă între ghilimele (fără un s în față) este o instrucțiune directă pentru rândul curent.
+    - "s" (substitute), "p" (print), "d" (delete).
+    Dacă scrii doar sed 'd' fisier.txt -> rezultatul e un flux de date gol.
+                    sed '3d' fisier.txt -> sed trece prin fișier, dar când ajunge la linia 3, o sterge și nu o mai afiseaza, iar restul liniilor apar normal.
+                    sed '1,5d' fisier.txt -> sed sterge tot dintre liniile 1 si 5 inclusiv.
 
 strace - System Trace
   - strace [comanda]: Interceptează apelurile de sistem efectuate de o comandă
@@ -1546,6 +1577,8 @@ tac - Reverse Cat
   - --help: Afișează manualul rapid de utilizare.
       - EX: tac --help
 
+Situație: Vrei să transformi formatul unui text prin înlocuirea unor caractere specifice cu altele sau prin 
+        eliminarea  caracterelor inutile pentru a standardiza informația.
 tr - Translate
   - tr [set1] [set2]: Traduce caracterele din set1 în caracterele corespunzătoare din set2
     - Exemplu: tr 'a-z' 'A-Z' < test.txt (Transformă totul în majuscule)
