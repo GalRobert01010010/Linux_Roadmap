@@ -751,7 +751,45 @@ lscpu - Display information about the CPU architecture
   - -y: Afișează informații extinse despre topologia cache-ului.
       - Exemplu probă: `lscpu -y`
 
+Situație: Auditarea tuturor modulelor active. Se folosește pentru a confirma 
+        prezența oricărui driver sau serviciu de kernel încărcat în RAM.
+lsmod - List loaded modules
+  (fără steaguri specifice): Afișează tabelar modulele încărcate, dimensiunea și dependențele lor active.
+      EX: lsmod
 
+Situație: Inspecția metadatelor unui modul specific. Se folosește pentru a înțelege capabilitățile, 
+        cerințele și originea unui modul înainte de utilizare.
+modinfo - Module information
+  -p: Listează toți parametrii configurabili ai unui modul.
+      EX: modinfo -p nume_modul
+  -n: Afișează locația exactă (calea) a fișierului .ko pe disc.
+      EX: modinfo -n nume_modul
+  -a: Afișează doar autorul modulului.
+      EX: modinfo -a nume_modul
+  -d: Afișează doar descrierea funcțională a modulului.
+      EX: modinfo -d nume_modul
+  -l: Afișează tipul de licență sub care este distribuit modulul.
+      EX: modinfo -l nume_modul
+
+Situație: Gestiunea automată a driverelor. Se folosește pentru activarea sau dezactivarea 
+        funcționalităților kernelului respectând ierarhia de dependențe.
+modprobe - Intelligent module handler
+  -r: Descarcă (remove) modulul specificat și dependențele sale neutilizate.
+      EX: sudo modprobe -r nume_modul
+  -v: Afișează detalii despre fiecare acțiune întreprinsă (verbose).
+      EX: sudo modprobe -v nume_modul
+  -f: Forțează încărcarea modulului chiar dacă versiunea kernelului nu se potrivește perfect (periculos).
+      EX: sudo modprobe -f nume_modul
+  -S [versiune]: Încarcă module pentru o altă versiune de kernel decât cea curentă.
+      EX: sudo modprobe -S 6.1.0-nume_modul
+  -D: Afișează dependențele modulului fără a-l încărca efectiv (Dry run).
+      EX: modprobe -D nume_modul
+
+Situație: Inserare directă de fișiere. Se folosește pentru testarea rapidă a modulelor 
+        compilate personal care nu se află în directoarele standard de sistem.
+insmod - Simple insertion
+  (fără steaguri, necesită cale): Inserează un fișier obiect direct în kernel.
+      EX: sudo insmod /cale/catre/modul.ko
 
 head - Output First Part of Files
   - head: Afișează implicit primele 10 linii ale unui fișier
@@ -1027,6 +1065,8 @@ ss - Socket Statistics (Înlocuitorul modern pentru netstat)
       - EX: ss -at '( dport = :80 or sport = :80 )'
       - Obs.: Foarte util pentru a vedea traficul pe un port specific (ex: HTTP).
 
+Situatie: Analiză de sistem. Se folosește când ai nevoie de tot header-ul DNS (coduri de eroare 
+        status TTL) sau când vrei să prelucrezi output-ul automat prin scripturi (folosind +short).
 dig - (Domain Information Gropper): Interogarea serverelor de nume (DNS Lookup)
   - @[server] (Server): Specifica un server DNS anume pentru interogare in loc de cel implicit.
       - EX: dig @8.8.8.8 google.com
@@ -1345,6 +1385,25 @@ traceroute - Print the route packets trace to network host
   - -p [port]: Specifică portul de destinație (folosit împreună cu -T sau -U).
       - EX: `traceroute -p 443 8.8.8.8`
 
+Situație: Vrei să afli rapid informații specifice despre un domeniu fără a folosi utilitare complexe ca dig.
+host - DNS lookup utility
+  -t [tip]: Specifică tipul de înregistrare DNS căutat (A, MX, NS, CNAME, TXT).
+      EX: host -t ns google.com
+  -a: Afișează toate înregistrările disponibile (echivalent cu -v -t ANY).
+      EX: host -a google.com
+  -v: Modul verbose (detaliat) care afișează și timpii de răspuns sau detaliile tehnice.
+      EX: host -v google.com
+  -C: Verifică consistența înregistrărilor SOA de pe serverele de nume autoritare.
+      EX: host -C google.com
+  -W [sec]: Specifică timpul de așteptare (timeout) pentru un răspuns în secunde.
+      EX: host -W 5 google.com
+  -4: Forțează utilizarea protocolului IPv4 pentru interogare.
+      EX: host -4 google.com
+  -6: Forțează utilizarea protocolului IPv6 pentru interogare.
+      EX: host -6 google.com
+
+Situație: Testare interactivă. Se folosește când vrei să intri într-un shell dedicat pentru a schimba rapid 
+        serverele interogate (server 8.8.8.8) și a pune întrebări succesive.
 nslookup - Query Internet name servers interactively
   - [domeniu]: Traducerea de bază (A record).
       - EX: `nslookup google.com`
