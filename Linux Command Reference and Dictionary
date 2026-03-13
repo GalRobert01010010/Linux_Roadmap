@@ -726,7 +726,8 @@ lsusb - List USB Devices
   - -t: Afișează topologia porturilor (viteza și ierarhia).
       - Exemplu probă: `lsusb -t`
       - Output: `/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M`
-
+Situație: Trebuie să verifici specificațiile tehnice ale procesorului, numărul de nuclee fizice/logice 
+      sau dimensiunea memoriei cache pentru a optimiza performanța unei aplicații.
 lscpu - Display information about the CPU architecture
   Obs. Se poate accesa si cu 'cat /proc/cpuinfo'.
   - lscpu: Afișează un rezumat complet al arhitecturii procesorului.
@@ -750,6 +751,23 @@ lscpu - Display information about the CPU architecture
       - Exemplu probă: `lscpu -x`
   - -y: Afișează informații extinse despre topologia cache-ului.
       - Exemplu probă: `lscpu -y`
+
+Situație: Vrei să verifici configurația hardware a memoriei, starea blocurilor (online/offline) sau arhitectura RAM-ului.
+lsmem - List Memory
+  - lsmem: List the ranges of available memory with their online status.
+    - EX: lsmem (sau cat /proc/meminfo)
+  -a (All): Afișează toate blocurile de memorie, inclusiv cele goale sau offline.
+      EX: lsmem -a
+  -b (Bytes): Afișează dimensiunile în bytes în loc de format human-readable.
+      EX: lsmem -b
+  -o [list]: Specifică ce coloane să fie afișate (ex: RANGE, STATE, REMOVABLE).
+      EX: lsmem -o RANGE,STATE
+  -n (No headings): Elimină linia de antet din output (util pentru scripturi).
+      EX: lsmem -n
+  -S (Split): Împarte output-ul pe zone de memorie specifice (ex: memorie DMA vs Normală).
+      EX: lsmem -S
+  -J (JSON): Afișează datele în format JSON pentru integrarea cu alte programe.
+      EX: lsmem -J
 
 Situație: Auditarea tuturor modulelor active. Se folosește pentru a confirma 
         prezența oricărui driver sau serviciu de kernel încărcat în RAM.
@@ -885,9 +903,22 @@ journalctl - Systemd Logs
   - journalctl: Query and display logs collected by the systemd-journald service
     - Example: journalctl -xe
 
+Situație: Trebuie să localizezi instantaneu fișiere folosind baza de date a sistemului, optimizând timpul de răspuns.
 locate - Fast File Find
   - locate: Find files quickly by name using a pre-built system database (updated by updatedb)
-    - Example: locate .bashrc
+    - Example: locate .bashrc 
+  -i (Ignore case): Ignoră diferența între litere mari și mici.
+      EX: locate -i Mesaj.txt
+  -c (Count): Afișează doar numărul de fișiere găsite, nu și căile lor.
+      EX: locate -c .jpg
+  -l [n] (Limit): Limitează numărul de rezultate afișate la valoarea n.
+      EX: locate -l 5 config.php
+  -r (Regex): Permite utilizarea expresiilor regulate pentru căutări complexe.
+      EX: locate -r \.sh$
+  -e (Existing): Afișează doar fișierele care există fizic pe disc în momentul căutării.
+      EX: locate -e fisier_sters_recent.txt
+  -S (Statistics): Afișează statistici despre baza de date utilizată.
+      EX: locate -S
 
 ls - List Directory Contents
   - -v: comanda implicită care sortează alfabetic/numeric conținutul.
@@ -1298,7 +1329,7 @@ uptime - System Run Time
   - uptime -p: (Pretty) Afișează timpul de funcționare într-un format mult mai lizibil (doar ore, minute, zile)
     - Exemplu: uptime -p
   - uptime -s: (Since) Afișează data și ora exactă la care sistemul a pornit (boot time)
-    - Exemplu: uptime -s
+    - Exemplu: uptime -s (similar cu who -b)
   - uptime -h: (Help) Afișează un scurt meniu de ajutor cu opțiunile disponibile
     - Exemplu: uptime -h
   - uptime -V: (Version) Afișează versiunea utilitarului uptime
@@ -1418,6 +1449,26 @@ nslookup - Query Internet name servers interactively
   - -retry=[număr]: De câte ori să reincerce interogarea dacă serverul nu răspunde.
       - EX: `nslookup -retry=5 google.com`
 
+Situație: Ești conectat la un server și vrei să verifici sub ce utilizator rulezi comenzi sau 
+      vrei să vezi dacă mai sunt și alți colegi logați care încarcă sistemul.
+whoami / who / w - Identity and Session Tools
+  - whoami: Afișează doar numele de utilizator curent (Identity).
+    - EX: whoami
+  - who: Afișează o listă cu toți utilizatorii logați în prezent în sistem.
+    - EX: who
+  - w: Afișează utilizatorii logați și, în plus, ce procese rulează aceștia (Activity).
+    - EX: w
+- whoami
+    - Cel mai scurt și simplu: returnează un singur șir de caractere (Username).
+    - Unic: Ignoră variabilele de mediu și verifică ID-ul real al procesului curent.
+  - who
+    - Oferă detalii despre sesiune: nume, terminalul folosit (pts/tty) și data/ora logării.
+    - Unic: Este utilitarul standard pentru a vedea "cine" ocupă terminalele sistemului.
+    - EX: who -b (arată data ultimei porniri a sistemului).
+  - w
+    - Este cel mai complex: include informațiile de la 'who' plus statistici de sistem (uptime, load average).
+    - Unic: Arată ce comandă rulează fiecare utilizator în acel moment (coloana WHAT).
+    - EX: w -h (scoate antetul pentru a fi mai ușor de citit).
 who / w / whoami - User Tracking
   - whoami: Afișează doar numele de utilizator (username) al celui care rulează comanda
     - Exemplu: whoami
@@ -1433,6 +1484,18 @@ who / w / whoami - User Tracking
     - Exemplu: w
   - w -s: (Short) Versiunea scurtă; omite timpul de logare și CPU-ul, arătând doar userul și procesul curent
     - Exemplu: w -s
+
+Situație: Trebuie să afli unde este instalat un program, să vezi manualul acestuia sau să înțelegi dacă o comandă este nativă shell-ului sau un binar extern.
+whereis / which / type - Location and Identification Tools
+    - whereis
+      - Utilizată pentru a localiza fișierele binare, sursă și manuale pentru anumite comenzi.
+      - Caută în directoare standard (/bin, /usr/share/man).
+    - which
+      - Utilizată pentru a arăta calea completă a unui executabil.
+      - Se bazează strict pe variabila de mediu $PATH.
+    - type
+      - Utilizată pentru a descrie o comandă: alias, funcție shell, binar, builtin sau executabil.
+      - EX: type ll (va returna că este un alias pentru ls -l).
 
 zip - Create ZIP
   - zip: Package and compress files into a ZIP archive
