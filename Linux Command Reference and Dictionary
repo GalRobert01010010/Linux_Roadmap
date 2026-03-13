@@ -291,6 +291,20 @@ mount - Conectarea dispozitivelor la ierarhia de fisiere
   - -v (Verbose): Afiseaza detalii despre procesul de montare in terminal.
       - EX: mount -v /dev/sdb1 /mnt/stick
 
+Situație: Vrei să verifici rapid pe ce dispozitiv fizic este montat un anumit director sau să cauți partiții de un anumit tip.
+findmnt - find a filesystem (utilitar de interogare mount)
+  - findmnt: Rulează fără argumente pentru a afișa toate sistemele montate sub formă de arbore.
+  - -l, --list: Afișază rezultatele sub formă de listă (similar cu output-ul de la mount).
+      EX: findmnt -l
+  - -t [tip], --types [tip]: Filtrează rezultatele după tipul sistemului de fișiere (ex: ext4, vfat).
+      EX: findmnt -t vfat
+  - -T [cale], --target [cale]: Arată sistemul de fișiere care conține directorul sau fișierul specificat.
+      EX: findmnt -T ./SystemRecovery
+  - -r, --raw: Afișază output-ul în format brut, fără formatare de tabel, util pentru scripturi.
+      EX: findmnt -r
+  - -u, --notruncate: Nu scurtează coloanele lungi în terminal.
+      EX: findmnt -u
+
 umount - Deconectarea dispozitivelor din sistem
   - -a (All): Incearca sa demonteze toate sistemele de fisiere listate in /etc/mtab.
       - EX: umount -a
@@ -489,8 +503,8 @@ chmod - Change Mode (Modifică permisiunile)
       - Exemplu: chmod --reference=vechi.txt nou.txt
 
 chown - Change Owner (Modifică proprietarul)
-  - chown: Schimbă utilizatorul și/sau grupul posesor
-      - Exemplu: sudo chown robert:elevi proiect.zip
+  - chown (Change Owner): Modifică proprietarul și/sau grupul.
+      EX: chown user:grup fisier.txt
   - chown -R: Schimbă proprietarul recursiv în toată structura de directoare
       - Exemplu: sudo chown -R www-data:www-data /var/www/html
   - chown -h: Schimbă proprietarul legăturii simbolice, nu al destinației
@@ -501,10 +515,12 @@ chown - Change Owner (Modifică proprietarul)
       - Exemplu: sudo chown -R -H user:group link_catre_director
   - chown --from: Schimbă proprietarul doar dacă cel actual este cel specificat
       - Exemplu: sudo chown --from=root user_nou fisier.log
+Obs. Dacă scrii chown user: fisier.txt (cu două puncte la final, dar fără să scrii 
+  grupul), Linux va schimba automat grupul fișierului în grupul principal al acelui user.
 
 chgrp - Change Group (Modifică grupul)
-  - chgrp: Schimbă doar grupul posesor al unui fișier
-      - Exemplu: chgrp staff document.pdf
+  - chgrp (Change Group): Modifică EXCLUSIV grupul posesor al fișierului.
+      EX: chgrp grup fisier.txt
   - chgrp -R: Schimbă grupul recursiv
       - Exemplu: sudo chgrp -R sysadmin /var/log/apache2
   - chgrp --reference: Aplică grupul unui fișier sursă asupra altui fișier
@@ -956,6 +972,12 @@ ls - List Directory Contents
   - -F: Adaugă indicator tip fișier (/ pentru folder, * pentru executabil).
       - Exemplu probă: `ls -F`
       - Output: `script.sh* folder/ text.txt`
+  - k: Forțează afișarea dimensiunilor în kilobytes (în loc de bytes).
+      EX: ls -lk
+  - n (Numeric): Afișează UID și GID sub formă de numere în loc de nume (implică -l).
+      EX: ls -n
+  - g (Group only): Afișează formatul lung, dar OMITE coloana proprietarului (afișează doar grupul).
+      EX: ls -g
 
 lshw - List Hardware
   - lshw: Afișează o listă detaliată a întregului hardware detectat.
@@ -1046,6 +1068,21 @@ mv - Move or Rename Files
       - EX: mv -t folder/ fisier1 fisier2
   - -b (Backup): Face o copie de rezervă a fișierului de la destinație înainte ca acesta să fie șters/înlocuit.
       - EX: mv -b sursa.txt destinatie.txt
+
+Situație: Vrei să creezi o scurtătură către un program într-un alt folder sau vrei ca același fișier să fie accesibil din două locații diferite fără a-l copia (economisind spațiu).
+ln - Link Files
+  - ln [sursă] [destinație]: Creează un Hard Link (implicit).
+  -s (Symbolic): Creează o legătură simbolică în loc de una hard (cea mai folosită opțiune).
+      EX: ln -s sursa scurtatura
+      EX: ln -s /usr/bin/python3 ./python
+  -f (Force): Șterge fișierele de destinație existente dacă acestea există deja.
+      EX: ln -sf sursa scurtatura
+  -i (Interactive): Cere confirmare înainte de a șterge fișierele de destinație existente.
+      EX: ln -si sursa scurtatura
+  -v (Verbose): Afișează numele fiecărui fișier pe măsură ce este procesat.
+      EX: ln -sv sursa scurtatura
+  -r (Relative): Creează legături simbolice relative la locația link-ului.
+      EX: ln -sr ../folder/fisier scurtatura
 
 netstat -tuln - Network Statistics
   - -tuln: Vezi toate porturile TCP/UDP care ascultă, cu IP numeric și numele programului.
