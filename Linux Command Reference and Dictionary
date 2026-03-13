@@ -551,7 +551,7 @@ df - Disk Free
       - raporteaza starea de ocupare a discului
 df - Disk Free
   - df: Afișează spațiul disponibil pe toate sistemele de fișiere montate (în blocuri de 1K)
-    - Exemplu: df
+    - Exemplu: df (sau cat /proc/mounts)
   - df -h: (Human-readable) Transformă dimensiunile în formate lizibile (K, M, G)
     - Exemplu: df -h
   - df -T: (Type) Afișează și tipul sistemului de fișiere (ex: ext4, xfs, vfat, tmpfs)
@@ -601,7 +601,7 @@ free - Display amount of free and used memory in the system
       - EX: `free -b`
   - -k: Afișează memoria în kilobytes.
       - EX: `free -k`
-  - -m: Afișează memoria în megabytes.
+  - -m: Afișează memoria în megabytes. (sau cat /proc/meminfo)
       - EX: `free -m`
   - -g: Afișează memoria în gigabytes.
       - EX: `free -g`
@@ -660,7 +660,7 @@ stat - File Status
 
 lsblk - List Block Devices
   - lsblk: Afișează dispozitivele de stocare sub formă de arbore.
-      - Exemplu probă: `lsblk`
+      - Exemplu probă: `lsblk` (sau cat /proc/partitions)
       - Output: Afișează sda (disc) și sda1, sda2 (partiții).
   - -a: Afișează toate dispozitivele, inclusiv cele goale sau RAM-disks.
       - Exemplu probă: `lsblk -a`
@@ -695,7 +695,7 @@ fdisk - Opțiuni de Afișare (Display Options)
 
 lspci - List PCI Devices
   - lspci: Listare simplă a controllerelor PCI.
-      - Exemplu probă: `lspci`
+      - Exemplu probă: `lspci` (sau ls /sys/bus/pci/devices)
   - -v: Detalii suplimentare (Verbose).
       - Exemplu probă: `lspci -v`
   - -vv: Detalii și mai multe (Very Verbose).
@@ -715,7 +715,7 @@ lspci - List PCI Devices
 
 lsusb - List USB Devices
   - lsusb: Listare simplă.
-      - Exemplu probă: `lsusb`
+      - Exemplu probă: `lsusb` (sau ls /sys/bus/usb/devices)
       - Output: `Bus 001 Device 002: ID 046d:c52b Logitech, Inc.`
   - -v: Detalii tehnice complete (extrem de lung).
       - Exemplu probă: `lsusb -v`
@@ -730,7 +730,7 @@ lsusb - List USB Devices
 lscpu - Display information about the CPU architecture
   Obs. Se poate accesa si cu 'cat /proc/cpuinfo'.
   - lscpu: Afișează un rezumat complet al arhitecturii procesorului.
-      - Exemplu probă: `lscpu`
+      - Exemplu probă: `lscpu` (sau cat /proc/cpuinfo)
       - Output: Afișează Vendor ID, Model name, CPU MHz, L1/L2/L3 cache.
   - -a: Afișează atât CPU-urile active, cât și pe cele inactive (offline).
       - Exemplu probă: `lscpu -a`
@@ -755,7 +755,7 @@ Situație: Auditarea tuturor modulelor active. Se folosește pentru a confirma
         prezența oricărui driver sau serviciu de kernel încărcat în RAM.
 lsmod - List loaded modules
   (fără steaguri specifice): Afișează tabelar modulele încărcate, dimensiunea și dependențele lor active.
-      EX: lsmod
+      EX: lsmod (sau cat /proc/modules)
 
 Situație: Inspecția metadatelor unui modul specific. Se folosește pentru a înțelege capabilitățile, 
         cerințele și originea unui modul înainte de utilizare.
@@ -1262,7 +1262,7 @@ uname - Unix Name
   - uname -v (version): Afișează versiunea detaliată de kernel și data la care a fost compilat
     - Exemplu: uname -v
   - uname -m (machine architecture): Afișează arhitectura hardware a mașinii (ex: x86_64)
-    - Exemplu: uname -m (machine architecture)
+    - Exemplu: uname -m (machine architecture) (sau 'arch' in terminal)
   - uname -p (processor type): Afișează tipul procesorului (adesea "unknown" în unele distribuții)
     - Exemplu: uname -p
   - uname -i: Afișează platforma hardware (adesea "unknown")
