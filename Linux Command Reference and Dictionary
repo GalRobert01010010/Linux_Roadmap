@@ -173,7 +173,10 @@ find - Find Files
     - Exemplu: find /var/log -mtime -2
   - find [cale] -exec [comanda] {} \;: Execută o comandă pe rezultatele găsite
     - Exemplu: find . -name "*.tmp" -exec rm {} \; (sterge toate fisierele care se termina cu ".tmp" pe rand)
-    - Exemplu: find . -name "*.tmp" -exec rm {} +; (sterge toate fisierele care se termina cu ".tmp" de-o data)
+            \; : Backslash-ul (\) are rolul de a "evada" (escape) punctul și virgula, astfel încât Shell-ul 
+                să nu creadă că ai terminat comanda find prematur, ci să trimită acel ; direct utilitarului find.
+            + : Acesta nu este un meta-caracter special pentru Shell în acea poziție, deci nu are nevoie de backslash.
+    - Exemplu: find . -name "*.tmp" -exec rm {} + (sterge toate fisierele care se termina cu ".tmp" de-o data)
   - find [cale] -user [nume]: Căutare fișiere deținute de un utilizator specific
     - Exemplu: find /home -user elev
   - find [cale] -perm [mod]: Căutare după permisiuni (format octal)
@@ -193,7 +196,7 @@ tar - Arhivarea si comprimarea fisierelor (Tape Archive)
       - EX: tar -cvf arhiva.tar folder/
   - -x (Extract): Extrage continutul unei arhive existente.
       - EX: tar -xvf arhiva.tar
-  - -v (Verbose): Afiseaza pe ecran lista fisierelor in timp ce sunt procesate.
+  - -v (Verbose): Afiseaza pe ecran date suplimentare despre arhiva si face lista fisierelor in timp ce sunt procesate.
       - EX: tar -cvf backup.tar .
   - -f (File): Specifica numele fisierului arhiva (trebuie sa fie ultimul steag inainte de nume).
       - EX: tar -f proiect.tar -cv [GRESIT - ordinea conteaza!] -> tar -cvf proiect.tar
@@ -668,11 +671,48 @@ echo - Output Text
   - echo -E: Dezactivează explicit interpretarea caracterelor escape (comportament implicit)
       - Exemplu: echo -E "Nu se va vedea \n ca linie nouă"
 
+Situație: Primești un fișier fără extensie sau cu o extensie suspectă și vrei să știi ce 
+        tip de date conține cu adevărat (ex: dacă un .jpg este de fapt un script).
+file - Determine file type
+  - file [fișier]: Analizează conținutul fișierului și afișează tipul acestuia (text, date, executabil).
+      - EX: file /bin/ls
+      - Output: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV)...
+  - -b (Brief): Afișează doar tipul fișierului, fără a repeta numele acestuia în output.
+      - EX: file -b imagine.png
+      - Output: PNG image data, 1920 x 1080, 8-bit/color RGBA...
+  - -i (MIME type): Afișează tipul MIME, util pentru protocoale web sau scripturi.
+      - EX: file -i script.sh
+      - Output: text/x-shellscript; charset=us-ascii
+  - -L: Urmărește link-urile simbolice (similar cu stat -L) pentru a identifica fișierul real.
+      - EX: file -L /etc/localtime
+  - -z: Încearcă să privească în interiorul fișierelor comprimate (ex: .gz, .zip).
+      - EX: file -z arhiva.tar.gz
+  - -f [fișier_listă]: Citește o listă de nume de fișiere dintr-un document și le analizează pe toate.
+      - EX: file -f lista_fisiere.txt
+  - -s: Analizează fișiere speciale de tip block/character (util pentru discuri).
+      - EX: file -s /dev/sda1
 
-
-stat - File Status
-  - stat [fisier]: Afișează informații detaliate despre un fișier (Inode, drepturi, timestamp)
-    - Exemplu: stat /etc/shadow
+Situație: Vrei să verifici metadatele complete ale unui fișier (Inode, timestamps, permisiuni 
+        octale) pentru a vedea exact când a fost modificat sau cine îl deține.
+stat - Display file or file system status
+  - stat [fișier]: Afișează informații detaliate (mărime, Inode, legături, drepturi, timestamp-uri).
+      - EX: stat /etc/passwd
+  - -c [format]: Specifică un format personalizat pentru output (util în scripturi).
+      - EX: stat -c %a fisier.txt (Afișează doar permisiunile în format octal, ex: 644).
+      - EX: stat -c %A fisier.txt (Afișează doar permisiunile în format simbolic, human-readable, ex: -rw-r--r--).
+      - EX: stat -c "%a %A %U:%G %n" *
+        Rol: Afișează rapid o listă compactă cu permisiunile (octal și simbolic), posesorii și numele pentru toate fișierele din directorul curent.
+  - -f (File System): Afișează starea sistemului de fișiere în loc de cea a fișierului.
+      - EX: stat -f /
+      - Output: Tipul sistemului de fișiere (ext4, tmpfs), ID, mărime blocuri.
+  - -L: Urmărește link-urile simbolice și arată info despre fișierul țintă.
+      - EX: stat -L /etc/localtime
+  - -t: Format scurt (terse), util pentru prelucrarea automată a datelor.
+      - EX: stat -t fisier.txt
+  - --format="%U %G": Afișează doar utilizatorul și grupul proprietar.
+      - EX: stat --format="%U %G" /var/www/html
+Obs: Utilizăm file pentru a determina tipul conținutului (ex: text, executabil, imagine), 
+    în timp ce stat este folosit strict pentru a interoga metadatele din structura Inode a sistemului de fișiere.
 
 lsblk - List Block Devices
   - lsblk: Afișează dispozitivele de stocare sub formă de arbore.
