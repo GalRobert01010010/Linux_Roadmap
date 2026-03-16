@@ -161,6 +161,21 @@ jobs - List active jobs
   - -n: Afișează doar job-urile care și-au schimbat starea de la ultima notificare.
     - Comandă terminal: jobs -n
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 2. Gestiunea Fișierelor și Arhivare
 
 Situație: Trebuie să găsești rapid un fișier folosind specificatii ale sale.
@@ -392,17 +407,21 @@ fsck - File System Consistency Check (File System Maintenance)
   - -a: Vrei o reparație rapidă și complet automată, potrivită pentru scripturi de mentenanță la boot-ul sistemului.
       - EX: sudo fsck -a /dev/sdb1
 
-nginx - Server Web si Reverse Proxy de inalta performanta
-  - -v (Version): Afiseaza versiunea de Nginx instalata pe sistem.
-      - EX: nginx -v
-  - -t (Test): Verifica daca fisierele de configurare (nginx.conf) sunt scrise corect fara a reporni serverul.
-      - EX: sudo nginx -t
-  - -s reload (Signal): Reincarca setarile fara a opri conexiunile active ale vizitatorilor.
-      - EX: sudo nginx -s reload
-  - -s stop: Opreste imediat procesul Nginx.
-      - EX: sudo nginx -s stop
-  - -T: Afiseaza configuratia curenta direct in terminal (util pentru debug).
-      - EX: nginx -T
+
+
+
+
+
+
+
+
+
+
+
+
+
+3.Procesarea Textului și Scripting (Filtre)
+
 
 Situație: Ai un fișier cu date (ex: log-uri, liste de utilizatori) și vrei să extragi, să calculezi sau să reformatezi coloanele.
 Text Processing - AWK Programming Language (Advanced Data Manipulation)
@@ -635,6 +654,25 @@ free - Display amount of free and used memory in the system
       - EX: `free -h -c 5`
   - -w: Wide mode (separă coloanele de buffer și cache pentru claritate).
       - EX: `free -hw`
+
+
+
+
+
+
+4. Administrarea Rețelei și Transfer de Date
+
+
+
+
+
+
+
+
+
+
+
+
 
 vmstat - Virtual Memory Statistics
   - vmstat: Afișează un raport unic al activității sistemului.
