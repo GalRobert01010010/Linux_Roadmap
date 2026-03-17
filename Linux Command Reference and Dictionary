@@ -717,6 +717,20 @@ dig - Domain Information Groper
       EX: dig google.com +stats
 
 
+Situație: Utilitar pentru descărcarea conținutului unei pagini web sau interogarea serviciilor externe direct în terminal.
+curl - Client URL (tool to transfer data from or to a server)
+  - -s (silent): Ascunde progresul descărcării și mesajele de eroare (mod silențios).
+      EX: curl -s icanhazip.com
+      Câmp important: Adresa IP Publică (Ex: 62.121.83.2) -> Singura informație afișată datorită modului silent.
+  - -I (head): Afișează doar header-ele HTTP ale răspunsului (fără conținutul paginii).
+      EX: curl -I google.com
+      Câmp important: HTTP/1.1 200 OK -> Confirmă că serverul funcționează corect.
+  - -o [nume_fișier]: Salvează conținutul descărcat într-un fișier local în loc să îl afișeze.
+      EX: curl -o index.html https://www.google.com
+      Câmp important: Numele fișierului salvat -> Conține codul sursă al paginii.
+  - -L (location): Urmează redirectările (dacă pagina s-a mutat la altă adresă).
+      EX: curl -L google.com
+      Câmp important: Final URL -> Adresa destinație unde ai fost redirecționat.
 
 
 
