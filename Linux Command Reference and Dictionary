@@ -3,6 +3,25 @@
 
 1. Managementul Resurselor și Proceselor
 
+Situatie: Vrei să verifici mesajele generate de kernel în timpul procesului de boot sau să vezi erorile 
+    apărute imediat după ce ai conectat un dispozitiv hardware nou.
+dmesg - Display Message Buffer
+  - dmesg: Afișează toate mesajele din buffer-ul de inele al kernelului (inclusiv erori hardware).
+      - EX: dmesg
+  - -C: Curăță (clear) complet buffer-ul de mesaje al kernelului.
+      - EX: sudo dmesg -C
+  - -c: Afișează conținutul buffer-ului și apoi îl șterge (read and clear).
+      - EX: sudo dmesg -c
+  - -T: Afișează marcajele de timp (timestamps) într-un format lizibil pentru om (dată și oră).
+      - EX: dmesg -T
+  - -l [nivel]: Filtrează mesajele după nivelul de importanță (ex: err, warn, info, debug).
+      - EX: dmesg -l err
+  - -w: Urmărește (wait) mesajele noi în timp real, pe măsură ce apar (similar cu tail -f).
+      - EX: dmesg -w
+  - -n [nivel]: Setează nivelul de logare pentru consola de sistem (ce mesaje să apară direct pe ecran).
+      - EX: sudo dmesg -n 1
+
+
 Situatie: Vrei sa capturezi o poza fixa (snapshot) a proceselor care ruleaza in acest moment pentru a vedea cine a lansat un anumit program sau ce ID are un proces blocat.
 ps - Process Status
   - ps: Afișează procesele active din terminalul curent al utilizatorului
@@ -943,6 +962,7 @@ modinfo - Module information
   -l: Afișează tipul de licență sub care este distribuit modulul.
       EX: modinfo -l nume_modul
 
+
 Situație: Gestiunea automată a driverelor. Se folosește pentru activarea sau dezactivarea 
         funcționalităților kernelului respectând ierarhia de dependențe.
 modprobe - Intelligent module handler
@@ -957,11 +977,30 @@ modprobe - Intelligent module handler
   -D: Afișează dependențele modulului fără a-l încărca efectiv (Dry run).
       EX: modprobe -D nume_modul
 
+
 Situație: Inserare directă de fișiere. Se folosește pentru testarea rapidă a modulelor 
         compilate personal care nu se află în directoarele standard de sistem.
-insmod - Simple insertion
-  (fără steaguri, necesită cale): Inserează un fișier obiect direct în kernel.
-      EX: sudo insmod /cale/catre/modul.ko
+insmod - Insert Module
+  - insmod [cale_fisier]: Inserează forțat un fișier de modul specific (.ko) în kernel.
+    - EX: insmod /lib/modules/kernel/drivers/net/dummy.ko
+  - Obs. insmod este un utilitar "mut": dacă modulul are nevoie de alte module pentru a funcționa, insmod va eșua cu eroare.
+
+Situatie: Vrei să descarci imediat un driver specific din memorie, fără a verifica dacă alte module depind de 
+        el sau fără a șterge automat ierarhia de dependențe.
+rmmod - Simple module remover
+  - [nume_modul]: Elimină modulul specificat din memorie (dacă nu este în uz).
+      - EX: sudo rmmod bluetooth
+  - -f: Forțează (force) eliminarea modulului chiar dacă acesta este marcat ca fiind utilizat (foarte periculos).
+      - EX: sudo rmmod -f e1000e
+  - -s: Trimite eventualele erori către jurnalul sistemului (syslog) în loc să le afișeze în terminal.
+      - EX: sudo rmmod -s dummy_driver
+  - -v: Afișează detalii despre operațiunea de eliminare (verbose).
+      - EX: sudo rmmod -v psmouse
+  - -w: Așteaptă (wait) până când modulul nu mai este activ înainte de a-l elimina.
+      - EX: sudo rmmod -w uvcvideo
+Obs. Utilitarul se numește rmmod (remove module) deoarece, dincolo de eliberarea memoriei RAM, acesta șterge efectiv 
+    înregistrarea modulului din tabela de execuție a nucleului Linux, marcând eliminarea sa definitivă din structura activă a sistemului de operare.
+
 
 head - Output First Part of Files
   - head: Afișează implicit primele 10 linii ale unui fișier
