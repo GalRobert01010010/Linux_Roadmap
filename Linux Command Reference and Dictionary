@@ -3,23 +3,18 @@
 
 1. Managementul Resurselor și Proceselor
 
-Situatie: Vrei să verifici mesajele generate de kernel în timpul procesului de boot sau să vezi erorile 
-    apărute imediat după ce ai conectat un dispozitiv hardware nou.
-dmesg - Display Message Buffer
-  - dmesg: Afișează toate mesajele din buffer-ul de inele al kernelului (inclusiv erori hardware).
+Situatie: Vrei să verifici mesajele generate de kernel în timpul procesului de boot sau să vezi erorile apărute imediat după ce ai conectat un dispozitiv hardware nou.
+dmesg - Display Message Buffer (Kernel logs)
+  - dmesg: Afișează toate mesajele din buffer-ul de inele al kernelului.
       - EX: dmesg
-  - -C: Curăță (clear) complet buffer-ul de mesaje al kernelului.
-      - EX: sudo dmesg -C
-  - -c: Afișează conținutul buffer-ului și apoi îl șterge (read and clear).
-      - EX: sudo dmesg -c
-  - -T: Afișează marcajele de timp (timestamps) într-un format lizibil pentru om (dată și oră).
+  - -T: Afișează marcajele de timp (timestamps) într-un format lizibil pentru om.
       - EX: dmesg -T
-  - -l [nivel]: Filtrează mesajele după nivelul de importanță (ex: err, warn, info, debug).
-      - EX: dmesg -l err
-  - -w: Urmărește (wait) mesajele noi în timp real, pe măsură ce apar (similar cu tail -f).
+  - -w: Urmărește mesajele noi în timp real (similar cu tail -f).
       - EX: dmesg -w
-  - -n [nivel]: Setează nivelul de logare pentru consola de sistem (ce mesaje să apară direct pe ecran).
-      - EX: sudo dmesg -n 1
+  - -C: Curăță complet buffer-ul de mesaje ale kernelului.
+      - EX: sudo dmesg -C
+  - -l [nivel]: Filtrează mesajele după nivelul de importanță (err, warn).
+      - EX: dmesg -l err
 
 
 Situatie: Vrei sa capturezi o poza fixa (snapshot) a proceselor care ruleaza in acest moment pentru a vedea cine a lansat un anumit program sau ce ID are un proces blocat.
@@ -48,6 +43,8 @@ ps - Process Status
          -pcpu: Acesta este detaliul cheie: pcpu înseamnă procentul de utilizare CPU (%CPU).
       Obs. Semnul minus (-) din față indică o sortare descrescătoare; Dacă era +pcpu sau doar pcpu, sortarea era crescătoare.
 
+
+
 Situatie: Vrei sa vezi in timp real care proces iti consuma procesorul (CPU) sau memoria (RAM) si sa monitorizezi starea generala a sistemului.
 top - Monitorizarea dinamica a proceselor si resurselor de sistem
   - -d [secunde] (Delay): Seteaza intervalul de reimprospatare a ecranului.
@@ -68,6 +65,8 @@ top - Monitorizarea dinamica a proceselor si resurselor de sistem
       - EX: top -s
   - -o [camp] (Order): Sorteaza procesele dupa o coloana specifica (ex: %CPU sau %MEM).
       - EX: top -o %MEM
+
+
 
 Situatie: Vrei o interfata interactiva, colorata si moderna care sa iti permita sa navighezi cu mouse-ul sau cu 
         sagetile pentru a inchide procese ori pentru a vedea grafic consumul pe fiecare nucleu de procesor (CPU) in parte.
@@ -152,10 +151,10 @@ jobs - List active jobs
           [1]+  Running                 sleep 1000 &
   - -l : Afișează PID-ul procesului alături de numărul job-ului.
     - Comandă terminal: jobs -l
-         `student@uso:~$ sleep 1000 &`
-         `[1] 10533`
-         `student@uso:~$ jobs -l`
-         `[1]+ 10533 Running                 sleep 1000 &`
+         student@uso:~$ sleep 1000 &
+         [1] 10533
+         student@uso:~$ jobs -l
+         [1]+ 10533 Running                 sleep 1000 &
          Obs.: Apare coloana a doua care indică PID-ul (Process ID) 10533.
   - -p : Afișează doar PID-urile proceselor.
     - Comandă terminal: jobs -p
@@ -182,13 +181,97 @@ jobs - List active jobs
 
 
 
+Situatie: Vrei să pornești o arhivare de mari dimensiuni care consumă mult procesor, dar vrei să nu încetinească restul sistemului în timp ce lucrezi.
+Situatie: Vrei să pornești un proces cu o prioritate specifică, alegând între sintaxa modernă sau cea tradițională.
+nice - Run a program with modified scheduling priority
+  - -n [valoare]: Modul standard și explicit de a seta prioritatea.
+      - EX: nice -n 5 script.sh
+  - -[valoare]: Modul prescurtat de a seta prioritatea.
+      - EX: nice -5 script.sh
+  - --[valoare_negativa]: Modul prescurtat pentru prioritate ridicată (necesită sudo).
+      - EX: sudo nice --10 script.sh
+
+Situatie: Ai observat în top că un proces deja pornit (ex: un script de calcul) ocupă prea multe resurse și vrei să îi scazi prioritatea fără să îl oprești.
+renice - Alter priority of running processes
+  - renice [valoare] -p [PID]: Modifică prioritatea unui proces aflat deja în execuție folosind ID-ul acestuia.
+      - EX: renice 15 -p 1234
+  - -u [utilizator]: Modifică prioritatea pentru toate procesele lansate de un anumit utilizator.
+      - EX: renice 5 -u student
+  - -g [grup]: Aplică o nouă prioritate pentru toate procesele care aparțin unui grup specific.
+      - EX: renice 10 -g 1001
 
 
 
+Situatie: Ai pus un editor de text (vim) pe pauză cu Ctrl+Z pentru a verifica un fișier și acum vrei să te întorci exact unde ai rămas în editor.
+fg - Foreground job control
+  - fg %[job_id]: Aduce un job din fundal sau suspendat înapoi în interfața activă a terminalului.
+      - EX: fg %1
 
 
 
+Situatie: Ai pornit un proces lung (ex: descărcarea unui fișier mare) în terminal, l-ai suspendat din greșeală și vrei ca acesta să continue să ruleze în fundal.
+bg - Background job control
+  - bg %[job_id]: Reia execuția unui job suspendat, permițându-i să ruleze în fundal (background).
+      - EX: bg %1
 
+
+
+Situatie: Vrei să verifici rapid de cât timp rulează serverul și care este media de încărcare (load average) a procesorului în ultimele minute.
+uptime - Tell how long the system has been running
+  - uptime: Afișează ora curentă, durata de funcționare, numărul de utilizatori logați și media de încărcare.
+      - EX: uptime
+  - -p: Afișează durata de funcționare (up time) într-un format simplificat și ușor de citit (pretty).
+      - EX: uptime -p
+  - -s: Afișează data și ora exactă la care a fost pornit sistemul (system boot).
+      - EX: uptime -s
+
+
+Situatie: Vrei să verifici dacă sistemul mai are memorie RAM liberă pentru o aplicație nouă sau dacă a început să folosească excesiv partiția Swap (disc).
+free - Display amount of free and used memory in the system
+  - free: Afișează utilizarea memoriei în unitatea implicită (kilobytes).
+      - EX: free
+  - -h: Afișează valorile în format lizibil (Human-readable: MB, GB) pentru o interpretare rapidă.
+      - EX: free -h
+  - -m: Forțează afișarea tuturor valorilor exclusiv în Megabytes.
+      - EX: free -m
+  - -g: Forțează afișarea tuturor valorilor exclusiv în Gigabytes.
+      - EX: free -g
+  - -s [secunde]: Actualizează datele la un interval regulat, transformând comanda într-un monitor continuu.
+      - EX: free -h -s 5
+  - -t: Afișează o linie suplimentară la final cu totalul (RAM + Swap).
+      - EX: free -t
+
+
+Situatie: Vrei să vezi o statistică detaliată și periodică a utilizării memoriei virtuale și a încărcării procesorului pentru a identifica un "gât de sticlă" (bottleneck).
+vmstat - Report virtual memory statistics
+  - vmstat: Afișează un raport sumar al utilizării resurselor de la ultima pornire.
+      - EX: vmstat
+  - [interval] [număr]: Rulează raportul de un număr de ori la fiecare interval de secunde.
+      - EX: vmstat 1 5
+  - -s: Afișează un tabel vertical cu statistici de evenimente și diverși contori de sistem.
+      - EX: vmstat -s
+  - -d: Afișează statistici detaliate despre activitatea discurilor (disk statistics).
+      - EX: vmstat -d
+
+Sursa de date (/proc/meminfo, /proc/stat, /proc/vmstat): vmstat colectează și prelucrează datele din aceste fișiere virtuale. Se poate folosi cat pe aceste fișiere pentru a obține aceleași informații brute.
+  - cat /proc/stat: Conține statistici despre activitatea CPU și a sistemului.
+      - EX: cat /proc/stat
+  - cat /proc/vmstat: Conține statistici specifice memoriei virtuale.
+      - EX: cat /proc/vmstat
+
+
+Situatie: Vrei să afli ce proces blochează un fișier pe care încerci să îl ștergi sau ce aplicație folosește un anumit port de rețea.
+lsof - List open files
+  - lsof [cale_fișier]: Arată toate procesele care au deschis fișierul respectiv.
+      - EX: lsof /var/log/syslog
+  - -u [utilizator]: Listează toate fișierele deschise de un anumit utilizator.
+      - EX: lsof -u student
+  - -p [PID]: Listează toate fișierele (inclusiv librării și conexiuni) deschise de un proces specific.
+      - EX: lsof -p 1234
+  - -i :[port]: Arată ce proces folosește un anumit port de rețea (foarte util la concurs).
+      - EX: lsof -i :80
+  - +D [director]: Listează toate fișierele deschise dintr-un director și subdirectoarele sale.
+      - EX: lsof +D /home/user/proiect
 
 
 
@@ -197,31 +280,55 @@ jobs - List active jobs
 
 2. Gestiunea Fișierelor și Arhivare
 
-Situație: Trebuie să găsești rapid un fișier folosind specificatii ale sale.
-find - Find Files
-  - find [cale] -name [nume]: Căutare după nume
-    - Exemplu: find /etc -name passwd
-  - find [cale] -type [tip]: Filtrare după tip (f=fișier, d=director)
-    - Exemplu: find . -type d
-  - find [cale] -mtime [zile]: Fișiere modificate în ultimele X zile
-    - Exemplu: find /var/log -mtime -2
+
+Situatie: Vrei să cauți fișiere în tot sistemul care îndeplinesc criterii complexe (ex: fișiere mai mari de 100MB modificate în ultima oră).
+find - Search for files in a directory hierarchy
+  - find [cale] -name [nume]: Caută fișiere după nume (folosește ghilimele pentru wildcard-uri).
+      - EX: find /home -name "*.txt"
+  - -type [f/d/l]: Filtrează rezultatele după tip: f (fișier), d (director), l (link simbolic).
+      - EX: find . -type d
+  - -size [+/-][valoare][unitate]: Caută după mărime (k=KB, M=MB, G=GB). + este mai mare, - este mai mic.
+      - EX: find /var/log -size +50M
+  - -mtime [+/-][zile]: Caută după timpul de modificare (modification time). -7 înseamnă în ultimele 7 zile.
+      - EX: find /etc -mtime -1
+  - -user [nume]: Caută fișierele care aparțin unui anumit utilizator.
+      - EX: find /tmp -user root
+  - -perm [mod]: Caută fișiere cu permisiuni specifice (octal).
+      - EX: find . -perm 777
   - find [cale] -exec [comanda] {} \;: Execută o comandă pe rezultatele găsite
     - Exemplu: find . -name "*.tmp" -exec rm {} \; (sterge toate fisierele care se termina cu ".tmp" pe rand)
             \; : Backslash-ul (\) are rolul de a "evada" (escape) punctul și virgula, astfel încât Shell-ul 
                 să nu creadă că ai terminat comanda find prematur, ci să trimită acel ; direct utilitarului find.
             + : Acesta nu este un meta-caracter special pentru Shell în acea poziție, deci nu are nevoie de backslash.
     - Exemplu: find . -name "*.tmp" -exec rm {} + (sterge toate fisierele care se termina cu ".tmp" de-o data)
-  - find [cale] -user [nume]: Căutare fișiere deținute de un utilizator specific
-    - Exemplu: find /home -user elev
-  - find [cale] -perm [mod]: Căutare după permisiuni (format octal)
-    - Exemplu: find . -perm 777
-  - find [cale] -size [mărime]: Căutare după dimensiune (k=KB, M=MB, G=GB)
-    - Exemplu: find /var/log -size +10M
-  - find [cale] -inum [număr]: Căutare fișier după numărul de Inode
-    - Exemplu: find / -inum 12345
     Obs. Comanda find . -name "*.log" -mtime -1 -exec grep "Critical" {} + caută în directorul curent 
         toate fișierele cu extensia .log modificate în ultimele 24 de ore și extrage din ele, printr-o 
         singură scanare eficientă, toate liniile care conțin cuvântul Critical.
+
+
+Situatie: Vrei să găsești instantaneu locația unui fișier în tot sistemul, fără a aștepta ca discul să fie scanat complet.
+locate - Find files by name (Database search)
+  - locate [nume]: Afișează toate căile care conțin șirul de caractere specificat.
+      - EX: locate config.php
+  - -i: Ignoră diferența între litere mari și mici (Case-insensitive).
+      - EX: locate -i README
+  - -n [număr]: Limitează numărul de rezultate afișate.
+      - EX: locate -n 5 passwd
+  - -r [regex]: Permite căutarea folosind expresii regulate complexe.
+      - EX: locate -r \.jpg$
+  - -e: Afișează doar fișierele care există în realitate pe disc în momentul căutării (nu doar în baza de date).
+      - EX: locate -e fisier_sters.txt
+  - -c: Afișează doar numărul total de fișiere găsite (Count), nu și căile lor.
+      - EX: locate -c apache2
+  - -q: Modul silențios (Quiet). Nu afișează erorile despre baze de date inaccesibile.
+      - EX: locate -q fisier_critic
+  - -S: Afișează statistici despre baza de date (câte fișiere sunt indexate, dimensiunea bazei de date).
+      - EX: locate -S
+
+Sursa de date (/var/lib/mlocate/mlocate.db): Aceasta este baza de date pe care o citește locate. Se poate folosi cat pe acest fișier, dar rezultatul va fi ilizibil (binar). Consecința actualizării se face cu updatedb.
+  - sudo updatedb: Actualizează manual baza de date pentru ca locate să vadă fișierele noi.
+      - EX: sudo updatedb
+
 
 Situatie: Trebuie să creezi o copie de rezervă completă a proiectului tău, care să păstreze exact 
         drepturile de execuție ale scripturilor, pentru a o trimite spre corectare.
@@ -243,77 +350,169 @@ tar - Arhivarea si comprimarea fisierelor (Tape Archive)
   - -C (Directory): Schimbă directorul înainte de a extrage (destinația).
       - EX: tar -xf arhiva.tar -C /destinatie/
 
-Situatie: Vrei să comprimi un folder cu documente astfel încât să poată fi deschis 
-        ușor pe orice sistem de operare (Windows/Linux/Mac).
-zip - Crearea arhivelor comprimate in format .zip
-  - zip [nume_arhiva.zip] [fisier]: Creeaza o arhiva simpla dintr-un singur fisier.
-      - EX: zip documente.zip raport.txt
-  - -r (Recursive): Arhiveaza un intreg director si tot ce contine acesta (subfoldere si fisiere).
-      - EX: zip -r proiect.zip ./folder_proiect
-  - -e (Encrypt): Protejeaza arhiva cu o parola (util pentru securizarea solutiilor).
-      - EX: zip -e -r securizat.zip ./date_sensibile
-  - -9 (Compression Level): Foloseste cel mai inalt nivel de compresie (cel mai mic fisier rezultat).
-      - EX: zip -9 -r arhiva_mica.zip ./date
-  - -u (Update): Adauga sau actualizeaza doar fisierele care s-au schimbat de la ultima arhivare.
-      - EX: zip -u proiect.zip script.py
-  - -d (Delete): Sterge un fisier specific din interiorul unei arhive deja existente.
-      - EX: zip -d proiect.zip fisier_inutil.tmp
+Situatie: Vrei să comprimi un singur fișier mare (ex: un backup SQL sau un log) pentru a ocupa mai puțin spațiu, fără să te intereseze dacă originalul este șters.
+gzip / bzip2 - Compresoare pentru fișiere individuale
+  - gzip [fișier]: Comprimă rapid (rezultă .gz). Este standardul de viteză.
+      - EX: gzip date.log
+  - bzip2 [fișier]: Comprimă mai bine, dar mai lent (rezultă .bz2).
+      - EX: bzip2 backup.sql
+  - -d: Decomprimă fișierul (valabil pentru ambele).
+      - EX: gzip -d date.log.gz (sau gunzip date.log.gz)
+  - -k: Păstrează (Keep) fișierul original după compresie.
+      - EX: bzip2 -k set_date.csv
 
-Situatie: Vrei să comprimi un singur fișier de date foarte mare, păstrând și originalul pentru siguranță.
-gzip / bzip2 / xz - Compresoare pentru fisiere individuale
-  - -d (Decompress): Desface fisierul comprimat.
-      - EX: gzip -d document.gz (sau gunzip document.gz)
-  - -k (Keep): Pastreaza fisierul original. In mod normal, gzip sterge originalul dupa compresie!
-      - EX: xz -k fisier_mare.bin
-  - -9 (Best): Nivel maxim de compresie.
-      - EX: bzip2 -9 date.csv
 
-Situatie: Ai o arhivă ZIP (posibil de pe Windows) și vrei să o extragi ordonat într-un folder separat, nu peste tot.
-unzip - Extragerea si gestionarea arhivelor ZIP
-  - -l (List): Vezi lista de fisiere si marimea lor fara sa le dezarhivezi.
-      - EX: unzip -l subiecte.zip
-  - -d [cale] (Directory): Trimite toate fisierele extrase intr-un folder specific.
-      - EX: unzip arhiva.zip -d ./subiecte_concurs
-  - -o (Overwrite): Suprascrie fisierele existente fara sa mai ceara confirmare.
-      - EX: unzip -o update.zip
-  - -P [parola] (Password): Extrage o arhiva protejata introducand parola direct in comanda.
-      - EX: unzip -P secret123 arhiva.zip
+Situatie: Vrei să afișezi rapid conținutul unui fișier scurt sau să unești mai multe fișiere într-unul singur.
+cat - Concatenate and print files
+  - cat [fișier]: Afișează întreg conținutul fișierului în terminal.
+      - EX: cat /etc/hostname
+  - -n: Numerotează toate liniile afișate (foarte util pentru depanarea codului).
+      - EX: cat -n script.sh
+  - -b: Numerotează doar liniile care nu sunt goale.
+      - EX: cat -b text.txt
+  - [fișier1] [fișier2] > [fișier_nou]: Unește două fișiere într-unul singur.
+      - EX: cat cap1.txt cap2.txt > carte.txt
 
-Situatie: Cauți o setare sau o eroare specifică într-o grămadă de fișiere de cod și vrei 
-        să știi exact unde și de câte ori apare, fără să le deschizi pe rând.
-grep - Filtrarea si cautarea textului folosind tipare
-  - -i (Ignore Case): Gaseste textul indiferent daca e scris cu litere mari sau mici.
-      - EX: grep -i linux fisier.txt
-  - -v (Invert Match): Iti arata tot ce NU contine textul cautat (util pentru curatat log-uri).
-      - EX: grep -v eroare log.txt
-  - -r (Recursive): Cauta in toate fisierele dintr-un folder si din subfolderele acestuia.
-      - EX: grep -r 192.168.1.1 /etc/
-  - -n (Line Number): Afiseaza numarul liniei unde a fost gasit textul.
-      - EX: grep -n main script.c
-  - -c (Count): Iti spune doar cate linii contin textul, fara sa le afiseze.
-      - EX: grep -c FAILED auth.log
-  - -l (Files with matches): Afiseaza doar numele fisierelor care contin textul, util pentru scripturi.
-      - EX: grep -l TODO *.py
-  - -E (Extended RegEx): Permite folosirea operatorilor logici precum SAU (|) fara caractere de escape.
-      - EX: grep -E mere|pere lista.txt
-  - -w (Word Regexp): Gaseste doar cuvantul intreg, ignorand derivatele (ex: ana, nu ananas).
-      - EX: grep -w ana text.txt
 
-Situatie: Vrei să faci o copie de siguranță a unui fișier sau să multiplici un întreg director 
-        cu tot ce conține, păstrând data creării și permisiunile.
-cp (Copy) - Copierea fisierelor si directoarelor
-  - -r (Recursive): Obligatoriu pentru a copia un director cu toate subfolderele si fisierele din el.
-      - EX: cp -r folder_sursa folder_destinatie
-  - -p (Preserve): Pastreaza atributele originale: permisiuni, proprietar si data ultimei modificari.
-      - EX: cp -p script.sh backup_script.sh
-  - -i (Interactive): Te intreaba inainte sa suprascrie un fisier care exista deja la destinatie.
-      - EX: cp -i date.txt /backup/
-  - -u (Update): Copiaza doar daca fisierul sursa este mai nou decat cel de la destinatie sau daca acesta lipseste.
-      - EX: cp -u *.c ./proiect_vechi/
-  - -v (Verbose): Afiseaza ce se intampla in timp real (sursa -> destinatie).
-      - EX: cp -v poza.jpg /media/usb/
-  - -a (Archive): Este un "super-steag" care include -r si -p, plus pastrarea legaturilor simbolice. Ideal pentru backup.
-      - EX: cp -a /home/user/proiect /backup/
+Situatie: Vrei să citești un fișier de log începând cu cele mai recente evenimente (de jos în sus).
+tac - Concatenate and print files in reverse
+  - tac [fișier]: Afișează conținutul fișierului începând cu ultima linie.
+      - EX: tac /var/log/syslog
+
+
+
+Situatie: Ai o listă de rezultate sau log-uri și vrei să elimini intrările identice pentru a vedea doar valorile unice.
+uniq - Report or omit repeated lines
+  - uniq [fișier]: Elimină liniile duplicate consecutive din fișier.
+      - EX: sort date.txt | uniq
+  - -c (Count): Numără de câte ori apare fiecare linie (foarte util pentru statistici).
+      - EX: sort loguri.txt | uniq -c
+  - -d (Repeated): Afișează DOAR liniile care se repetă (duplicatele).
+      - EX: sort useri.txt | uniq -d
+  - -u (Unique): Afișează DOAR liniile care apar o singură dată în tot fișierul.
+      - EX: sort taskuri.txt | uniq -u
+  - -i: Ignoră diferența dintre litere mari și mici (Case-insensitive).
+      - EX: sort nume.txt | uniq -i
+
+
+
+
+Situatie: Vrei să extragi un număr fix de linii de la începutul unui fișier, asigurându-te că sistemul nu confundă cifra cu un nume de fișier.
+head - Output the first part of files
+  - head -n [număr] [fișier]: Afișează exact primele X linii (sintaxa obligatorie pentru a evita confuzia cu numele fișierelor).
+      - EX: head -n 15 date.txt
+  - -c [octeți]: Afișează primii X octeți din fișier (util pentru fișiere binare).
+      - EX: head -c 500 input.bin
+
+
+
+Situatie: Vrei să vizualizezi finalul unui fișier sau să monitorizezi adăugarea de date noi în timp real.
+tail - Output the last part of files
+  - tail -n [număr] [fișier]: Afișează exact ultimele X linii dintr-un fișier.
+      - EX: tail -n 20 erori.log
+  - -f (Follow): Rămâne activ și afișează liniile noi pe măsură ce sunt scrise în fișier (se oprește cu Ctrl+C).
+      - EX: tail -f /var/log/syslog
+  - -n +[număr]: Afișează tot conținutul fișierului începând de la linia X până la final (Skip).
+      - EX: tail -n +5 date.txt (afișează de la linia 5 în jos, sărind peste primele 4)
+
+
+
+Situatie: Vrei să cauți o secvență de text specifică (un cuvânt sau o eroare) într-un fișier sau în rezultatul unei alte comenzi.
+grep - Print lines matching a pattern
+  - grep [text] [fișier]: Afișează toate liniile care conțin textul respectiv.
+      - EX: grep "eroare" log.txt
+  - -i: Ignoră diferența între litere mari și mici (Case-insensitive).
+      - EX: grep -i "user" passwd
+  - -v: Afișează liniile care NU conțin textul (Invert match). Foarte util pentru a elimina zgomotul.
+      - EX: grep -v "debug" syslog
+  - -r: Caută recursiv în toate fișierele dintr-un director (Recursive).
+      - EX: grep -r "function" ./proiect
+  - -n: Afișează și numărul liniei unde a fost găsită potrivirea.
+      - EX: grep -n "main" cod.c
+  - -c: Afișează doar numărul total de linii care se potrivesc (Count), nu și liniile în sine.
+      - EX: grep -c "failed" auth.log
+  - -l: Afișează doar numele fișierelor care conțin textul, nu și liniile.
+      - EX: grep -l "TODO" *.txt
+  - -w: Caută cuvântul întreg, prevenind potriviri parțiale (ex: caută "ion" dar nu găsește "funcționar").
+      - EX: grep -w "ion" lista.txt
+
+
+Situatie: Vrei să afli numărul exact de linii dintr-un fișier sau să numeri rezultatele returnate de o altă comandă prin pipe.
+wc - Print newline, word, and byte counts for each file
+  - wc [fișier]: Afișează implicit trei coloane: numărul de linii, numărul de cuvinte și numărul de octeți (bytes).
+      - EX: wc date.txt
+  - -l: Afișează DOAR numărul de linii (cea mai folosită opțiune la concurs).
+      - EX: ls -l /etc | wc -l (Numără câte fișiere sunt în /etc)
+  - -w: Afișează DOAR numărul de cuvinte.
+      - EX: wc -w eseu.txt
+  - -c: Afișează DOAR numărul de octeți (dimensiunea fișierului în bytes).
+      - EX: wc -c imagine.jpg
+  - -m: Afișează numărul de caractere (util pentru texte cu caractere speciale unde 1 caracter != 1 byte).
+      - EX: wc -m text_utf8.txt
+
+
+Situatie: Vrei să pui în ordine o listă de rezultate, să identifici cele mai mari valori sau să pregătești un fișier pentru eliminarea duplicatelor.
+sort - Sort lines of text files
+  - -n: Sortează numeric (pune 2 înaintea lui 10). Fără acest flag, 10 apare înaintea lui 2 pentru că începe cu cifra 1.
+      - EX: sort -n note.txt
+  - -r: Inversează ordinea (Reverse). Pune cele mai mari valori sau literele de la finalul alfabetului primele.
+      - EX: sort -r nume.txt
+  - -k [coloană]: Sortează după o anumită coloană (Key). Util când ai tabele cu nume și note.
+      - EX: sort -k 2 tabel.txt (Sortează după a doua coloană dintr-un rând)
+  - -t [separator]: Definește ce desparte coloanele (implicit este spațiul). Se folosește des pentru fișiere de sistem precum /etc/passwd.
+      - EX: sort -t ":" -k 3 /etc/passwd (Sortează după a treia coloană, unde coloanele sunt separate prin ":")
+
+
+
+Situatie: Vrei să compari două fișiere de configurare sau două versiuni ale unui cod pentru a vedea exact ce modificări au fost făcute.
+diff - Compare files line by line
+  - diff [fișier1] [fișier2]: Compară cele două fișiere și afișează diferențele.
+      - EX: diff setari_vechi.conf setari_noi.conf
+  - -u (Unified): Afișează diferențele într-un format mai ușor de citit (cu + pentru adăugări și - pentru ștergeri).
+      - EX: diff -u cod1.c cod2.c
+  - -i: Ignoră diferența între litere mari și mici (Case-insensitive).
+      - EX: diff -i fisierA.txt fisierB.txt
+  - -w: Ignoră spațiile albe (Whitespace). Util când doar indentarea s-a schimbat, nu și logica.
+      - EX: diff -w script1.py script2.py
+  - -q (Brief): Spune doar dacă fișierele sunt diferite sau nu, fără a arăta liniile (Quiet).
+      - EX: diff -q backup.tar.gz original.tar.gz
+  - -y (Side-by-side): Afișează fișierele pe două coloane paralele pentru o comparare vizuală ușoară.
+      - EX: diff -y a.txt b.txt
+
+
+
+
+
+Situatie: Vrei să creezi o copie de siguranță a unui fișier sau să multiplici un template într-un director nou.
+cp - Copy files and directories
+  - cp [sursă] [destinație]: Copiază fișierul la noua locație.
+      - EX: cp config.txt config.bak
+  - -r (Recursive): Copiază directoare întregi cu tot conținutul lor (obligatoriu pentru foldere).
+      - EX: cp -r ./proiect /backup/
+  - -p (Preserve): Păstrează atributele originale (permisiuni, data modificării).
+      - EX: cp -p script.sh /tmp/
+  - -i (Interactive): Întreabă înainte de a suprascrie un fișier existent la destinație.
+      - EX: cp -i date.txt /foldernou/
+
+
+
+Situatie: Vrei să redenumești un fișier sau să îl muți definitiv într-un alt director fără a lăsa o copie în urmă.
+mv - Move (rename) files
+  - mv [sursă] [destinație]: Mută sau redenumește fișierul (dacă destinația e un nume nou în același folder).
+      - EX: mv vechi.txt nou.txt (Redenumire)
+      - EX: mv raport.pdf ./documente/ (Mutare)
+  - -i (Interactive): Cere confirmare dacă la destinație există deja un fișier cu același nume.
+      - EX: mv -i poza.jpg ./galerie/
+  - -f (Force): Suprascrie forțat fișierele de la destinație fără a întreba nimic.
+      - EX: mv -f setup.sh /usr/local/bin/
+  - -t (Target directory): Permite scrierea destinației înaintea fișierelor pe care vrei să le muți.
+      - EX: mv -t folder/ fisier1 fisier2
+  - -b (Backup): Face o copie de rezervă a fișierului de la destinație înainte ca acesta să fie șters/înlocuit.
+      - EX: mv -b sursa.txt destinatie.txt
+  - -v (Verbose): Afișează ce face (ex: 'vechi.txt' -> 'nou.txt'). Util pentru a vedea progresul la mutări masive.
+      - EX: mv -v *.mp3 ./muzica/
+
+
 
 Situatie: Vrei să conectezi manual o unitate de stocare (stick, HDD extern) la un dosar din sistemul tău pentru a-i accesa sau salva datele.
 mount - Conectarea dispozitivelor la ierarhia de fisiere
@@ -1096,22 +1295,7 @@ journalctl - Systemd Logs
   - journalctl: Query and display logs collected by the systemd-journald service
     - Example: journalctl -xe
 
-Situație: Trebuie să localizezi instantaneu fișiere folosind baza de date a sistemului, optimizând timpul de răspuns.
-locate - Fast File Find
-  - locate: Find files quickly by name using a pre-built system database (updated by updatedb)
-    - Example: locate .bashrc 
-  -i (Ignore case): Ignoră diferența între litere mari și mici.
-      EX: locate -i Mesaj.txt
-  -c (Count): Afișează doar numărul de fișiere găsite, nu și căile lor.
-      EX: locate -c .jpg
-  -l [n] (Limit): Limitează numărul de rezultate afișate la valoarea n.
-      EX: locate -l 5 config.php
-  -r (Regex): Permite utilizarea expresiilor regulate pentru căutări complexe.
-      EX: locate -r \.sh$
-  -e (Existing): Afișează doar fișierele care există fizic pe disc în momentul căutării.
-      EX: locate -e fisier_sters_recent.txt
-  -S (Statistics): Afișează statistici despre baza de date utilizată.
-      EX: locate -S
+
 
 ls - List Directory Contents
   - -v: comanda implicită care sortează alfabetic/numeric conținutul.
@@ -1230,21 +1414,8 @@ mount - Mount File System
   - umount [punct_montare]: Demontează (scoate) un sistem de fișiere.
       - EX: umount /mnt/usb
 
-mv - Move or Rename Files
-  - -i (Interactive): Te întreabă înainte să suprascrie un fișier care există deja la destinație.
-      - EX: mv -i sursa.txt destinatie.txt
-  - -f (Force): Suprascrie tot la destinație fără să te întrebe nimic, ignorând orice protecție.
-      - EX: mv -f sursa.txt destinatie.txt
-  - -n (No clobber): Nu suprascrie niciodată un fișier existent; mutarea este anulată dacă destinația există.
-      - EX: mv -n sursa.txt destinatie.txt
-  - -u (Update): Mută fișierul doar dacă sursa este mai nouă decât cel de la destinație.
-      - EX: mv -u sursa.txt destinatie.txt
-  - -v (Verbose): Arată în timp real ce fișiere sunt mutate și unde.
-      - EX: mv -v *.txt folder/
-  - -t (Target directory): Permite scrierea destinației înaintea fișierelor pe care vrei să le muți.
-      - EX: mv -t folder/ fisier1 fisier2
-  - -b (Backup): Face o copie de rezervă a fișierului de la destinație înainte ca acesta să fie șters/înlocuit.
-      - EX: mv -b sursa.txt destinatie.txt
+
+
 
 Situație: Vrei să creezi o scurtătură către un program într-un alt folder sau vrei ca același fișier să fie accesibil din două locații diferite fără a-l copia (economisind spațiu).
 ln - Link Files
@@ -1668,21 +1839,7 @@ zip - Create ZIP
   - zip: Package and compress files into a ZIP archive
     - Example: zip -r backup.zip /path/to/files
 
-sort - Sort Text Files
-  - sort: Sortează liniile alfabetic (implicit)
-    - Exemplu: sort nume.txt
-  - sort -r: (Reverse) Inversează ordinea sortării (de la Z la A sau de la mare la mic)
-    - Exemplu: sort -r numere.txt
-  - sort -n: (Numeric) Sortează după valoarea numerică (altfel vede "10" ca fiind mai mic decât "2", pentru că începe cu "1")
-    - Exemplu: sort -n date.txt
-  - sort -t [caracter]: (Field separator) Definește caracterul care desparte coloanele
-    - Exemplu: sort -t ':' /etc/passwd
-  - sort -k [număr]: (Key) Specifică pe ce coloană să se facă sortarea
-    - Exemplu: sort -t ',' -k3 date.csv
-  - sort -u: (Unique) Sortează și elimină liniile duplicat (similar cu pipe la comanda uniq)
-    - Exemplu: sort -u vizitatori.txt
-  - sort -h: (Human-numeric) Știe să sorteze dimensiuni de fișiere (ex: 1K, 2M, 1G)
-    - Exemplu: du -h | sort -h
+
 
 id - Identity
   - id: Afișează UID-ul (User ID), GID-ul (Group ID) și toate grupurile din care face parte utilizatorul curent
@@ -1780,19 +1937,7 @@ tree - Directory Tree
   - tree -L [nivel]: (Level) Limitează adâncimea afișării
     - Exemplu: tree -L 2
 
-cut - Extragerea secțiunilor din fiecare linie a fișierelor
-  - cut -d [delimitator]: Delimiter. Specifică simbolul care separă coloanele (implicit este Tab).
-      - EX: cut -d ":" -f 1 /etc/passwd
-  - cut -f [listă]: Fields. Selectează coloanele (câmpurile) dorite.
-      - EX: cut -f 1,3 fisier.tsv
-  - cut -c [listă]: Characters. Selectează doar anumite poziții de caractere din linie.
-      - EX: cut -c 1-10 fisier.txt
-  - cut -b [listă]: Bytes. Selectează doar anumiți bytes (util pentru fișiere cu codificare fixă).
-      - EX: cut -b 1-5 fisier.txt
-  - cut --complement: Complement. Inversează selecția (afișează tot în afară de ce ai selectat cu -f sau -c).
-      - EX: cut -d " " -f 1 --complement fisier.txt
-  - cut -s: Only-delimited. Nu afișează liniile care nu conțin delimitatorul specificat.
-      - EX: cut -d ":" -s -f 1 fisier.txt
+
 
 nl - Numerotarea liniilor unui fișier
   - nl -b [stil]: Body. Setează stilul de numerotare (a=toate, t=doar cele cu text).
@@ -1806,15 +1951,7 @@ nl - Numerotarea liniilor unui fișier
   - nl -w [număr]: Width. Setează lățimea coloanei pentru număr.
       - EX: nl -w 3 fisier.txt
 
-wc - Word Count
-  - wc -l: (Lines) Afișează numărul de linii
-    - Exemplu: wc -l /etc/passwd
-  - wc -w: (Words) Afișează numărul de cuvinte
-    - Exemplu: wc -w fisier.txt
-  - wc -c: (Bytes) Afișează numărul de octeți
-    - Exemplu: wc -c mesaj.txt
-  - wc -L: (Max length) Afișează lungimea celei mai lungi linii
-    - Exemplu: wc -L fisier.txt
+
 
 uniq - Unique Lines
   - uniq -c: (Count) Afișează numărul de apariții pentru fiecare linie
