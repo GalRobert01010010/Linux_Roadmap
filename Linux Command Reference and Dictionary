@@ -514,6 +514,26 @@ mv - Move (rename) files
 
 
 
+Situatie: Vrei să afișezi un mesaj, să verifici valoarea unei variabile de mediu sau să scrii rapid o setare într-un fișier de sistem.
+echo - Display a line of text
+  - -n: Nu adaugă linia nouă (newline) la finalul afișării.
+      - EX: echo -n "Așteaptă..."
+  - echo -e: Activează interpretarea caracterelor de tip "backslash escape"
+      - Exemplu \n: echo -e "Linia 1\nLinia 2"
+          - Obs.: \n (newline) mută textul care urmează pe o linie nouă.
+      - Exemplu \t: echo -e "Nume:\tPopescu"
+          - Obs.: \t (horizontal tab) inserează un spațiu de tabulare orizontal, util pentru alinierea textului în coloane.
+      - Exemplu \b: echo -e "Linuxx\b"
+          - Obs.: \b (backspace) șterge caracterul anterior. În exemplul de mai sus, va afișa "Linux" (șterge ultimul 'x').
+  - -E: Dezactivează explicit interpretarea caracterelor speciale (comportamentul implicit pe majoritatea sistemelor).
+      - EX: echo -E "Text cu \n care nu se rupe"
+
+
+
+
+
+
+
 Situatie: Vrei să conectezi manual o unitate de stocare (stick, HDD extern) la un dosar din sistemul tău pentru a-i accesa sau salva datele.
 mount - Conectarea dispozitivelor la ierarhia de fisiere
   - -t (Type): Specifica manual tipul de sistem de fisiere (vfat, ntfs, ext4).
@@ -970,22 +990,7 @@ vmstat - Virtual Memory Statistics
 
 
 
-echo - Output Text
-  - echo: Afișează un șir de text sau valoarea unei variabile în terminal
-      - Exemplu: echo "Hello Linux"
-  - echo $VARIABLE: Afișează conținutul unei variabile de mediu
-      - Exemplu: echo $SHELL
-  - echo -n: Afișează textul fără a adăuga o linie nouă (newline) la final
-      - Exemplu: echo -n "Text fără enter la final"
-  - echo -e: Activează interpretarea caracterelor de tip "backslash escape"
-      - Exemplu \n: echo -e "Linia 1\nLinia 2"
-          - Obs.: \n (newline) mută textul care urmează pe o linie nouă.
-      - Exemplu \t: echo -e "Nume:\tPopescu"
-          - Obs.: \t (horizontal tab) inserează un spațiu de tabulare orizontal, util pentru alinierea textului în coloane.
-      - Exemplu \b: echo -e "Linuxx\b"
-          - Obs.: \b (backspace) șterge caracterul anterior. În exemplul de mai sus, va afișa "Linux" (șterge ultimul 'x').
-  - echo -E: Dezactivează explicit interpretarea caracterelor escape (comportament implicit)
-      - Exemplu: echo -E "Nu se va vedea \n ca linie nouă"
+
 
 Situație: Primești un fișier fără extensie sau cu o extensie suspectă și vrei să știi ce 
         tip de date conține cu adevărat (ex: dacă un .jpg este de fapt un script).
