@@ -900,6 +900,120 @@ free - Display amount of free and used memory in the system
 
 4. Administrarea Rețelei și Transfer de Date
 
+
+Situație: Utilitar pentru descoperirea automată de endpoint-uri, parametri,
+fișiere sau directoare ascunse pe servere web prin înlocuirea placeholder-ului
+FUZZ cu cuvinte dintr-o listă. Folosit când nu știi structura unei aplicații web
+și vrei să găsești rute, fișiere sau valori valide fără să ghicești manual.
+
+ffuf - Fuzz Faster U Fool
+  -u [url]: URL-ul țintă cu FUZZ ca placeholder pentru zona de fuzzing.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt
+
+  -w [fisier]: Wordlist-ul folosit — fiecare linie înlocuiește FUZZ pe rând.
+      EX: ffuf -u http://site.com/FUZZ -w ~/tools/SecLists/Discovery/Web-Content/common.txt
+
+  -X [metoda]: Metoda HTTP folosită, implicit GET. Folosit când aplicația
+      acceptă PUT sau POST pentru endpoint-uri specifice.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -X PUT
+
+  -d [date]: Date trimise în body-ul cererii, folosit împreună cu POST sau PUT.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -X PUT -d "name=test&content=test"
+
+  -H [header]: Header HTTP custom adăugat la fiecare cerere, folosit când
+      aplicația necesită autentificare sau un Origin specific.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -H "Authorization: Bearer token"
+
+  -mc [coduri]: Match codes — afișează doar răspunsurile cu statusurile
+      specificate. Implicit ffuf afișează și 403, 500 etc.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -mc 200,301,302
+
+  -fc [coduri]: Filter codes — ascunde răspunsurile cu statusurile specificate.
+      Alternativă la -mc când vrei să excluzi doar câteva coduri.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -fc 404,403
+
+  -fs [bytes]: Filter size — ascunde răspunsurile cu exact această dimensiune
+      în bytes. Esențial când serverul returnează 200 pentru orice URL dar cu
+      dimensiuni diferite pentru paginile reale față de cele inexistente.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -fs 2171
+
+  -e [extensii]: Adaugă extensii la fiecare cuvânt din wordlist. Folosit când
+      cauți fișiere cu extensii specifice — baze de date, backup-uri, scripturi.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -e .php,.db,.txt,.html
+
+  -t [nr]: Numărul de thread-uri paralele, implicit 40. Reduci când serverul
+      are rate limiting sau când primești prea multe erori de conexiune.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -t 10
+
+  -c: Colorează output-ul pentru lizibilitate mai bună în terminal.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -c
+
+  -o [fisier]: Salvează rezultatele într-un fișier JSON pentru analiză ulterioară.
+      EX: ffuf -u http://site.com/FUZZ -w wordlist.txt -o rezultate.json
+
+
+
+Situație: Utilitar pentru detectarea și exploatarea automată a vulnerabilităților
+SQL Injection în aplicații web. Folosit când o aplicație trimite input-ul
+utilizatorului direct către o bază de date fără sanitizare corectă. Primul tool
+de încercat când bănuiești că parametrii unei aplicații web ajung într-un query SQL.
+Garantate pentru orice challange SQLi: -u, --dbs, --tables, -D, -T, --dump, --batch
+
+sqlmap - Automatic SQL Injection Tool
+  -u [url]: URL-ul țintă cu parametrul de testat inclus cu valoarea lui curentă.
+      Valoarea nu contează — sqlmap o înlocuiește automat cu payload-uri de injecție.
+      EX: sqlmap -u "http://site.com/page?id=1"
+
+  --method [metoda]: Metoda HTTP folosită, implicit GET. Necesar când aplicația
+      acceptă POST sau PUT în loc de GET.
+      EX: sqlmap -u "http://site.com/" --method POST
+
+  --data [date]: Date trimise în body pentru POST sau PUT. Parametrii scrisi
+      aici sunt testați pentru SQLi exact ca cei din URL.
+      EX: sqlmap -u "http://site.com/" --method POST --data "user=test&pass=test"
+
+  --cookie [cookie]: Trimite cookie și testează SQLi în valoarea lui. Numele
+      și valoarea se iau exact din headerul Set-Cookie al serverului — nu sunt fixe.
+      Dacă ai mai multe cookie-uri le separi cu punct și virgulă.
+      EX: sqlmap -u "http://site.com/" --cookie "session=abc123"
+      EX: sqlmap -u "http://site.com/" --cookie "session=abc; id=5"
+
+  --dbs: Listează toate bazele de date după confirmarea SQLi. Primul steag
+      de folosit — îți arată ce există pe server.
+      EX: sqlmap -u "http://site.com/?id=1" --dbs --batch
+
+  -D [nume]: Specifică baza de date țintă din lista returnată de --dbs.
+      EX: sqlmap -u "http://site.com/?id=1" -D numebaza --tables --batch
+
+  --tables: Listează tabelele din baza de date specificată cu -D.
+      EX: sqlmap -u "http://site.com/?id=1" -D numebaza --tables --batch
+
+  -T [nume]: Specifică tabela țintă din lista returnată de --tables.
+      EX: sqlmap -u "http://site.com/?id=1" -D numebaza -T numtabel --dump --batch
+
+  --dump: Extrage tot conținutul tabelei specificate cu -T. Pasul final
+      care returnează datele reale inclusiv flag-ul.
+      EX: sqlmap -u "http://site.com/?id=1" -D numebaza -T numtabel --dump --batch
+
+  --batch: Răspunde automat la toate întrebările sqlmap. Folosit mereu
+      la CTF pentru viteză — fără el sqlmap se oprește și așteaptă confirmare.
+      EX: sqlmap -u "http://site.com/?id=1" --dbs --batch
+
+  --level [1-5]: Profunzimea testelor, implicit 1. Nivel 3 testează și
+      headere HTTP automat. Folosit când testele standard nu găsesc nimic.
+      EX: sqlmap -u "http://site.com/?id=1" --dbs --batch --level 3
+
+  --risk [1-3]: Agresivitatea payload-urilor, implicit 1. Crescut doar
+      când nivelurile mici nu găsesc nimic.
+      EX: sqlmap -u "http://site.com/?id=1" --dbs --batch --risk 2
+
+  --random-agent: Schimbă User-Agent la fiecare cerere pentru a ocoli
+      filtrele care blochează tool-urile automate.
+      EX: sqlmap -u "http://site.com/?id=1" --dbs --batch --random-agent
+
+
+
+
 Situație: Utilitar pentru identificarea rapidă a IP-ului sau a serverelor unor domenii.
 host - DNS lookup utility
   -t [tip]: Specifică tipul de înregistrare DNS căutat (A, MX, NS, CNAME, TXT).
